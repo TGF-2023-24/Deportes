@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Smart Score{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'smartscore/style.css' %}">
+</head>
+<body>
+    <header>
+        <!-- Aquí puedes incluir tu encabezado común -->
+        <h1>Encabezado común</h1>
+        
+    </header>
+    <nav>
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'about' %}">About</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        
+        <p>Pie de página común &copy; {% now "Y" %}</p>
+    </footer>
+</body>
+</html>

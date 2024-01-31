@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load static %} <!-- Para poder usar archivos de la carpeta static  --> 
+{% block title %}Smart Score{% endblock %}
+{% block content %}
+    <h1>Home</h1>
+    <p>Esta es la página de inicio</p>
+    
+    <img src="{% static 'smartscore/images/prueba.png' %}" alt="Home">
+{% endblock %}
+     
