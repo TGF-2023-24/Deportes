@@ -5,7 +5,14 @@
     <h1>Home</h1>
     <p>Esta es la página de inicio</p>
     
+    
+    
+
     <img src="{% static 'smartscore/images/prueba.png' %}" alt="Home">
-    <p>{{all}}</p>
+    
+    {% for i in all %}
+        <p>{{i}}</p>
+    {% endfor %}
+
 {% endblock %}
      
