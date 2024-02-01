@@ -32,3 +32,22 @@ py manage.py runserver
 ### Open in Browser:
 
 Once the server is running, open your web browser and navigate to http://127.0.0.1:8000/ by clicking or using Ctrl + click.
+
+## Imports
+
+To male an import, you need to install django extensions
+
+pip install django-extensions
+
+Then you have to run the command (inside the project directory)
+
+py manage.py runscript smartscore.import
+
+## When changings database
+
+Always makemigration and migrate 
+
+py manage.py makemigrations
+py manage.py migrate
+
+

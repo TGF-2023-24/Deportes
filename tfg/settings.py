@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions' , # Add this line to install django-extensions and execute the import script
     'smartscore.apps.SmartscoreConfig', # Add this line to connect the app to the project
 ]
 
