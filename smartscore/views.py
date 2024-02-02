@@ -64,5 +64,13 @@ def signup_user(request):
         return render(request, 'signup.html', context)
    
 
+def search_player(request):
+    if request.method == 'POST':
+        searched = request.POST['q']
+        players = Player.objects.filter(Nombre__icontains=searched)
+        return render(request, 'search_player.html', {'searched': searched, 'players': players})
+    else:
+        return render(request, 'search_player.html', {})
+
    
 

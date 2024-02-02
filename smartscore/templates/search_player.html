@@ -1,0 +1,18 @@
+{%extends "base.html"%}
+{%block title%}Search{%endblock%}
+{%block content%}
+    <form action="{% url 'search_player' %}" method="POST">
+        {% csrf_token %}
+        <input type="text" name="q" value="{{q}}">
+        <input type="submit" value="Search">
+    </form>
+    <br>
+    <h1>You searched: </h1>
+    <br>
+    <h2>Results</h2>
+    <ul>
+        {%for player in players%}
+            <li><a href="/player/{{player.custom_id}}">{{player.Nombre}}</a></li>
+        {%endfor%}
+    </ul>
+{%endblock%}
