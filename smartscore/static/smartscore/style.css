@@ -2211,6 +2211,15 @@ p {
    -ms-flex-wrap: wrap;
    flex-wrap: wrap;
  }
+
+ .logo-wrapper img {
+  width: 50px; 
+  height: auto; 
+  vertical-align: middle; 
+  
+  margin-right: 10px; 
+  margin-bottom: 10px;
+}
  
  .logo-text {
    display: -webkit-box;
@@ -2982,6 +2991,7 @@ p {
  }
  
  .main-content {
+  
    background-color: #fff;
    border-radius: 10px;
    padding: 20px;
