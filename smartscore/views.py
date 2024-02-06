@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from django.db.models import Q
 from django import forms
 from .forms import CreateUserForm
 from django.contrib.auth.decorators import login_required #utilizar este decorador para proteger las rutas que requieren autenticación
@@ -67,7 +68,16 @@ def signup_user(request):
 def search_player(request):
     if request.method == 'POST':
         searched = request.POST['q']
-        players = Player.objects.filter(Name__icontains=searched)
+        
+        players = Player.objects.filter(
+            Q(Name__icontains=searched) | 
+            Q(Club__icontains=searched) | 
+            Q(League__icontains=searched) | 
+            Q(Nacionality__icontains=searched) | 
+            Q(Leg__icontains=searched)
+        )
+
+
         return render(request, 'search_player.html', {'searched': searched, 'players': players})
     else:
         return render(request, 'search_player.html', {})

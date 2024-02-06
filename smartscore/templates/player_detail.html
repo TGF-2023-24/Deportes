@@ -1,11 +1,15 @@
 {%extends "base.html"%}
 {%block title%}Player Detail{%endblock%}
 {%block content%}
-    <h1>Player Detail</h1>
-    <br>
-    <h2>{{player.Name}}</h2>
-    <br>
-    <h3>Possition: {{player.Pos}}</h3><br>
-    <h3>Sueldo: {{player.Salary}} $</h3>
-
+    <div class="main-nav">
+        <div class="main-nav-header">
+            <h1>Player Detail</h1>
+    </div>
+    <div class="main-nav-body">
+        <br>
+        <h2>{{player.Name}}</h2>
+        <br>
+        <h3>Possition: {{player.Pos}}</h3><br>
+        <h3>Sueldo: {{player.Salary}} $</h3>
+    </div>
 {%endblock%}

@@ -6,12 +6,6 @@
     <h1>Home</h1>
     <p>Esta es la página de inicio</p>
     <br>
-    
-    <form action="{% url 'search_player' %}" method="POST">
-        {% csrf_token %} <!--seguridad -->
-        <input type="text" name="q" value="{{q}}">
-        <input type="submit" value="Search">
-    </form>
 
     <br>
     <img src="{% static 'smartscore/images/prueba.png' %}" alt="Home">
