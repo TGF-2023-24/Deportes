@@ -49,6 +49,77 @@ p {
     background-color: #0056b3;
 }
 
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+.top-bar {
+  background-color: lightblue;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.search-container {
+  flex-grow: 1;
+}
+
+.search-wrapper {
+  display: flex;
+}
+
+.search-wrapper input[type="text"] {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+
+.primary-search-btn {
+  padding: 8px 15px;
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.nav-user-wrapper {
+  display: flex;
+}
+
+.primary-default-btn {
+  padding: 8px 15px;
+  margin-left: 10px;
+  background-color: #008CBA;
+  border: none;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.container-for-main-content {
+  padding: 20px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*A PARTIR DE AQUÍ, LO USADO EN LA WEB ANTIGUA*/
 
 /**
@@ -266,7 +337,7 @@ p {
  [type="button"],
  [type="reset"],
  [type="submit"] {
-   -webkit-appearance: button;
+   appearance: button;
  }
  
  /**
@@ -368,7 +439,7 @@ p {
   */
  
  [type="search"] {
-   -webkit-appearance: textfield;
+   appearance: textfield;
    /* 1 */
    outline-offset: -2px;
    /* 2 */
