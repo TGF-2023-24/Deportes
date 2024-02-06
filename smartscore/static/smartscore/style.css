@@ -1,5 +1,5 @@
 /* FILEPATH: /c:/Users/moren/Desktop/TFG/tfg/smartscore/templates/static/smartscore/styles.css */
-
+@import url(fonts/stylesheet.css);
 /* Reset default styles */
 body, h1, p {
     margin: 0;
@@ -1075,49 +1075,49 @@ p {
  }
  
  .logo {
-   background-image: url(../img/svg/spain.svg);
+   background-image: url(img/svg/spain.svg);
    width: 49px;
    height: 70px;
  }
  
  .menu-toggle {
-   background-image: url(../img/svg/Bulk/Menu-toggle-white.svg);
+   background-image: url(img/svg/Bulk/Menu-toggle-white.svg);
    width: 24px;
    height: 24px;
  }
  
  .menu-toggle--gray {
-   background-image: url(../img/svg/Bulk/Menu-toggle-gray.svg);
+   background-image: url(img/svg/Bulk/Menu-toggle-gray.svg);
    width: 24px;
    height: 24px;
  }
  
  .home {
-   background-image: url(../img/svg/Bulk/Home-white.svg);
+   background-image: url(img/svg/Bulk/Home-white.svg);
    width: 24px;
    height: 24px;
  }
  
  .document {
-   background-image: url(../img/svg/Bulk/Document-white.svg);
+   background-image: url(img/svg/Bulk/Document-white.svg);
    width: 24px;
    height: 24px;
  }
  
  .folder {
-   background-image: url(../img/svg/Bulk/Folder-white.svg);
+   background-image: url(img/svg/Bulk/Folder-white.svg);
    width: 24px;
    height: 24px;
  }
  
  .arrow-down {
-   background-image: url(../img/svg/Bulk/Arrow-DownCircle.svg);
+   background-image: url(img/svg/Bulk/Arrow-DownCircle.svg);
    width: 24px;
    height: 24px;
  }
  
  .image {
-   background-image: url(../img/svg/Bulk/Image-white.svg);
+   background-image: url(img/svg/Bulk/Image-white.svg);
    width: 24px;
    height: 24px;
  }
@@ -1125,114 +1125,114 @@ p {
  .paper {
    width: 24px;
    height: 24px;
-   background-image: url(../img/svg/Bulk/Paper-white.svg);
+   background-image: url(img/svg/Bulk/Paper-white.svg);
  }
  
  .message {
-   background-image: url(../img/svg/Bulk/Message-white.svg);
+   background-image: url(img/svg/Bulk/Message-white.svg);
    width: 24px;
    height: 24px;
  }
  
  .edit {
-   background-image: url(../img/svg/Bulk/Edit-white.svg);
+   background-image: url(img/svg/Bulk/Edit-white.svg);
    width: 24px;
    height: 24px;
  }
  
  .category {
-   background-image: url(../img/svg/Bulk/Category-white.svg);
+   background-image: url(img/svg/Bulk/Category-white.svg);
    width: 24px;
    height: 24px;
  }
  
  .user-3 {
-   background-image: url(../img/svg/Bulk/3-User-white.svg);
+   background-image: url(img/svg/Bulk/3-User-white.svg);
    width: 24px;
    height: 24px;
  }
  
  .setting {
-   background-image: url(../img/svg/Bulk/Setting-white.svg);
+   background-image: url(img/svg/Bulk/Setting-white.svg);
    width: 24px;
    height: 24px;
  }
  
  .settings-line {
-   background-image: url(../img/svg/Bulk/Settings-line.svg);
+   background-image: url(img/svg/Bulk/Settings-line.svg);
    width: 24px;
    height: 24px;
  }
  
  .avatar {
-   background-image: url(../img/avatar/Avatar.svg);
+   background-image: url(img/avatar/Avatar.svg);
    width: 56px;
    height: 56px;
  }
  
  .avatar-2 {
-   background-image: url(../img/avatar/avatar-2.svg);
+   background-image: url(img/avatar/avatar-2.svg);
    width: 40px;
    height: 40px;
  }
  
  .notification {
-   background-image: url(../img/svg/Bulk/Notification-gray.svg);
+   background-image: url(img/svg/Bulk/Notification-gray.svg);
    width: 24px;
    height: 24px;
  }
  
  .arrows-up-down {
-   background-image: url(../img/svg/Bulk/Arrows-up-down.svg);
+   background-image: url(img/svg/Bulk/Arrows-up-down.svg);
    width: 10px;
    height: 17px;
    margin-left: 10px;
  }
  
  .move {
-   background-image: url(../img/svg/move.svg);
+   background-image: url(img/svg/move.svg);
    width: 24px;
    height: 24px;
  }
  
  .radio {
-   background-image: url(../img/svg/radio.svg);
+   background-image: url(img/svg/radio.svg);
    width: 24px;
    height: 24px;
  }
  
  .thumbnail {
-   background-image: url(../img/svg/thumbnail.svg);
+   background-image: url(img/svg/thumbnail.svg);
    width: 60px;
    height: 60px;
  }
  
  .time-circle {
-   background-image: url(../img/svg/Bulk/TimeCircle.svg);
+   background-image: url(img/svg/Bulk/TimeCircle.svg);
    width: 24px;
    height: 24px;
  }
  
  .google-drive {
-   background-image: url(../img/svg/GoogleDrive.svg);
+   background-image: url(img/svg/GoogleDrive.svg);
    width: 24px;
    height: 24px;
  }
  
  .dropbox {
-   background-image: url(../img/svg/dropbox.svg);
+   background-image: url(img/svg/dropbox.svg);
    width: 24px;
    height: 24px;
  }
  
  .star {
-   background-image: url(../img/svg/Bulk/Star.svg);
+   background-image: url(img/svg/Bulk/Star.svg);
    width: 24px;
    height: 24px;
  }
  
  .delete {
-   background-image: url(../img/svg/Bulk/Delete.svg);
+   background-image: url(img/svg/Bulk/Delete.svg);
    width: 24px;
    height: 24px;
  }
