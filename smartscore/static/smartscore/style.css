@@ -5,7 +5,7 @@
     left: 0;
     height: 100%;
     width: 250px; /* Ancho del sidebar */
-    background-color: #6c1616; /* Color de fondo del sidebar */
+    background-color: #d73030; /* Color de fondo del sidebar */
     color: #fff; /* Color del texto en el sidebar */
     padding-top: 60px; /* Altura del top bar */
     transition: width 0.3s ease;
@@ -16,10 +16,14 @@
     position: fixed;
     top: 0;
     padding-top: 25px;
+    text-align: center; /* Center the content of the head */
 }
 
 .sidebar-body {
     margin-top: 80px; /* Ajusta el valor según el espacio deseado */
+    /*Add a separator between elements of the sidebar*/
+    border-top: 1px solid #080808;
+    border-top-style: groove;
 }
 
 .sidebar a {
@@ -31,7 +35,7 @@
 }
 
 .sidebar a:hover {
-    background-color: #666; /* Color de fondo al hacer hover */
+    background-color: #dc7575; /* Color de fondo al hacer hover */
 }
 
 /* Estilo para el contenido principal */
@@ -145,3 +149,19 @@ footer {
     margin-right: 20px; /* Espacio entre el campo de búsqueda y los botones de inicio de sesión */
 }
 
+
+
+/* Styles for the football field container */
+.Football-field-container {
+    position: relative; /* Ensure the container is positioned relative to its parent */
+}
+
+/*Estilo para los puntos del campo de futbol*/
+.player-position-dot {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background-color: blue;
+    border-radius: 50%;
+    z-index: 999;
+}
