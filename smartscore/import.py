@@ -58,8 +58,10 @@ with open('Dataset_comp_acortado.csv',  encoding='utf-8') as csvfile:
         player.Reg_90 = 0 if row[44] == '-' else float(row[44].replace(',', '.'))
         player.Rob_90 = 0 if row[45] == '-' else float(row[45].replace(',', '.'))
         # Obtener las posiciones del jugador
-        poslist = []
+        poslist = ""
         for position in get_player_positions(player.Pos):
-            poslist.append(position)
+            if poslist != "":
+                poslist = poslist + ","
+            poslist = poslist + position
         player.PositionList = poslist
         player.save() 

@@ -55,5 +55,8 @@ def get_player_positions(player_pos):
                     elif char == 'C':
                         name_positions.append(position + 'C')
             else:
-                name_positions.append(position + 'C')
+                if position == 'POR': #Para que no quede PORC
+                    name_positions.append(position)
+                else:
+                    name_positions.append(position + 'C')
     return name_positions
