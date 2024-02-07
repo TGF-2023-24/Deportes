@@ -6,207 +6,101 @@
     <title>{% block title %}Smart Score{% endblock %}</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'smartscore/style.css' %}">
+    <link rel="icon" href="{% static 'smartscore/images/icono.png' %}">
 </head>
-
 <body>
-<!-- ! Body -->
-<a class="skip-link sr-only" href="#skip-target">Skip to content</a>
-<div class="page-flex">
-  <!-- ! Sidebar -->
-  <aside class="sidebar">
-    <div class="sidebar-start">
-        <div class="sidebar-head">
-            <a href="/" class="logo-wrapper" title="Home">
-                <span class="sr-only">Home</span>
-                <span class="icon logo" aria-hidden="true"></span>
-                <div class="logo-text">
-                    <span class="logo-title">Iván</span>
-                    <span class="logo-subtitle">Gallego</span>
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li> 
+            {% endfor %}
+        </ul>
+    {% endif %}
+    
+   
+        
+        
+            <div class="sidebar"> <!-- Barra lateral. Modifica según veas -->
+                <div class="sidebar-start">
+                    <div class="sidebar-head">
+                        <a href="/" class="logo-wrapper" title="Home">
+                            <img src="{% static 'smartscore/images/icono.png' %}" alt="Icon">
+                            <div class="logo-text">
+                                <span class="logo-title">PlayerProVision</span>
+                                <span class="logo-subtitle">Iván & Pablo</span>
+                            </div>
+                        </a>
+                        
+                    </div>
+                    <div class="sidebar-body">
+                        <ul class="sidebar-body-menu">
+                            <li>
+                                <a class="active" href="{% url 'home' %}"><span class="icon home" aria-hidden="true"></span>Home</a>
+                            </li>
+                            <li>
+                                <a class="show-cat-btn" href="##">
+                                    <span class="icon category" aria-hidden="true"></span>Tools
+                                    <span class="category__btn transparent-btn" title="Open list">
+                                        <span class="sr-only">Open list</span>
+                                        <span class="icon arrow-down" aria-hidden="true"></span>
+                                    </span>
+                                </a>
+                                <ul class="cat-sub-menu">
+                                    <li>
+                                        <a href="{% url 'search_player' %}">Search player</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="{% url 'about' %}"><span class="icon setting" aria-hidden="true"></span>About</a>
+                            </li>
+                            <li>
+                                <a href="##"><span class="icon setting" aria-hidden="true"></span>Settings</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="sidebar-footer">
+                    
+                </div>
+                
+            </div>
+
+            <div class="top-bar">   
+                <div class="search-wrapper">
+                    <form action="{% url 'search_player' %}" method="POST">
+                        {% csrf_token %} <!--seguridad -->
+                        <input type="text" name="q" value="{{q}}" placeholder="Search for players">
+                        <input type="submit" value="Search" class="primary-search-btn">
+                    </form>
                 </div>
 
-            </a>
-            <button class="sidebar-toggle transparent-btn" title="Menu" type="button">
-                <span class="sr-only">Toggle menu</span>
-                <span class="icon menu-toggle" aria-hidden="true"></span>
-            </button>
-        </div>
-        <div class="sidebar-body">
-            <ul class="sidebar-body-menu">
-                <li>
-                    <a class="active" href="/"><span class="icon home" aria-hidden="true"></span>Dashboard</a>
-                </li>
-                <li>
-                    <a class="show-cat-btn" href="##">
-                        <span class="icon document" aria-hidden="true"></span>Form
-                        <span class="category__btn transparent-btn" title="Open list">
-                            <span class="sr-only">Open list</span>
-                            <span class="icon arrow-down" aria-hidden="true"></span>
-                        </span>
-                    </a>
-                    <ul class="cat-sub-menu">
-                        <li>
-                            <a href="forms/form.html">Complete form</a>
-                        </li>
-                        <li>
-                            <a href="forms/ajax.html">AJAX form</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a class="show-cat-btn" href="##">
-                        <span class="icon image" aria-hidden="true"></span>Media
-                        <span class="category__btn transparent-btn" title="Open list">
-                            <span class="sr-only">Open list</span>
-                            <span class="icon arrow-down" aria-hidden="true"></span>
-                        </span>
-                    </a>
-                    <ul class="cat-sub-menu">
-                        <li>
-                            <a href="img/cv.pdf">Curriculum</a>
-                        </li>
-                        <li>
-                            <a href="media-02.html">Media-02</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a class="show-cat-btn" href="##">
-                        <span class="icon paper" aria-hidden="true"></span>Pages
-                        <span class="category__btn transparent-btn" title="Open list">
-                            <span class="sr-only">Open list</span>
-                            <span class="icon arrow-down" aria-hidden="true"></span>
-                        </span>
-                    </a>
-                    <ul class="cat-sub-menu">
-                        <li>
-                            <a href="AssignmentInfo/assignment1.html">Assignment 1</a>
-                        </li>
-                        <li>
-                            <a href="AssignmentInfo/assignment2.html">Assignment 2</a>
-                        </li>
-                        <li>
-                          <a href="##">Assignment 3</a>
-                       </li>
-                        <li>
-                          <a href="##">Assignment 4</a>
-                       </li>
-                    </ul>
-                </li>
-            </ul>
-            <span class="system-menu__title">system</span>
-            <ul class="sidebar-body-menu">
-                <li>
-                    <a class="show-cat-btn" href="##">
-                        <span class="icon category" aria-hidden="true"></span>Tools
-                        <span class="category__btn transparent-btn" title="Open list">
-                            <span class="sr-only">Open list</span>
-                            <span class="icon arrow-down" aria-hidden="true"></span>
-                        </span>
-                    </a>
-                    <ul class="cat-sub-menu">
-                        <li>
-                            <a href="calculator.html">Calculator</a>
-                        </li>
-                        <li>
-                            <a href="randomcolour.html">Random colour</a>
-                        </li>
-                        <li>
-                          <a href="guessinggame.html">Guessing game</a>
-                        </li>
-                        <li>
-                          <a href="map.html">Map</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a class="show-cat-btn" href="##">
-                        <span class="icon user-3" aria-hidden="true"></span>Users
-                        <span class="category__btn transparent-btn" title="Open list">
-                            <span class="sr-only">Open list</span>
-                            <span class="icon arrow-down" aria-hidden="true"></span>
-                        </span>
-                    </a>
-                    <ul class="cat-sub-menu">
-                        <li>
-                            <a href="users-01.html">Users-01</a>
-                        </li>
-                        <li>
-                            <a href="users-02.html">Users-02</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="##"><span class="icon setting" aria-hidden="true"></span>Settings</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div class="sidebar-footer">
-        <a href="##" class="sidebar-user">
-            <span class="sidebar-user-img">
-                <picture><source srcset="./img/avatar/ancelotti.webp" type="image/webp"><img src="./img/avatar/ancelotti.png" alt="User name"></picture>
-            </span>
-            <div class="sidebar-user-info">
-                <span class="sidebar-user__title">Iván G.</span>
-                <span class="sidebar-user__subtitle">Developer</span>
+                <div class="log-in-wrapper">  
+                    {% if user.is_authenticated %}
+                        <a class = "primary-default-btn" href="{% url 'logout' %}">Logout</a>
+                    {% else %}
+                        <a class = "primary-default-btn" href="{% url 'login' %}">Login</a>
+                        <a class = "primary-default-btn" href="{% url 'signup' %}">Signup</a>
+                    {% endif %}     
+                </div>
+            
             </div>
-        </a>
-    </div>
-</aside>
 
-<!-- Top bar -->
-<div>
-    <div class="top-bar">
-        <div class="search-container">
-            <div class="search-wrapper">
-                <form action="{% url 'search_player' %}" method="POST">
-                    {% csrf_token %} <!-- Security -->
-                    <input type="text" name="q" value="{{q}}" placeholder="Search for players">
-                    <input type="submit" value="Search" class="primary-search-btn">
-                </form>
+            <div class="content">
+                {% block content %}{% endblock %}
             </div>
-        </div>
-        <div class="nav-user-wrapper">  
-            {% if user.is_authenticated %}
-                <a class="primary-default-btn" href="{% url 'logout' %}">Logout</a>
-            {% else %}
-                <a class="primary-default-btn" href="{% url 'login' %}">Login</a>
-                <a class="primary-default-btn" href="{% url 'signup' %}">Signup</a>
-            {% endif %}     
-        </div>
-        <div class="nav-user-wrapper">
-            <button href="##" class="nav-user-btn dropdown-btn" title="My profile" type="button">
-              <span class="sr-only">My profile</span>
-              <span class="nav-user-img">
-                <picture><source srcset="./img/avatar/ancelotti.webp" type="image/webp"><img src="./img/avatar/ancelotti.png" alt="User name"></picture>
-              </span>
-            </button>
-            <ul class="users-item-dropdown nav-user-dropdown dropdown">
-              <li><a href="##">
-                  <i data-feather="user" aria-hidden="true"></i>
-                  <span>Profile</span>
-                </a></li>
-              <li><a href="##">
-                  <i data-feather="settings" aria-hidden="true"></i>
-                  <span>Account settings</span>
-                </a></li>
-              <li><a class="danger" href="##">
-                  <i data-feather="log-out" aria-hidden="true"></i>
-                  <span>Log out</span>
-                </a></li>
-            </ul>
-        </div>
-    </div>
-</div>
+    
 
-<!-- Container for main content -->
-<div class="container-for-main-content">
-    <div class="main-content">
-        <div class="scroll-box" style="width: 400px; height: 400px; overflow: auto;">
-            {% block content %}{% endblock %}
-        </div>
-    </div>
-</div>
+        
 
+        
+        <footer>       
+            <p>Pie de página común &copy; {% now "Y" %}</p>
+        </footer>
+   
+
+   
+   
 </body>
 </html>
