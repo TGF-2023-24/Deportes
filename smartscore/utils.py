@@ -1,32 +1,36 @@
 def get_dot_positions(player_pos):
+    position_mapping = {
+        'POR': {'default_top': 750},  # Goalkeeper
+        'DF': {'default_top': 650},  # Defender
+        'CR': {'default_top': 525},  # Wing-back
+        'MC': {'default_top': 525},  # Defensive midfielder
+        'ME': {'default_top': 400},  # Midfielder
+        'MP': {'default_top': 250},  # Attacking midfielder
+        'DL': {'default_top': 125},  # Forward
+        # Add more positions and their default top values as needed
+    }
+
     dot_positions = []
-    for position in player_pos.split(","):
-        if 'D' in position or 'I' in position or 'C' in position:
-            if 'D' in position:
-                if 'I' in position:
-                    dot_positions.extend([{'left': 100, 'top': 100}, {'left': 250, 'top': 100}])  # Example positions for right and left
-                elif 'C' in position:
-                    dot_positions.extend([{'left': 250, 'top': 100}, {'left': 300, 'top': 100}])  # Example positions for right and middle
+    for position_with_spec in player_pos.split(","):
+        positions, spec = position_with_spec.split('(') if '(' in position_with_spec else (position_with_spec.strip(), None)
+        positions = positions.strip().split('/')
+        if spec:
+            spec = spec.strip()
+        for position in positions:
+            position = position.strip()
+            if position in position_mapping:
+                dot_position = {'left': 250, 'top': position_mapping[position]['default_top']}
+                if spec:
+                    for char in spec:
+                        if char == 'D':
+                            dot_position['left'] = 425  # Example value for 'D'
+                            dot_positions.append(dot_position.copy())
+                        elif char == 'I':
+                            dot_position['left'] = 75  # Example value for 'I'
+                            dot_positions.append(dot_position.copy())
+                        elif char == 'C':
+                            dot_position['left'] = 250  # Example value for 'C'
+                            dot_positions.append(dot_position.copy())
                 else:
-                    dot_positions.append({'left': 250, 'top': 100})  # Example position for right
-            if 'I' in position and 'D' not in position:
-                if 'C' in position:
-                    dot_positions.extend([{'left': 100, 'top': 100}, {'left': 200, 'top': 100}])  # Example positions for left and middle
-                else:
-                    dot_positions.append({'left': 100, 'top': 100})  # Example position for left
-            if 'C' in position and 'D' not in position and 'I' not in position:
-                dot_positions.append({'left': 250, 'top': 100})  # Example position for middle
-        else:
-            if position == 'POR':
-                dot_positions.append({'left': 250, 'top': 10})  # Example position for goalkeeper
-            elif position == 'DF':
-                dot_positions.append({'left': 250, 'top': 100})  # Example position for defender
-            elif position == 'MC':
-                dot_positions.append({'left': 250, 'top': 250})  # Example position for defensive midfielder
-            elif position == 'ME':
-                dot_positions.append({'left': 250, 'top': 400})  # Example position for midfielder
-            elif position == 'MP':
-                dot_positions.append({'left': 250, 'top': 550})  # Example position for attacking midfielder
-            elif position == 'DL':
-                dot_positions.append({'left': 250, 'top': 700})  # Example position for forward
+                    dot_positions.append(dot_position)
     return dot_positions

@@ -157,11 +157,15 @@ footer {
 }
 
 /*Estilo para los puntos del campo de futbol*/
+/* style.css */
+
 .player-position-dot {
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    background-color: blue;
-    border-radius: 50%;
-    z-index: 999;
+    width: 40px; /* Adjust the size of the dot */
+    height: 40px; /* Adjust the size of the dot */
+    border-radius: 50%; /* Make the dot round */
+    background-color: blue; /* Set the color of the dot */
+    position: absolute; /* Position the dot relative to its container */
+    transform: translate(-50%, -50%); /* Center the dot's position */
 }
+
+
