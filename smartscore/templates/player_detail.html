@@ -1,42 +1,27 @@
-{%extends "base.html"%}
+{% extends "base.html" %}
 {% load static %}
-{%block title%}Player Detail{%endblock%}
-{%block content%}
-    <div class="main-nav">
-        <div class="main-nav-header">
-            <h1>Player Detail</h1>
+{% block title %}Player Detail{% endblock %}
+{% block content %}
+<div class="main-nav">
+    <div class="main-nav-header">
+        <h1>Player Detail</h1>
     </div>
     <div class="main-nav-body">
         <br>
-        <h2>{{player.Name}}</h2>
+        <h2>{{ player.Name }}</h2>
         <br>
-        <h3>Position: {{player.Pos}}</h3><br>
-        <h3>Sueldo: {{player.Salary}} $</h3>
+        <h3>Position: {{ player.Pos }}</h3><br>
+        <h3>Sueldo: {{ player.Salary }} $</h3>
 
         <!-- Field image container -->
         <div class="Football-field-container">
             <img src="{% static 'smartscore/images/field.jpg' %}" alt="Football Field">
             <!-- Player position dots -->
-            {% if player.Pos == 'POR' %} <!-- Goalkeeper -->
-                    <div class="player-position-dot" style="left: 250px; top: 400px;"></div>
-            {% endif %}
-            
-            {% for position in player.Pos|slice:", " %}
-                {% if position == 'POR' %} <!-- Goalkeeper -->
-                    <div class="player-position-dot" style="left: 250px; top: 10px;"></div>
-                {% elif position == 'DF' %} <!-- Defender -->
-                    <div class="player-position-dot" style="left: 250px; top: 100px;"></div>
-                {% elif position == 'MC' %} <!--Defensive midfielder-->
-                    <div class="player-position-dot" style="left: 250px; top: 250px;"></div>
-                {% elif position == 'ME' %} <!--Midfielder-->
-                    <div class="player-position-dot" style="left: 250px; top: 400px;"></div>
-                {% elif position == 'MP' %} <!--Attacking midfielder-->
-                    <div class="player-position-dot" style="left: 250px; top: 550px;"></div>
-                {% elif position == 'DL' %} <!--Forward-->
-                    <div class="player-position-dot" style="left: 250px; top: 700px;"></div>
-                {% endif %}
+            {% for dot_position in dot_positions %}
+                <div class="player-position-dot" style="left: {{ dot_position.left }}px; top: {{ dot_position.top }}px;"></div>
             {% endfor %}
         </div>
 
     </div>
-{%endblock%}
+</div>
+{% endblock %}
