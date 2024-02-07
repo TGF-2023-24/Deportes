@@ -49,11 +49,11 @@ def get_player_positions(player_pos):
             if spec:
                 for char in spec:
                     if char == 'D':
-                        name_positions.append(position.copy() + 'D')
+                        name_positions.append(position + 'D')
                     elif char == 'I':
-                        name_positions.append(position.copy() + 'I')
+                        name_positions.append(position + 'I')
                     elif char == 'C':
-                        name_positions.append(position.copy() + 'C')
+                        name_positions.append(position + 'C')
             else:
                 name_positions.append(position + 'C')
     return name_positions
