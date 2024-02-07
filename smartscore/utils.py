@@ -58,3 +58,18 @@ def get_player_positions(player_pos):
                 else:
                     name_positions.append(position + 'C')
     return name_positions
+
+#Obtener estadísticas del jugador
+def get_player_stats(player):
+    
+    ataque = (player.xG) + (player.Gol_90 * 15) + (player.Asis_90 *10)
+    defensa =  (player.Tackles_won_rat * 15) + (player.Rob_90 * 15)
+    pase = (player.Pas_Clv_90 * 10) + (player.Pass_rat * 15) 
+
+    stats = {
+        'Ataque': ataque,
+        'Defensa': defensa,
+        'Pase': pase
+    }
+
+    return stats

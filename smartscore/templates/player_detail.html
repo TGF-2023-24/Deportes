@@ -3,28 +3,89 @@
 {% block title %}{{ player.Name }}{% endblock %}
 {% block content %}
 <div class="main-nav">
-    <div class="main-nav-header">
-        <h1>{{ player.Name }}</h1>
-    </div>
-    <div class="main-nav-body">
-        <br>
-        <h3>Current team: {{ player.Club }}</h3><br>
-        <h3>League: {{ player.League }}</h3><br>
-        {% for position in player.Pos.all %}
-            <h3>Position: {{ position }}</h3><br>
-        {% endfor %}
-       
-        <h3>Sueldo: {{ player.Salary }} $</h3>
+    <div class="grid-container">
+        <div class="data-column">
 
-        <!-- Field image container -->
-        <div class="Football-field-container">
-            <img src="{% static 'smartscore/images/field.jpg' %}" alt="Football Field">
-            <!-- Player position dots -->
-            {% for dot_position in dot_positions %}
-                <div class="player-position-dot" style="left: {{ dot_position.left }}px; top: {{ dot_position.top }}px;"></div>
-            {% endfor %}
+            <div class="main-nav-header">
+                <h1>{{ player.Name }}</h1>
+            </div>
+
+            <div class="main-nav-body">
+                <br>
+                <h3>Current team: {{ player.Club }}</h3><br>
+                <h3>League: {{ player.League }}</h3><br>
+                <h3>Positions:</h3>
+                    <ul>
+                        {% for position in player.Pos.all %}
+                            <li>{{ position }}</li>
+                        {% endfor %}
+                    </ul>
+                <h3>Wage: {{ player.Salary }} $</h3>
+                <h3>Contract until: {{ player.Contract }}</h3>
+                <h3>Leg: {{ player.Leg}} </h3>
+                <h3>Age: {{ player.Age }}</h3>
+                <h3>Country: {{ player.Nacionality }}</h3>
+                <h3>Market Value: estaría guapo $</h3>
+                <h3>Height: {{ player.Height }} cm</h3>
+                <h3>Weight: {{ player.Weight }} kg</h3>
+
+            </div>
         </div>
 
+        <div class="image-column">
+            <!-- Field image container -->
+            <div class="Football-field-container">
+                <img src="{% static 'smartscore/images/field.jpg' %}" alt="Football Field">
+                <!-- Player position dots -->
+                {% for dot_position in dot_positions %}
+                    <div class="player-position-dot" style="left: {{ dot_position.left }}px; top: {{ dot_position.top }}px;"></div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="chart-column">
+                <canvas id="radarChart" width="400" height="400"></canvas>
+                <h3>Stats: </h3>
+                <ul>
+                    <li>Defensa: {{ stats.Defensa }}</li>
+                    <li>Ataque: {{ stats.Ataque }}</li>
+                    <li>Pase: {{ stats.Pase }}</li>
+                </ul>
+        </div>
+
+        <script>
+            var radarData = {
+                labels: ["Defensa", "Ataque", "Pase"],
+                datasets: [{
+                    label: "{{ player.Name }}",
+                    backgroundColor: "#FFCC80",
+                    borderColor: "#FFA500",
+                    pointBackgroundColor: "#FFA500",
+                    pointBorderColor: "#FFA500",
+                    pointHoverBackgroundColor: "#FFA500",
+                    pointHoverBorderColor: "rgba(179,181,198,1)",
+                    data: [{{ stats.Defensa }}, {{ stats.Ataque }}, {{ stats.Pase }}]
+                }]
+            };
+        
+            var radarOptions = {
+                scale: {
+                    ticks: {
+                        beginAtZero: true,
+                        max: 10
+                    }
+                }
+            };
+        
+            var radarChartCanvas = document.getElementById("radarChart").getContext("2d");
+            var myRadarChart = new Chart(radarChartCanvas, {
+                type: 'radar',
+                data: radarData,
+                options: radarOptions
+            });
+        </script>
+
     </div>
+
 </div>
 {% endblock %}

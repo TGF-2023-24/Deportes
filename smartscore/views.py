@@ -8,7 +8,7 @@ from django.db.models import Q
 from django import forms
 from .forms import CreateUserForm
 from django.contrib.auth.decorators import login_required #utilizar este decorador para proteger las rutas que requieren autenticación
-from .utils import get_dot_positions  # Import the get_dot_positions function
+from .utils import get_dot_positions, get_player_stats  # Import the get_dot_positions function
 #se usa @login_required(login_url='login') en la vista que se quiere proteger
 
 # Create your views here.
@@ -24,7 +24,8 @@ def player_detail(request, custom_id):
     player = Player.objects.get(custom_id=custom_id)
     # Call the get_dot_positions function to calculate dot positions
     dot_positions = get_dot_positions(player.Pos)
-    return render(request, 'player_detail.html', {'player': player, 'dot_positions': dot_positions})
+    stats = get_player_stats(player)
+    return render(request, 'player_detail.html', {'player': player, 'dot_positions': dot_positions, 'stats': stats})
 
 def login_user(request):
     if request.user.is_authenticated: #habrá que cambiar el redirect, esto debe ser cutre, pero por el momento nos vale

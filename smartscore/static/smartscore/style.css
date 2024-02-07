@@ -149,7 +149,16 @@ footer {
     margin-right: 20px; /* Espacio entre el campo de búsqueda y los botones de inicio de sesión */
 }
 
+/* Estilo para el contenido jugadores */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 20px;
+}
 
+.data-column, .image-column, .chart-column {
+    padding: 20px;
+}
 
 /* Styles for the football field container */
 .Football-field-container {
