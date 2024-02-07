@@ -1,6 +1,7 @@
 import csv
 from smartscore.models import Player
 from datetime import datetime
+from .utils import get_player_positions # Import the function from utils.py
 
 with open('Dataset_comp_acortado.csv',  encoding='utf-8') as csvfile:
     readCSV = csv.reader(csvfile, delimiter=',')
@@ -56,4 +57,9 @@ with open('Dataset_comp_acortado.csv',  encoding='utf-8') as csvfile:
         player.Ent_rat = 0 if row[43] == '-' else int(row[43].replace('%', ''))
         player.Reg_90 = 0 if row[44] == '-' else float(row[44].replace(',', '.'))
         player.Rob_90 = 0 if row[45] == '-' else float(row[45].replace(',', '.'))
+        # Obtener las posiciones del jugador
+        poslist = []
+        for position in get_player_positions(player.Pos):
+            poslist.append(position)
+        player.PositionList = poslist
         player.save() 

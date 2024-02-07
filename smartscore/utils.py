@@ -1,3 +1,4 @@
+#Dibujar las posiciones del jugador
 def get_dot_positions(player_pos):
     position_mapping = {
         'POR': {'default_top': 750},  # Goalkeeper
@@ -34,3 +35,25 @@ def get_dot_positions(player_pos):
                 else:
                     dot_positions.append(dot_position)
     return dot_positions
+
+#Obtener las posiciones del jugador
+def get_player_positions(player_pos):
+    name_positions = []
+    for position_with_spec in player_pos.split(","):
+        positions, spec = position_with_spec.split('(') if '(' in position_with_spec else (position_with_spec.strip(), None)
+        positions = positions.strip().split('/')
+        if spec:
+            spec = spec.strip()
+        for position in positions:
+            position = position.strip()
+            if spec:
+                for char in spec:
+                    if char == 'D':
+                        name_positions.append(position.copy() + 'D')
+                    elif char == 'I':
+                        name_positions.append(position.copy() + 'I')
+                    elif char == 'C':
+                        name_positions.append(position.copy() + 'C')
+            else:
+                name_positions.append(position + 'C')
+    return name_positions
