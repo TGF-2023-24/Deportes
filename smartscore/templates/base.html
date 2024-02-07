@@ -7,97 +7,99 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'smartscore/style.css' %}">
     <link rel="icon" href="{% static 'smartscore/images/icono.png' %}">
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    
+
 </head>
 <body>
-    {% if messages %}
-        <ul>
-            {% for message in messages %}
-                <li>{{ message }}</li> 
-            {% endfor %}
-        </ul>
-    {% endif %}
     
-   
-        
-        
-            <div class="sidebar"> <!-- Barra lateral. Modifica según veas -->
-                <div class="sidebar-start">
-                    <div class="sidebar-head">
-                        <a href="/" class="logo-wrapper" title="Home">
-                            <img src="{% static 'smartscore/images/icono.png' %}" alt="Icon">
-                            <div class="logo-text">
-                                <span class="logo-title">PlayerProVision</span>
-                                <span class="logo-subtitle">Iván & Pablo</span>
-                            </div>
-                        </a>
-                        
+    <div class="sidebar"> <!-- Barra lateral. Modifica según veas -->
+
+        <div class="sidebar-start">
+
+            <div class="sidebar-head">
+                <a href="/" class="logo-wrapper" title="Home">
+                    <img src="{% static 'smartscore/images/icono.png' %}" alt="Icon">
+                    <div class="logo-text">
+                        <span class="logo-title">PlayerProVision</span>
+                        <span class="logo-subtitle">Iván & Pablo</span>
                     </div>
-                    <div class="sidebar-body">
-                        <ul class="sidebar-body-menu">
+                </a>
+            </div>
+
+            <div class="sidebar-body">
+
+                <ul class="sidebar-body-menu">
+                    <li>
+                        <a class="active" href="{% url 'home' %}"><span class="icon home" aria-hidden="true"></span>Home</a>
+                    </li>
+                    <li>
+                        <a class="show-cat-btn" href="##">
+                            <span class="icon category" aria-hidden="true"></span>Tools
+                            <span class="category__btn transparent-btn" title="Open list">
+                                <span class="sr-only">Open list</span>
+                                <span class="icon arrow-down" aria-hidden="true"></span>
+                            </span>
+                        </a>
+                        <ul class="cat-sub-menu">
                             <li>
-                                <a class="active" href="{% url 'home' %}"><span class="icon home" aria-hidden="true"></span>Home</a>
-                            </li>
-                            <li>
-                                <a class="show-cat-btn" href="##">
-                                    <span class="icon category" aria-hidden="true"></span>Tools
-                                    <span class="category__btn transparent-btn" title="Open list">
-                                        <span class="sr-only">Open list</span>
-                                        <span class="icon arrow-down" aria-hidden="true"></span>
-                                    </span>
-                                </a>
-                                <ul class="cat-sub-menu">
-                                    <li>
-                                        <a href="{% url 'search_player' %}">Search player</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="{% url 'about' %}"><span class="icon setting" aria-hidden="true"></span>About</a>
-                            </li>
-                            <li>
-                                <a href="##"><span class="icon setting" aria-hidden="true"></span>Settings</a>
+                                <a href="{% url 'search_player' %}">Search player</a>
                             </li>
                         </ul>
-                    </div>
-                </div>
-                
-                <div class="sidebar-footer">
-                    
-                </div>
-                
+                    </li>
+                    <li>
+                        <a href="{% url 'about' %}"><span class="icon setting" aria-hidden="true"></span>About</a>
+                    </li>
+                    <li>
+                        <a href="##"><span class="icon setting" aria-hidden="true"></span>Settings</a>
+                    </li>
+                </ul>
             </div>
+        </div>
+        
+    </div>
 
-            <div class="top-bar">   
-                <div class="search-wrapper">
-                    <form action="{% url 'search_player' %}" method="POST">
-                        {% csrf_token %} <!--seguridad -->
-                        <input type="text" name="q" value="{{q}}" placeholder="Search for players">
-                        <input type="submit" value="Search" class="primary-search-btn">
-                    </form>
-                </div>
+    <div class="top-bar">   
+        <div class="search-wrapper">
+            <form action="{% url 'search_player' %}" method="POST">
+                {% csrf_token %} <!--seguridad -->
+                <input type="text" name="q" value="{{q}}" placeholder="Search for players">
+                <input type="submit" value="Search" class="primary-search-btn">
+            </form>
+        </div>
 
-                <div class="log-in-wrapper">  
-                    {% if user.is_authenticated %}
-                        <a class = "primary-default-btn" href="{% url 'logout' %}">Logout</a>
-                    {% else %}
-                        <a class = "primary-default-btn" href="{% url 'login' %}">Login</a>
-                        <a class = "primary-default-btn" href="{% url 'signup' %}">Signup</a>
-                    {% endif %}     
-                </div>
-            
-            </div>
-
-            <div class="content">
-                {% block content %}{% endblock %}
-            </div>
+        <div class="log-in-wrapper">  
+            {% if user.is_authenticated %}
+                <a class = "primary-default-btn" href="{% url 'logout' %}">Logout</a>
+            {% else %}
+                <a class = "primary-default-btn" href="{% url 'login' %}">Login</a>
+                <a class = "primary-default-btn" href="{% url 'signup' %}">Signup</a>
+            {% endif %}     
+        </div>
     
+    </div>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <div class="content">
+        {% if messages %}
+        <div class="container mt-4">
+            {% for message in messages %}
+                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
 
+        {% block content %}{% endblock %}
+    </div>
         
-
-        
-        <footer>       
-            <p>Pie de página común &copy; {% now "Y" %}</p>
-        </footer>
+    <footer>       
+        <p>Pie de página común &copy; {% now "Y" %}</p>
+    </footer>
    
 
    
