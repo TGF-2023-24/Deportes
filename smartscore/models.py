@@ -9,7 +9,7 @@ class Player(models.Model):
     International_match = models.IntegerField()
     Club = models.CharField(max_length=100)
     League = models.CharField(max_length=100)	
-    Pos = models.CharField(max_length=50)
+    Pos = models.ManyToManyField('Position')
     Leg = models.CharField(max_length=50)
     Age = models.IntegerField()
     Height = models.IntegerField()	
@@ -51,3 +51,9 @@ class Player(models.Model):
 
     def __str__(self):
         return self.Name
+    
+class Position(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Player
+from .models import Player, Position
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -77,8 +77,8 @@ def search_player(request):
             Q(Club__icontains=searched) | 
             Q(League__icontains=searched) | 
             Q(Nacionality__icontains=searched) | 
-            Q(Leg__icontains=searched) |
-            Q(Pos__icontains=searched) 
+            Q(Leg__icontains=searched) 
+            #| Q(Pos__icontains=searched) 
         )
 
 

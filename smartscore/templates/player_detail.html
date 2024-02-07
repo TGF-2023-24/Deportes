@@ -1,16 +1,19 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Player Detail{% endblock %}
+{% block title %}{{ player.Name }}{% endblock %}
 {% block content %}
 <div class="main-nav">
     <div class="main-nav-header">
-        <h1>Player Detail</h1>
+        <h1>{{ player.Name }}</h1>
     </div>
     <div class="main-nav-body">
         <br>
-        <h2>{{ player.Name }}</h2>
-        <br>
-        <h3>Position: {{ player.Pos }}</h3><br>
+        <h3>Current team: {{ player.Club }}</h3><br>
+        <h3>League: {{ player.League }}</h3><br>
+        {% for position in player.Pos.all %}
+            <h3>Position: {{ position }}</h3><br>
+        {% endfor %}
+       
         <h3>Sueldo: {{ player.Salary }} $</h3>
 
         <!-- Field image container -->

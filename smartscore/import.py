@@ -1,5 +1,5 @@
 import csv
-from smartscore.models import Player
+from smartscore.models import Player, Position
 from datetime import datetime
 from .utils import get_player_positions # Import the function from utils.py
 
@@ -19,7 +19,6 @@ with open('Dataset_comp_acortado.csv',  encoding='utf-8') as csvfile:
         player.International_match = int(row[4].replace(',', ''))  # Eliminar comas en números
         player.Club = row[6]
         player.League = row[7]
-        player.Pos = row[8]
         player.Leg = row[9]
         player.Age = int(row[10])
         player.Height = int(row[11].split()[0])  # Extraer solo el número de la altura
@@ -57,11 +56,15 @@ with open('Dataset_comp_acortado.csv',  encoding='utf-8') as csvfile:
         player.Ent_rat = 0 if row[43] == '-' else int(row[43].replace('%', ''))
         player.Reg_90 = 0 if row[44] == '-' else float(row[44].replace(',', '.'))
         player.Rob_90 = 0 if row[45] == '-' else float(row[45].replace(',', '.'))
+
+        player.save()
+
         # Obtener las posiciones del jugador
-        poslist = ""
-        for position in get_player_positions(player.Pos):
-            if poslist != "":
-                poslist = poslist + ","
-            poslist = poslist + position
-        player.PositionList = poslist
-        player.save() 
+        positions = get_player_positions(row[8])
+
+        # Crear instancias de las posiciones y agregarlas al jugador
+        for position_name in positions:
+            position, created = Position.objects.get_or_create(name=position_name)
+            player.Pos.add(position)
+
+        player.save()
