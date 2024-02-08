@@ -1,12 +1,12 @@
 def get_dot_positions(player_pos):
     position_mapping = {
-        'POR': {'default_top': 750},  # Goalkeeper
-        'DF': {'default_top': 650},  # Defender
-        'CR': {'default_top': 525},  # Wing-back
-        'MC': {'default_top': 525},  # Defensive midfielder
-        'ME': {'default_top': 400},  # Midfielder
-        'MP': {'default_top': 250},  # Attacking midfielder
-        'DL': {'default_top': 125},  # Forward
+        'GK': {'default_top': 750},  # Goalkeeper
+        'D': {'default_top': 650},   # Defender
+        'WB': {'default_top': 525},  # Wing-back
+        'DM': {'default_top': 525},  # Defensive midfielder
+        'M': {'default_top': 400},   # Midfielder
+        'AM': {'default_top': 250},  # Attacking midfielder
+        'ST': {'default_top': 125},  # Forward
         # Add more positions and their default top values as needed
     }
 
@@ -14,22 +14,18 @@ def get_dot_positions(player_pos):
     for position in player_pos.all():
         if position.name[:2] in position_mapping:
             dot_position = {'left': 250, 'top': position_mapping[position.name[:2]]['default_top']}            
-            if position.name[-1]   == 'D':
-                dot_position['left'] = 425  # Example value for 'D'
+            if position.name[-1]   == 'R':
+                dot_position['left'] = 425  # Value for Right
                 dot_positions.append(dot_position.copy())
-            elif position.name[-1]   == 'I':
-                dot_position['left'] = 75  # Example value for 'I'
+            elif position.name[-1]   == 'L':
+                dot_position['left'] = 75  # Value for Left
                 dot_positions.append(dot_position.copy())
             elif position.name[-1]   == 'C':
-                dot_position['left'] = 250  # Example value for 'C'
+                dot_position['left'] = 250  # Value for Center
                 dot_positions.append(dot_position.copy())
-        
-                dot_positions.append(dot_position)
-        else:
-            dot_position = {'left': 250, 'top': position_mapping[position.name]['default_top']}  
-            dot_positions.append(dot_position)
-          
-
+            else: #If the position is not specified (case of GK) we add the center dot position
+                dot_positions.append(dot_position) 
+         
     return dot_positions
 
 
@@ -46,17 +42,14 @@ def get_player_positions(player_pos):
             position = position.strip()
             if spec:
                 for char in spec:
-                    if char == 'D':
+                    if char == 'R':
                         name_positions.append(position + 'D')
-                    elif char == 'I':
+                    elif char == 'L':
                         name_positions.append(position + 'I')
                     elif char == 'C':
                         name_positions.append(position + 'C')
-            else:
-                if position == 'POR': #Para que no quede PORC
-                    name_positions.append(position)
-                else:
-                    name_positions.append(position + 'C')
+            else: #If the position is not specified (case of GK)
+                name_positions.append(position)
     return name_positions
 
 #Obtener estadísticas del jugador
