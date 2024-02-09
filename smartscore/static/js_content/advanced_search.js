@@ -1,3 +1,4 @@
+document.addEventListener('DOMContentLoaded', function() {
     // Mapping of positions to coordinates
     const positionMapping = {
         'GK': { top: '750px', left: '250px' },
@@ -17,13 +18,12 @@
     };
 
 
-document.addEventListener('DOMContentLoaded', function() {
     // Function to add buttons for positions
     function addDots(positions) {
         const field = document.getElementById('football-field');
         const dotContainer = document.getElementById('player-dots');
         dotContainer.innerHTML = ''; // Clear previous dots
-    
+
         // Add dots for selected positions
         positions.forEach(position => {
             if (positionMapping[position]) {
@@ -40,10 +40,14 @@ document.addEventListener('DOMContentLoaded', function() {
         // Get selected positions
         const selectedPositions = Array.from(document.querySelectorAll('input[name="position"]:checked')).map(checkbox => checkbox.value);
         // Get selected qualities (implement as needed)
-    
+
         // Add dots to the football field
         addDots(selectedPositions);
-    
+
         // Send search query to the server (implement as needed)
     });
+
+
 });
+
+
