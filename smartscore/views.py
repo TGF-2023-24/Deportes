@@ -88,4 +88,19 @@ def search_player(request):
         return render(request, 'search_player.html', {})
 
    
+def advanced_search(request):
+    if request.method == 'POST':
+        # Extract selected positions from the form data
+        selected_positions = request.POST.getlist('position')
+        # Extract other filters as needed
+
+        # Perform database query to get players matching the criteria
+        players = Player.objects.filter(position__in=selected_positions)
+        # Apply other filters to the queryset as needed
+
+        # Render the search results in the template
+        return render(request, 'search_results.html', {'players': players})
+
+    # If the request method is not POST, render the advanced search page
+    return render(request, 'advanced_search.html')
 

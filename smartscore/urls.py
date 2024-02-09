@@ -9,4 +9,5 @@ urlpatterns = [
     path('logout/', views.logout_user, name='logout'),
     path('player/<int:custom_id>/', views.player_detail, name='player_detail'),
     path('search_player/', views.search_player, name='search_player'),
+    path('advanced_search/', views.advanced_search, name='advanced_search'),
 ]
