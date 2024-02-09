@@ -64,7 +64,7 @@ with open('new_short_dataset.csv',  encoding='utf-8') as csvfile:
         player.Shot_rat = 0 if row[51] == '-' else int(row[51].replace('%', ''))
         player.Conv_rat = 0 if row[52] == '-' else int(row[52].replace('%', ''))
         player.Dorsal = 0 if row[53] == '-' else int(row[53])
-        player.Country_league = row[54]
+        player.Country_league = row[54].split()[0]  # Extraer solo el nombre del país
 
         player.save()
 
