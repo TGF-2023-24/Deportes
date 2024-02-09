@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Advanced Player Search{% endblock %}
+{% block content %}
+<div class="container">
+    <h1>Advanced Player Search</h1>
+    
+    <!-- Football field image with dots -->
+    <div class="football-field-container">
+        <img src="{% static 'smartscore/images/field.jpg' %}" alt="Football Field" id="football-field">
+        <div id="player-dots">
+            <script>
+                // Function to add dots to the football field image
+                function addDots(positions) {
+                    const field = document.getElementById('football-field');
+                    const dotContainer = document.getElementById('player-dots');
+                    dotContainer.innerHTML = ''; // Clear previous dots
+            
+                    // Mapping of positions to coordinates
+                    const positionMapping = {
+                        'GK': { top: '750px', left: '250px' },
+                        'DC': { top: '650px', left: '250px' },
+                        'DL': { top: '650px', left: '75px' },
+                        'DR': { top: '650px', left: '425px' },
+                        'DM': { top: '525px', left: '250px' },
+                        'WBL': { top: '525px', left: '75px' },
+                        'WBR': { top: '525px', left: '425px' },
+                        'MC': { top: '400px', left: '250px' },
+                        'ML': { top: '400px', left: '75px' },
+                        'MD': { top: '400px', left: '425px' },
+                        'AMC': { top: '250px', left: '250px' },
+                        'AML': { top: '250px', left: '75px' },
+                        'AMR': { top: '250px', left: '425px' },
+                        'STC': { top: '125px', left: '250px' }
+                    };
+            
+                    // Add dots for selected positions
+                    positions.forEach(position => {
+                        if (positionMapping[position]) {
+                            const dot = document.createElement('div');
+                            dot.className = 'player-position-dot';
+                            dot.style.top = positionMapping[position].top;
+                            dot.style.left = positionMapping[position].left;
+                            dotContainer.appendChild(dot);
+                        }
+                    });
+                }
+            
+                // Function to handle search button click
+                document.getElementById('search-btn').addEventListener('click', function() {
+                    // Get selected positions
+                    const selectedPositions = Array.from(document.querySelectorAll('input[name="position"]:checked')).map(checkbox => checkbox.value);
+                    // Get selected qualities (implement as needed)
+            
+                    // Add dots to the football field
+                    addDots(selectedPositions);
+            
+                    // Send search query to the server (implement as needed)
+                });
+            </script>
+        </div>
+    </div>
+    
+    
+    <!-- Other filters for player qualities -->
+    <div class="player-qualities">
+        <h2>Select Player Qualities:</h2>
+        <!-- Add more filters as needed -->
+    </div>
+    
+    <!-- Search button -->
+    <button id="search-btn">Search</button>
+    
+    <!-- Display search results here -->
+    <div id="search-results">
+        <!-- Results will be dynamically added here -->
+    </div>
+</div>
+
+<!-- JavaScript for handling interactions -->
+<script>
+    // JavaScript code goes here
+</script>
+{% endblock %}

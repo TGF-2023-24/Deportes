@@ -177,4 +177,26 @@ footer {
     transform: translate(-50%, -50%); /* Center the dot's position */
 }
 
+.football-field-container {
+    position: relative;
+    width: 50%; /* Adjust width as needed */
+    float: left;
+}
+
+.player-qualities {
+    width: 50%; /* Adjust width as needed */
+    float: left;
+}
+
+.position-btn {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.position-btn.active {
+    background-color: green; /* Adjust active button style as needed */
+    color: white;
+}
+
+
 
