@@ -12,19 +12,21 @@ def get_dot_positions(player_pos):
 
     dot_positions = []
     for position in player_pos.all():
-        if position.name[:2] in position_mapping:
-            dot_position = {'left': 250, 'top': position_mapping[position.name[:2]]['default_top']}            
-            if position.name[-1]   == 'R':
-                dot_position['left'] = 425  # Value for Right
-                dot_positions.append(dot_position.copy())
-            elif position.name[-1]   == 'L':
-                dot_position['left'] = 75  # Value for Left
-                dot_positions.append(dot_position.copy())
-            elif position.name[-1]   == 'C':
-                dot_position['left'] = 250  # Value for Center
-                dot_positions.append(dot_position.copy())
-            else: #If the position is not specified (case of GK) we add the center dot position
-                dot_positions.append(dot_position) 
+        if position.name[-1] in ['R', 'L', 'C']:  # Check the last letter for position indicator
+            position_key = position.name[:-1]  # Extract position key without indicator
+            if position_key in position_mapping:
+                dot_position = {'left': 250, 'top': position_mapping[position_key]['default_top']}
+                if position.name[-1] == 'R':
+                    dot_position['left'] = 425  # Value for Right
+                elif position.name[-1] == 'L':
+                    dot_position['left'] = 75  # Value for Left
+                elif position.name[-1] == 'C':
+                    dot_position['left'] = 250  # Value for Center
+                dot_positions.append(dot_position)
+        else:
+            dot_positions.append({'left': 250, 'top': position_mapping[position.name]['default_top']})
+            
+
          
     return dot_positions
 
