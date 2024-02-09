@@ -16,6 +16,64 @@ const positionMapping = {
     'STC': { top: '125px', left: '250px' }
 };
 
+fieldCategories = {
+    general: [
+        { displayName: 'Age', attributeName: 'Age' },
+        { displayName: 'Height', attributeName: 'Height' },
+        { displayName: 'Weight', attributeName: 'Weight' },
+        { displayName: 'Salary', attributeName: 'Salary' },
+    //    { displayName: 'CAbil', attributeName: 'CAbil' },
+    //    { displayName: 'Pot_abil', attributeName: 'Pot_abil' },
+        { displayName: 'Starter Matches', attributeName: 'Strater_match' },
+        { displayName: 'Substitute Matches', attributeName: 'Res_match' },
+        { displayName: 'International Matches', attributeName: 'International_match' },
+        { displayName: 'Minutes', attributeName: 'Min' },
+        { displayName: 'Yellow Cards', attributeName: 'Yel' },
+        { displayName: 'Red Cards', attributeName: 'Red' },
+        { displayName: 'Distance / 90', attributeName: 'Dist_90' },
+        { displayName: 'Shirt Number', attributeName: 'Dorsal' }
+    ],
+    goalkeeping: [
+        { displayName: 'Clean Sheets', attributeName: 'Clean_sheet' },
+        { displayName: 'Goals Allowed', attributeName: 'Goal_allowed' },
+        { displayName: 'Save Ratio', attributeName: 'Sv_rat' },
+        { displayName: 'Expected Save Ratio', attributeName: 'xSv_rat' },
+        { displayName: 'Penalty Save Ratio', attributeName: 'Pen_saved_rat' }
+    ],
+    defensive: [
+        { displayName: 'Blocks / 90', attributeName: 'Blocks_90' },
+        { displayName: 'Clearances / 90', attributeName: 'Clr_90' },
+        { displayName: 'Interceptions / 90', attributeName: 'Int_90' },
+        { displayName: 'Tackle Completion Ratio', attributeName: 'Tackles_rat' },
+        { displayName: 'Key Tackles / 90', attributeName: 'Key_tck_90' },
+        { displayName: 'Headers Won Ratio', attributeName: 'Hdr_rat' },
+        { displayName: 'Key Headers / 90', attributeName: 'Key_hdr_90' },
+        { displayName: 'Mistakes that Lead to Goals', attributeName: 'Gl_mistake' },
+        { displayName: 'Fouls Commited', attributeName: 'Fcomm' }
+    ],
+    creative: [
+        { displayName: 'Assists', attributeName: 'Asis' },
+        { displayName: 'Assists / 90', attributeName: 'Asis_90' },
+        { displayName: 'Progressive passes / 90', attributeName: 'Pr_pass_90' },
+        { displayName: 'Key passes / 90', attributeName: 'Key_pass_90' },
+        { displayName: 'Crosses completed / 90', attributeName: 'Cr_c_90' },
+        { displayName: 'Crosses completion ratio', attributeName: 'Cr_c_acc' },
+        { displayName: 'Chances created / 90', attributeName: 'Ch_c_90' },
+        { displayName: 'Possesion lost / 90', attributeName: 'Poss_lost_90' }
+    ],
+    attacking: [
+        { displayName: 'Goals', attributeName: 'Goal' },
+        { displayName: 'Expected Goals', attributeName: 'xG' },
+        { displayName: 'Goals / 90', attributeName: 'Gol_90' },
+        { displayName: 'Dribbles / 90', attributeName: 'Drb_90' },
+        { displayName: 'Shots on Target Ratio', attributeName: 'Shot_rat' },
+        { displayName: 'Conversion Ratio', attributeName: 'Conv_rat' },
+        { displayName: 'Fouls Received', attributeName: 'Faga' }
+    ]
+};
+
+
+
 
 document.addEventListener('DOMContentLoaded', function() {
     // Function to add dots for each position
@@ -48,6 +106,53 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+
+    // Function to handle filter category
+    function populateFilterProperties(category) {
+        const filterPropertySelect = document.getElementById('filter-property');
+        filterPropertySelect.innerHTML = ''; // Clear previous options
+
+        // Find the category in the fieldCategories object
+        const categoryFields = fieldCategories[category];
+        categoryFields.forEach(field => {
+            const option = document.createElement('option');
+            option.value = field.attributeName; // Use attribute name as value
+            option.textContent = field.displayName; // Use display name as text content
+            filterPropertySelect.appendChild(option);
+        });
+    }
+
+    // Function to handle filter menu visibility
+    document.getElementById('add-filter-btn').addEventListener('click', function() {
+        const filterMenu = document.getElementById('filter-menu');
+        filterMenu.style.display = filterMenu.style.display === 'block' ? 'none' : 'block';
+
+        // Manually trigger the change event to populate filter properties for the default category
+        if (filterMenu.style.display === 'block') {
+            const selectedCategory = document.getElementById('filter-category').value;
+            populateFilterProperties(selectedCategory);
+        }
+    });
+
+    // Populate filter properties based on selected category
+    document.getElementById('filter-category').addEventListener('change', function() {
+        const selectedCategory = this.value;
+        populateFilterProperties(selectedCategory);
+    });
+
+    // Function to handle applying filters
+    document.getElementById('apply-filter-btn').addEventListener('click', function() {
+        const filterType = document.getElementById('filter-type').value;
+        const filterProperty = document.getElementById('filter-property').value;
+        const filterValue = document.getElementById('filter-value').value;
+        const appliedFilters = document.getElementById('applied-filters');
+
+        // Create filter element
+        const filterElement = document.createElement('div');
+        filterElement.textContent = `${filterProperty} ${filterType} ${filterValue}`;
+        appliedFilters.appendChild(filterElement);
+    });
+
     // Function to handle search button click
     document.getElementById('search-btn').addEventListener('click', function() {
         // Get activated dots
@@ -60,8 +165,17 @@ document.addEventListener('DOMContentLoaded', function() {
             );
             return position;
         });
-
+    
+        // Get applied filters
+        const appliedFilters = document.getElementById('applied-filters').children;
+        const filters = Array.from(appliedFilters).map(filterElement => {
+            // Split the text content of the filter element into its components
+            const [property, type, value] = filterElement.textContent.trim().split(' ');
+            return { property, type, value };
+        });
+    
         // Send search query to the server (implement as needed)
         console.log('Selected positions:', selectedPositions);
+        console.log('Applied filters:', filters);
     });
 });

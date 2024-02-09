@@ -11,16 +11,32 @@
         <div id="player-dots"></div>
     </div>
     
-    <!-- Other filters for player qualities -->
-    <div class="player-qualities">
-        <h2>Select Player Positions:</h2>
-        <input type="checkbox" name="position" value="GK"> Goalkeeper<br>
-        <input type="checkbox" name="position" value="DC"> Defender - Center<br>
-        <input type="checkbox" name="position" value="DL"> Defender - Left<br>
-        <input type="checkbox" name="position" value="DR"> Defender - Right<br>
-        <!-- Add more position checkboxes as needed -->
+
+    <!-- Filter section -->
+    <div class="filter-section">
+        <h2>Add Filter:</h2>
+        <button id="add-filter-btn">Add Filter</button>
+        <div id="filter-menu" style="display: none;">
+            <select id="filter-category">
+                <option value="general">General</option>
+                <option value="defensive">Defensive</option>
+                <option value="creative">Creative</option>
+                <option value="attacking">Attacking</option>
+            </select>
+            <select id="filter-property">
+                <!-- Options will be populated dynamically -->
+            </select>
+            <select id="filter-type">
+                <option value="less">Less than</option>
+                <option value="greater">Greater than</option>
+                <option value="equal">Equal to</option>
+            </select>
+            <input type="number" id="filter-value" placeholder="Enter value">
+            <button id="apply-filter-btn">Apply Filter</button>
+        </div>
+        <div id="applied-filters"></div>
     </div>
-    
+
     <!-- Search button -->
     <button id="search-btn">Search</button>
     
