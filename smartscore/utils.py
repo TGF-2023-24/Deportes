@@ -43,9 +43,9 @@ def get_player_positions(player_pos):
             if spec:
                 for char in spec:
                     if char == 'R':
-                        name_positions.append(position + 'D')
+                        name_positions.append(position + 'R')
                     elif char == 'L':
-                        name_positions.append(position + 'I')
+                        name_positions.append(position + 'L')
                     elif char == 'C':
                         name_positions.append(position + 'C')
             else: #If the position is not specified (case of GK)
