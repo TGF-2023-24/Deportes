@@ -62,6 +62,7 @@ def get_player_positions(player_pos):
 #Obtener estadísticas del jugador
 def get_player_stats(player):
     
+    media = (player.Goal + player.Asis) / player.Min
     ataque = (player.xG) + (player.Gol_90 * 15) + (player.Asis_90 *10)
     defensa =  (player.Tackles_won_rat * 15) + (player.Rob_90 * 15)
     pase = (player.Pas_Clv_90 * 10) + (player.Pass_rat * 15) 

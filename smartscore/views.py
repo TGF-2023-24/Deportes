@@ -78,7 +78,7 @@ def search_player(request):
             Q(Club__icontains=searched) | 
             Q(League__icontains=searched) | 
             Q(Nacionality__icontains=searched) | 
-            Q(Leg__icontains=searched) 
+            Q(Pref_foot__icontains=searched) 
             #| Q(Pos__icontains=searched) 
         )
 
