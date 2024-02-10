@@ -1,4 +1,3 @@
-
 const positionMapping = {
     'GK': { top: '750px', left: '250px' },
     'DC': { top: '650px', left: '250px' },
@@ -186,4 +185,4 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Selected positions:', selectedPositions);
         console.log('Applied filters:', filters);
     });
-});
+})

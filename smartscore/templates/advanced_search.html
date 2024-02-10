@@ -16,7 +16,8 @@
         <!-- Filter section -->
         <div class="filter-section">
             <h2 class="section-title">Add Filter:</h2>
-            <div class="filter-controls">
+            <button id="add-filter-btn" class="primary-default-btn">Add Filter</button>
+            <div id="filter-menu" style="display: none;">
                 <select id="filter-category">
                     <option value="general">General</option>
                     <option value="goalkeeping">Goalkeeping</option>
@@ -24,7 +25,9 @@
                     <option value="creative">Creative</option>
                     <option value="attacking">Attacking</option>
                 </select>
-                <select id="filter-property"></select>
+                <select id="filter-property">
+                    <!-- Options will be populated dynamically -->
+                </select>
                 <select id="filter-type">
                     <option value="less">Less than</option>
                     <option value="greater">Greater than</option>
@@ -33,7 +36,7 @@
                 <input type="number" id="filter-value" placeholder="Enter value">
                 <button id="apply-filter-btn" class="primary-default-btn">Apply Filter</button>
             </div>
-            <div class="applied-filters"></div>
+            <div id="applied-filters" class="applied-filters"></div>
         </div>
     </div>
 
