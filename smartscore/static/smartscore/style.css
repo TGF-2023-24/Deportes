@@ -188,10 +188,11 @@ footer {
     float: left;
 }
 
+/* Style for the dots inside the football field */
 .player-position-dot {
     position: absolute;
-    width: 40px;
-    height: 40px;
+    width: 20px; /* Adjust the size of the dot */
+    height: 20px; /* Adjust the size of the dot */
     background-color: gray; /* Default color */
     border-radius: 50%;
     cursor: pointer;
@@ -211,20 +212,41 @@ footer {
     text-align: center;
     margin-bottom: 20px;
 }
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
+    display: flex; /* Use flexbox for layout */
+    justify-content: space-between; /* Space between items */
+    align-items: flex-start; /* Align items at the top */
 }
 
 .search-container {
     display: flex;
-    justify-content: space-between;
+    align-items: flex-start; /* Align items at the start of the container */
     margin-bottom: 30px;
+}
+
+.football-field-container {
+    width: auto; /* Adjust the width automatically */
+    height: calc(100vh - 200px); /* Set the height dynamically */
+    max-height: calc(100vh - 200px); /* Set a maximum height */
+    position: relative; /* Ensure relative positioning */
+    overflow: hidden; /* Hide any overflowing content */
+}
+
+#football-field {
+    width: 100%; /* Set width to 100% to fill the container */
+    height: 100%; /* Set height to 100% to fill the container */
+    object-fit: contain; /* Ensure the image fits within the container while preserving aspect ratio */
 }
 
 .filter-section {
     width: calc(50% - 10px);
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center items horizontally */
 }
 
 .section-title {
@@ -251,6 +273,7 @@ footer {
     margin-top: 20px;
 }
 
+
 .primary-default-btn,
 .primary-search-btn {
     padding: 10px 20px;
@@ -270,8 +293,16 @@ footer {
 }
 
 .primary-search-btn {
+    position: fixed; /* Fixed position */
+    bottom: 20px; /* Distance from the bottom of the screen */
+    right: 20px; /* Distance from the right side of the screen */
+    padding: 10px 20px;
     background-color: #000000;
     color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .primary-search-btn:hover {

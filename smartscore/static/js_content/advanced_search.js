@@ -81,12 +81,20 @@ document.addEventListener('DOMContentLoaded', function() {
         const dotContainer = document.getElementById('player-dots');
         dotContainer.innerHTML = ''; // Clear previous dots
 
+        // Get the dimensions of the football field container
+        const fieldContainer = document.querySelector('.football-field-container');
+        const containerWidth = fieldContainer.offsetWidth;
+        const containerHeight = fieldContainer.offsetHeight;
+
         // Add dots for each position
         Object.keys(positionMapping).forEach(position => {
             const dot = document.createElement('div');
             dot.className = 'player-position-dot';
-            dot.style.top = positionMapping[position].top;
-            dot.style.left = positionMapping[position].left;
+            // Calculate the position of the dot based on container dimensions
+            const left = parseFloat(positionMapping[position].left) / 500 * containerWidth; // Normalize left position
+            const top = parseFloat(positionMapping[position].top) / 800 * containerHeight; // Normalize top position
+            dot.style.left = left + 'px';
+            dot.style.top = top + 'px';
             dotContainer.appendChild(dot);
         });
     }
