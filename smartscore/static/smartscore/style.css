@@ -206,3 +206,80 @@ footer {
 
 
 
+/* Add custom styles for advanced player search page */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.search-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.football-field-container {
+    width: calc(50% - 10px);
+    position: relative;
+}
+
+#football-field {
+    width: 100%;
+    display: block;
+}
+
+.filter-section {
+    width: calc(50% - 10px);
+}
+
+.section-title {
+    margin-bottom: 10px;
+}
+
+.filter-controls {
+    margin-bottom: 20px;
+}
+
+.filter-controls select,
+.filter-controls input[type="number"] {
+    margin-right: 10px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#apply-filter-btn {
+    padding: 8px 15px;
+}
+
+.applied-filters {
+    margin-top: 20px;
+}
+
+.primary-default-btn,
+.primary-search-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.primary-default-btn {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.primary-default-btn:hover {
+    background-color: #0056b3;
+}
+
+.primary-search-btn {
+    background-color: #000000;
+    color: #fff;
+}
+
+.primary-search-btn:hover {
+    background-color: #6a6a6a;
+}
