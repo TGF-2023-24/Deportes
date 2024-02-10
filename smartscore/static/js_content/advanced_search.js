@@ -113,6 +113,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    window.addEventListener('resize', function() {
+        addDots();
+    });
+
 
     // Function to handle filter category
     function populateFilterProperties(category) {
