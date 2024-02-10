@@ -207,6 +207,10 @@ footer {
 
 
 /* Add custom styles for advanced player search page */
+.page-title {
+    text-align: center;
+    margin-bottom: 20px;
+}
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -217,16 +221,6 @@ footer {
     display: flex;
     justify-content: space-between;
     margin-bottom: 30px;
-}
-
-.football-field-container {
-    width: calc(50% - 10px);
-    position: relative;
-}
-
-#football-field {
-    width: 100%;
-    display: block;
 }
 
 .filter-section {

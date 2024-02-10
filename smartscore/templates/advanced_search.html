@@ -3,7 +3,7 @@
 {% block title %}Advanced Player Search{% endblock %}
 {% block content %}
 <div class="container">
-    <h1>Advanced Player Search</h1>
+    <h1 class="page-title">Advanced Player Search</h1>
     
     <!-- Football field image with dots -->
     <div class="football-field-container">
@@ -15,10 +15,11 @@
     <!-- Filter section -->
     <div class="filter-section">
         <h2>Add Filter:</h2>
-        <button id="add-filter-btn">Add Filter</button>
+        <button id="add-filter-btn" class="primary-default-btn">Add Filter</button>
         <div id="filter-menu" style="display: none;">
             <select id="filter-category">
                 <option value="general">General</option>
+                <option value="goalkeeping">Goalkeeping</option>
                 <option value="defensive">Defensive</option>
                 <option value="creative">Creative</option>
                 <option value="attacking">Attacking</option>
@@ -32,16 +33,16 @@
                 <option value="equal">Equal to</option>
             </select>
             <input type="number" id="filter-value" placeholder="Enter value">
-            <button id="apply-filter-btn">Apply Filter</button>
+            <button id="apply-filter-btn" class="primary-default-btn">Apply Filter</button>
         </div>
-        <div id="applied-filters"></div>
+        <div id="applied-filters" class="applied-filters"></div>
     </div>
 
     <!-- Search button -->
-    <button id="search-btn">Search</button>
+    <button id="search-btn" class="primary-search-btn">Search</button>
     
     <!-- Display search results here -->
-    <div id="search-results">
+    <div id="search-results" class="search-results">
         <!-- Results will be dynamically added here -->
     </div>
 </div>
