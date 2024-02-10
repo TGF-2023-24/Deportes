@@ -224,10 +224,9 @@ footer {
 
 .search-container {
     display: flex;
-    align-items: flex-start; /* Align items at the start of the container */
+    justify-content: space-between; /* Align items to the start and end of the container */
     margin-bottom: 30px;
 }
-
 .football-field-container {
     width: auto; /* Adjust the width automatically */
     height: calc(100vh - 200px); /* Set the height dynamically */
@@ -242,11 +241,13 @@ footer {
     object-fit: contain; /* Ensure the image fits within the container while preserving aspect ratio */
 }
 
+
 .filter-section {
     width: calc(50% - 10px);
     display: flex;
     flex-direction: column;
-    align-items: center; /* Center items horizontally */
+    align-items: flex-end; /* Align items to the end of the container */
+    display: block; 
 }
 
 .section-title {
@@ -259,7 +260,7 @@ footer {
 
 .filter-controls select,
 .filter-controls input[type="number"] {
-    margin-right: 10px;
+    margin-left: 10px; /* Adjust margin to create space between controls */
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 5px;
