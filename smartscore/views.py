@@ -102,15 +102,15 @@ def advanced_search(request):
             print(filters)  # Print filters to console  
 
             if selected_positions != [] and filters != None:
+                filters_list = json.loads(filters)
                 # Redirect to search_results view with query parameters
-                url = f'/search_results/?positions={",".join(selected_positions)}&filters={",".join(filters)}'
+                url = f'/search_results/?positions={",".join(selected_positions)}&filters={json.dumps(filters_list)}'
                 return redirect(url)
             else:
+                print("We do this once")
                 return render(request, 'advanced_search.html', {})
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
-    else:
-        return JsonResponse({'error': 'Method not allowed'}, status=405)
 
 def search_results(request):
     # Retrieve positions and filters from query parameters
@@ -138,11 +138,17 @@ def search_results(request):
     
 
 def perform_search(positions, filters):
-    # Perform search query using Django's ORM
-    players = Player.objects.all()  # Get all players initially
     print("We are in the perform search function")
     print(positions)  # Print positions to console
-    for position in positions:
-        players = players.filter(Pos__contains=position)
+    players = Player.objects.all()
 
-    pass
+    # Filter players by positions
+    if positions:
+        position_filters = Q()
+        for position in positions:
+            position_filters |= Q(Pos__name=position)
+        players = players.filter(position_filters)
+
+    print("We will return the players now")
+    print(players)  # Print players to console
+    return players
