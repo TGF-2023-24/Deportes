@@ -89,6 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
         Object.keys(positionMapping).forEach(position => {
             const dot = document.createElement('div');
             dot.className = 'player-position-dot';
+            dot.position = position;
             // Calculate the position of the dot based on container dimensions
             const left = parseFloat(positionMapping[position].left) / 500 * containerWidth; // Normalize left position
             const top = parseFloat(positionMapping[position].top) / 800 * containerHeight; // Normalize top position
@@ -165,16 +166,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Function to handle search button click
-    document.getElementById('search-btn').addEventListener('click', function() {
+    document.getElementById('adv-search-btn').addEventListener('click', function() {
         // Get activated dots
         const activatedDots = document.querySelectorAll('.activated');
         // Get positions corresponding to activated dots
         const selectedPositions = Array.from(activatedDots).map(dot => {
-            const position = Object.keys(positionMapping).find(key =>
-                positionMapping[key].top === dot.style.top &&
-                positionMapping[key].left === dot.style.left
-            );
-            return position;
+            // Retrieve the position stored in the dot's position property
+            return dot.position;
         });
     
         // Get applied filters  
@@ -184,49 +182,29 @@ document.addEventListener('DOMContentLoaded', function() {
             const [property, type, value] = filterElement.textContent.trim().split(' ');
             return { property, type, value };
         });
-       
-        console.log('Selected positions:', selectedPositions);
-        console.log('Applied filters:', filters);
 
-        const dataToSend = {
-            filters: filters, // Asume que 'filters' contiene tus datos de filtro
-            selectedPositions: selectedPositions // Asume que 'selectedPositions' contiene tus posiciones seleccionadas
-        };
-
-        console.log(dataToSend);
-
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    // Does this cookie string begin with the name we want?
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-        const csrftoken = getCookie('csrftoken');
-
-        fetch('/advanced_search/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrftoken // Incluir el token CSRF en el encabezado X-CSRFToken
-            },
-            body: JSON.stringify(dataToSend)
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
-        })
-        .catch((error) => {
-            console.error('Error:', error);
+        //console.log('Selected positions:', selectedPositions);
+        //console.log('Applied filters:', filters);
+    
+        // Construct the query parameters string
+        const params = new URLSearchParams({
+            selectedPositions: selectedPositions.join(','), // Convert array to comma-separated string
+            filters: JSON.stringify(filters) // Convert filters array to JSON string
         });
     
+        // Send GET request to the server
+        fetch('/advanced_search/?' + params, {
+            method: 'GET'
+        })
+        .then(response => response.text())
+        .then(data => {
+            // Redirect to search_results.html and pass search results as query parameter
+            window.location.href = '/search_results/?search_results=' + encodeURIComponent(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
     });
+    
+
 })

@@ -293,7 +293,7 @@ footer {
     background-color: #0056b3;
 }
 
-.primary-search-btn {
+.secondary-search-btn {
     position: fixed; /* Fixed position */
     bottom: 20px; /* Distance from the bottom of the screen */
     right: 20px; /* Distance from the right side of the screen */
@@ -306,6 +306,6 @@ footer {
     transition: background-color 0.3s ease;
 }
 
-.primary-search-btn:hover {
+.secondary-search-btn:hover {
     background-color: #6a6a6a;
 }

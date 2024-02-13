@@ -41,24 +41,9 @@
     </div>
 
     <!-- Search button -->
-    <button id="search-btn" class="primary-default-btn">Search</button>
+    <button id="adv-search-btn" class="secondary-search-btn">Search</button>
 
-    <!-- Display search results here -->
-    <div id="search-results">
-        <h2>Search Results:</h2>
-        {{context}}
-        <h2>Filtros aplicados:</h2>
-        <ul>
-            {% if context.filters %}
-                {% for filter in context.filters %}
-                    <li>{{ filter }}</li>
-                {% endfor %}
-            {% else %}
-                <li>No se aplicaron filtros</li>
-            {% endif %}
-        </ul>
-
-    </div>
+    
 </div>
 
 <!-- JavaScript for handling interactions -->

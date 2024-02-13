@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from .models import Player, Position
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -9,7 +10,7 @@ from django import forms
 from .forms import CreateUserForm
 from django.contrib.auth.decorators import login_required #utilizar este decorador para proteger las rutas que requieren autenticación
 from .utils import get_dot_positions, get_player_stats  # Import the get_dot_positions function
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 import json
 #se usa @login_required(login_url='login') en la vista que se quiere proteger
 
@@ -91,30 +92,57 @@ def search_player(request):
 
    
 def advanced_search(request):
-    # Extract selected positions from the form data
-    context = {}
-    if request.method == 'POST':
-        # Decodificar el cuerpo de la solicitud como JSON
-        data_from_client = json.loads(request.body)
+    if request.method == 'GET':
+        try:
+            # Retrieve parameters from the request
+            selected_positions = request.GET.getlist('selectedPositions')
+            filters = request.GET.get('filters')
+            print("We are in the advanced search view")
+            print(selected_positions)  # Print selected positions to console
+            print(filters)  # Print filters to console  
 
-        # Acceder a los datos que has enviado desde el cliente
-        filters = data_from_client.get('filters')
-        selectedPositions = data_from_client.get('selectedPositions')
+            if selected_positions != [] and filters != None:
+                # Redirect to search_results view with query parameters
+                url = f'/search_results/?positions={",".join(selected_positions)}&filters={",".join(filters)}'
+                return redirect(url)
+            else:
+                return render(request, 'advanced_search.html', {})
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    else:
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
 
-        # Hacer lo que necesites con los datos
-        print('Filters:', filters)
-        print('Selected Positions:', selectedPositions)
-        # Devolver una respuesta si es necesario
-        response_data = {'message': 'Datos recibidos correctamente.'}
+def search_results(request):
+    # Retrieve positions and filters from query parameters
+    positions_str = request.GET.get('positions', '')
+    filters_str = request.GET.get('filters', '')
+    
+    positions = positions_str.split(',') if positions_str else []
+    filters = filters_str.split(',') if filters_str else []
+    print("We are in the search results view")
+    print(positions)  # Print positions to console
+    print(filters)  # Print filters to console
 
-        #No se actualiza esto
-        context.update({
-            'filters': filters,
-            'selectedPositions': selectedPositions,
-        })
+    try:
+        # Perform search based on positions and filters
+        results = perform_search(positions, filters)
 
-        return JsonResponse(response_data)
+        if not results:
+            raise Http404("No results found.")
 
-    # Render the search results in the template
-    return render(request, 'advanced_search.html', {'context': context})
+        # Render the search results template with the results
+        return render(request, 'search_results.html', {'results': results})
+    
+    except Exception as e:
+        return render(request, 'error.html', {'error_message': str(e)})
+    
 
+def perform_search(positions, filters):
+    # Perform search query using Django's ORM
+    players = Player.objects.all()  # Get all players initially
+    print("We are in the perform search function")
+    print(positions)  # Print positions to console
+    for position in positions:
+        players = players.filter(Pos__contains=position)
+
+    pass
