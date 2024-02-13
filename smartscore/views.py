@@ -9,6 +9,8 @@ from django import forms
 from .forms import CreateUserForm
 from django.contrib.auth.decorators import login_required #utilizar este decorador para proteger las rutas que requieren autenticación
 from .utils import get_dot_positions, get_player_stats  # Import the get_dot_positions function
+from django.http import JsonResponse
+import json
 #se usa @login_required(login_url='login') en la vista que se quiere proteger
 
 # Create your views here.
@@ -89,18 +91,30 @@ def search_player(request):
 
    
 def advanced_search(request):
+    # Extract selected positions from the form data
+    context = {}
     if request.method == 'POST':
-        # Extract selected positions from the form data
-        selected_positions = request.POST.getlist('position')
-        # Extract other filters as needed
+        # Decodificar el cuerpo de la solicitud como JSON
+        data_from_client = json.loads(request.body)
 
-        # Perform database query to get players matching the criteria
-        players = Player.objects.filter(position__in=selected_positions)
-        # Apply other filters to the queryset as needed
+        # Acceder a los datos que has enviado desde el cliente
+        filters = data_from_client.get('filters')
+        selectedPositions = data_from_client.get('selectedPositions')
 
-        # Render the search results in the template
-        return render(request, 'search_results.html', {'players': players})
+        # Hacer lo que necesites con los datos
+        print('Filters:', filters)
+        print('Selected Positions:', selectedPositions)
+        # Devolver una respuesta si es necesario
+        response_data = {'message': 'Datos recibidos correctamente.'}
 
-    # If the request method is not POST, render the advanced search page
-    return render(request, 'advanced_search.html')
+        #No se actualiza esto
+        context.update({
+            'filters': filters,
+            'selectedPositions': selectedPositions,
+        })
+
+        return JsonResponse(response_data)
+
+    # Render the search results in the template
+    return render(request, 'advanced_search.html', {'context': context})
 

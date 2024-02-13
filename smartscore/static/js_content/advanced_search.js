@@ -101,6 +101,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to handle dot click
     function handleDotClick(dot) {
         dot.classList.toggle('activated'); // Toggle dot activation
+        console.log('Activated dots:', document.querySelectorAll('.activated'));
     }
 
     // Add dots when the page is loaded
@@ -157,7 +158,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const filterProperty = document.getElementById('filter-property').value;
         const filterValue = document.getElementById('filter-value').value;
         const appliedFilters = document.getElementById('applied-filters');
-
         // Create filter element
         const filterElement = document.createElement('div');
         filterElement.textContent = `${filterProperty} ${filterType} ${filterValue}`;
@@ -177,16 +177,56 @@ document.addEventListener('DOMContentLoaded', function() {
             return position;
         });
     
-        // Get applied filters
+        // Get applied filters  
         const appliedFilters = document.getElementById('applied-filters').children;
         const filters = Array.from(appliedFilters).map(filterElement => {
             // Split the text content of the filter element into its components
             const [property, type, value] = filterElement.textContent.trim().split(' ');
             return { property, type, value };
         });
-    
-        // Send search query to the server (implement as needed)
+       
         console.log('Selected positions:', selectedPositions);
         console.log('Applied filters:', filters);
+
+        const dataToSend = {
+            filters: filters, // Asume que 'filters' contiene tus datos de filtro
+            selectedPositions: selectedPositions // Asume que 'selectedPositions' contiene tus posiciones seleccionadas
+        };
+
+        console.log(dataToSend);
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+
+        fetch('/advanced_search/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken // Incluir el token CSRF en el encabezado X-CSRFToken
+            },
+            body: JSON.stringify(dataToSend)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    
     });
 })
