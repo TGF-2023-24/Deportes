@@ -54,8 +54,9 @@
                     <li>Poss lost: {{ stats.Poss_lost_90 }}</li>
                     <li>Penalty saved: {{ stats.Penalty_sav }}</li>
                 </ul>
+                <h3 id="avg_stats_title">Avg stats: </h3>
                 <ul id="avg_stats">
-                    
+                    <p>Select a position to obtain average position stats.</p>
                 </ul>
         </div>
 
@@ -79,7 +80,7 @@
                     pointBorderColor: "#FFA500",
                     pointHoverBackgroundColor: "#FFA500",
                     pointHoverBorderColor: "rgba(179,181,198,1)",
-                    data: [{{ avg_stats.Goal }}, {{ avg_stats.CAbil }}, {{ avg_stats.Poss_lost_90 }}, {{ avg_stats.Penalty_sav}}]
+                    data: [0, 0, 0, 0]
                 }]
             };
 
