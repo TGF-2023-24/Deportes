@@ -47,17 +47,25 @@
 
         <div class="chart-column">
                 <canvas id="radarChart" width="400" height="400"></canvas>
-                <h3>Stats: </h3>
+                <h3>Player stats: </h3>
                 <ul>
-                    <li>Defensa: {{ stats.Defensa }}</li>
-                    <li>Ataque: {{ stats.Ataque }}</li>
-                    <li>Pase: {{ stats.Pase }}</li>
+                    <li>Goal: {{ stats.Goal }}</li>
+                    <li>Curr ability: {{ stats.CAbil }}</li>
+                    <li>Poss lost: {{ stats.Poss_lost_90 }}</li>
+                    <li>Penalty saved: {{ stats.Penalty_sav }}</li>
+                </ul>
+                <h3>Avg stats: </h3>
+                <ul id="avg_stats">
+                    <li>Goal: {{ avg_stats.Goal }}</li>
+                    <li>Curr ability: {{ avg_stats.CAbil }}</li>
+                    <li>Poss lost: {{ avg_stats.Poss_lost_90 }}</li>
+                    <li>Penalty saved: {{ avg_stats.Penalty_sav }}</li>
                 </ul>
         </div>
 
         <script>
             var radarData = {
-                labels: ["Defensa", "Ataque", "Pase"],
+                labels: ["Goles", "Curr ability", "Pass lost, Penalty saved"],
                 datasets: [{
                     label: "{{ player.Name }}",
                     backgroundColor: "#FFCC80",
@@ -66,16 +74,16 @@
                     pointBorderColor: "#FFA500",
                     pointHoverBackgroundColor: "#FFA500",
                     pointHoverBorderColor: "rgba(179,181,198,1)",
-                    data: [{{ stats.Defensa }}, {{ stats.Ataque }}, {{ stats.Pase }}]
+                    data: [{{ stats.Goal }}, {{ stats.CAbil }}, {{ stats.Poss_lost_90 }}, {{ stats.Penalty_sav }}]
                 }, {
-                    label: "otro conjunto datos",
+                    label: "Avg possition Stats",
                     backgroundColor: "#98FB98",
                     borderColor: "#FFA500",
                     pointBackgroundColor: "#98FB98",
                     pointBorderColor: "#FFA500",
                     pointHoverBackgroundColor: "#FFA500",
                     pointHoverBorderColor: "rgba(179,181,198,1)",
-                    data: [500, 100, 600]
+                    data: [{{ avg_stats.Goal }}, {{ avg_stats.CAbil }}, {{ avg_stats.Poss_lost_90 }}, {{ avg_stats.Penalty_sav}}]
                 }]
             };
 
@@ -98,6 +106,9 @@
         </script>
 
     </div>
+
+    <script src="{% static 'js_content/player_detail.js' %}"></script>
+
 
 </div>
 {% endblock %}

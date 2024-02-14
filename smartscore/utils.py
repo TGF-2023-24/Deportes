@@ -1,3 +1,6 @@
+from django.db.models import Avg
+from .models import Player, Position
+
 def get_dot_positions(player_pos):
     position_mapping = {
         'GK': {'default_top': 750},  # Goalkeeper
@@ -55,14 +58,24 @@ def get_player_positions(player_pos):
 
 def get_player_stats(player):
     
-    ataque = (player.xG) + (player.Gol_90 * 15) + (player.Asis_90 *10)
-    defensa =  (player.Tackles_rat * 15) + (player.Key_tck_90 * 15)
-    pase = (player.Key_pass_90 * 10) - (player.Poss_lost_90 * 15) 
-
     stats = {
-        'Ataque': ataque,
-        'Defensa': defensa,
-        'Pase': pase
+        'Goal': player.Goal,
+        'CAbil': player.CAbil,
+        'Poss_lost_90': player.Poss_lost_90,
+        'Penalty_sav': player.Pen_saved_rat,
     }
 
+    return stats
+
+def get_pos_stats():
+    stats = {}
+    positions = Position.objects.all()  # Suponiendo que tengas un modelo Position
+    for position in positions:
+        players = Player.objects.filter(Pos=position)
+        stats[position.name] = {
+            'Goal': players.aggregate(Avg('Goal'))['Goal__avg'] or 0,
+            'CAbil': players.aggregate(Avg('CAbil'))['CAbil__avg'] or 0,
+            'Poss_lost_90': players.aggregate(Avg('Poss_lost_90'))['Poss_lost_90__avg'] or 0,
+            'Penalty_sav': players.aggregate(Avg('Pen_saved_rat'))['Pen_saved_rat__avg'] or 0,
+        }
     return stats
