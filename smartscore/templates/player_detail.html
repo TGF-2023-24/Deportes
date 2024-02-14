@@ -61,47 +61,14 @@
         </div>
 
         <script>
-            var radarData = {
-                labels: ["Goles", "Curr ability", "Pass lost, Penalty saved"],
-                datasets: [{
-                    label: "{{ player.Name }}",
-                    backgroundColor: "#FFCC80",
-                    borderColor: "#FFA500",
-                    pointBackgroundColor: "#FFA500",
-                    pointBorderColor: "#FFA500",
-                    pointHoverBackgroundColor: "#FFA500",
-                    pointHoverBorderColor: "rgba(179,181,198,1)",
-                    data: [{{ stats.Goal }}, {{ stats.CAbil }}, {{ stats.Poss_lost_90 }}, {{ stats.Penalty_sav }}]
-                }, {
-                    label: "Avg possition Stats",
-                    backgroundColor: "#98FB98",
-                    borderColor: "#FFA500",
-                    pointBackgroundColor: "#98FB98",
-                    pointBorderColor: "#FFA500",
-                    pointHoverBackgroundColor: "#FFA500",
-                    pointHoverBorderColor: "rgba(179,181,198,1)",
-                    data: [0, 0, 0, 0]
-                }]
+            var initialPlayerStats = {
+                Goal: {{ stats.Goal }},
+                CAbil: {{ stats.CAbil }},
+                Poss_lost_90: {{ stats.Poss_lost_90 }},
+                Penalty_sav: {{ stats.Penalty_sav }}
             };
-
-        
-            var radarOptions = {
-                scale: {
-                    ticks: {
-                        beginAtZero: true,
-                        max: 10
-                    }
-                }
-            };
-        
-            var radarChartCanvas = document.getElementById("radarChart").getContext("2d");
-            var myRadarChart = new Chart(radarChartCanvas, {
-                type: 'radar',
-                data: radarData,
-                options: radarOptions
-            });
         </script>
-
+        
     </div>
 
     <script src="{% static 'js_content/player_detail.js' %}"></script>
