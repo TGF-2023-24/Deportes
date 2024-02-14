@@ -44,6 +44,24 @@ document.addEventListener('DOMContentLoaded', function() {
         var position = positionMapping[`${top},${left}`];
 
         console.log('Activated dot:', position);
+
+         // Send an AJAX request to fetch stats for the clicked position
+         fetch(`/api/position-stats/${position}/`)
+         .then(response => response.json())
+         .then(data => {
+             console.log(data);
+              // Update the UI to display the stats for the clicked position
+              document.getElementById('avg_stats').innerHTML = `
+              <h3>Avg stats for: ${position}</h3>
+              <li>Goal: ${data[position].Goal}</li>
+              <li>Curr ability: ${data[position].CAbil}</li>
+              <li>Poss lost: ${data[position].Poss_lost_90}</li>
+              <li>Penalty saved: ${data[position].Penalty_sav}</li>
+            `;
+         })
+         .catch(error => {
+             console.error('Error fetching position stats:', error);
+         });
     }
 
     

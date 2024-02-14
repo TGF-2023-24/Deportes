@@ -11,4 +11,6 @@ urlpatterns = [
     path('search_player/', views.search_player, name='search_player'),
     path('advanced_search/', views.advanced_search, name='advanced_search'),
     path('search_results/', views.search_results, name='search_results'),
+    path('api/position-stats/<str:position>/', views.position_stats_api, name='position_stats_api'),
+
 ]

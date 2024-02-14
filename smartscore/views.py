@@ -28,8 +28,14 @@ def player_detail(request, custom_id):
     # Call the get_dot_positions function to calculate dot positions
     dot_positions = get_dot_positions(player.Pos)
     stats = get_player_stats(player)
-    avg_stats = get_pos_stats()
-    return render(request, 'player_detail.html', {'player': player, 'dot_positions': dot_positions, 'stats': stats, 'avg_stats': avg_stats})
+    return render(request, 'player_detail.html', {'player': player, 'dot_positions': dot_positions, 'stats': stats})
+
+def position_stats_api(request, position):
+    # Retrieve statistics for the given position
+    stats = get_pos_stats(position)
+
+    # Return statistics as JSON response
+    return JsonResponse(stats)
 
 def login_user(request):
     if request.user.is_authenticated: #habrá que cambiar el redirect, esto debe ser cutre, pero por el momento nos vale

@@ -67,15 +67,16 @@ def get_player_stats(player):
 
     return stats
 
-def get_pos_stats():
+def get_pos_stats(position_name):
     stats = {}
-    positions = Position.objects.all()  # Suponiendo que tengas un modelo Position
-    for position in positions:
-        players = Player.objects.filter(Pos=position)
-        stats[position.name] = {
-            'Goal': players.aggregate(Avg('Goal'))['Goal__avg'] or 0,
-            'CAbil': players.aggregate(Avg('CAbil'))['CAbil__avg'] or 0,
-            'Poss_lost_90': players.aggregate(Avg('Poss_lost_90'))['Poss_lost_90__avg'] or 0,
-            'Penalty_sav': players.aggregate(Avg('Pen_saved_rat'))['Pen_saved_rat__avg'] or 0,
-        }
+    position = Position.objects.get(name=position_name)
+    players = Player.objects.filter(Pos=position)
+
+    stats[position_name] = {
+        'Goal': players.aggregate(Avg('Goal'))['Goal__avg'] or 0,
+        'CAbil': players.aggregate(Avg('CAbil'))['CAbil__avg'] or 0,
+        'Poss_lost_90': players.aggregate(Avg('Poss_lost_90'))['Poss_lost_90__avg'] or 0,
+        'Penalty_sav': players.aggregate(Avg('Pen_saved_rat'))['Pen_saved_rat__avg'] or 0,
+    }
+
     return stats
