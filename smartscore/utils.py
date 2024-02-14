@@ -32,7 +32,6 @@ def get_dot_positions(player_pos):
 
 
 
-#Obtener las posiciones del jugador
 def get_player_positions(player_pos):
     name_positions = []
     for position_with_spec in player_pos.split(","):
@@ -54,7 +53,6 @@ def get_player_positions(player_pos):
                 name_positions.append(position)
     return name_positions
 
-#Obtener estadísticas del jugador
 def get_player_stats(player):
     
     ataque = (player.xG) + (player.Gol_90 * 15) + (player.Asis_90 *10)

@@ -196,11 +196,7 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch('/advanced_search/?' + params, {
             method: 'GET'
         })
-        .then(response => response.text())
-        .then(data => {
-            // Redirect to search_results.html and pass search results as query parameter
-            window.location.href = '/search_results/?search_results=' + encodeURIComponent(data);
-        })
+        .then(response =>  window.location.href = response.url) //redirect to url with params
         .catch(error => {
             console.error('Error:', error);
         });

@@ -70,7 +70,7 @@
     <div class="top-bar">   
         <div class="search-wrapper">
             <form action="{% url 'search_player' %}" method="POST">
-                {% csrf_token %} <!--seguridad -->
+                {% csrf_token %} <!--security -->
                 <input type="text" name="q" value="{{q}}" placeholder="Search for players">
                 <input type="submit" value="Search" class="primary-search-btn">
             </form>

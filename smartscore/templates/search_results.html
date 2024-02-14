@@ -9,8 +9,8 @@
     <!-- Display search results -->
     <ul>
         {% for player in results %}
-            <li>{{ player.name }}</li>
-            <!-- Add more player details as needed -->
+        <li><a href="/player/{{player.custom_id}}">{{player.Name}}</a></li>
+        <!-- Add more player details as needed -->
         {% endfor %}
     </ul>
 </body>

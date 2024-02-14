@@ -5,12 +5,7 @@ from .utils import get_player_positions # Import the function from utils.py
 
 with open('new_short_dataset.csv',  encoding='utf-8') as csvfile:
     readCSV = csv.reader(csvfile, delimiter=',')
-    next(readCSV)  # Saltar la primera fila que contiene los encabezados
-    #ID,nada,Nombre,Nac,Internacionalidades,nada2,Club,Liga,Pos,row 0-8
-    #Pierna_buena,Edad,Altura,Peso,Sueldo,Final, 9-14
-    #CAct,CPot,Strater_game,Res_game,Min,Gol,Asis, 15-21
-    #xG,Gol_90,Asis_90,Enc,Clean_sheet,Pen_metidos_rat,Fal_rev,Fal_com,Ama,Roj,Dist_90, 22-32
-    #Ent_clav,Err_clav,Oc_C_90,Pas_Clv_90,Pep,On_target_rat,Tackles_won_rat,Reg_rat,Rp,Pass_rat,Ent_rat,Reg_90,Rob_90 33-45
+    next(readCSV)  
     for row in readCSV:
         player = Player()
         player.custom_id = int(row[0])
