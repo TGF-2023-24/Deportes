@@ -57,6 +57,7 @@ fieldCategories = {
     creative: [
         { displayName: 'Assists', attributeName: 'Asis' },
         { displayName: 'Assists / 90', attributeName: 'Asis_90' },
+        { displayName: 'Pass completion ratio', attributeName: 'Pass_rat' },
         { displayName: 'Progressive passes / 90', attributeName: 'Pr_pass_90' },
         { displayName: 'Key passes / 90', attributeName: 'Key_pass_90' },
         { displayName: 'Crosses completed / 90', attributeName: 'Cr_c_90' },
