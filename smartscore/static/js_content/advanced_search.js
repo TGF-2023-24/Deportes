@@ -21,16 +21,18 @@ fieldCategories = {
         { displayName: 'Height', attributeName: 'Height' },
         { displayName: 'Weight', attributeName: 'Weight' },
         { displayName: 'Salary', attributeName: 'Salary' },
-        { displayName: 'CAbil', attributeName: 'CAbil' },
-        { displayName: 'Pot_abil', attributeName: 'Pot_abil' },
+       // { displayName: 'CAbil', attributeName: 'CAbil' },
+       // { displayName: 'Pot_abil', attributeName: 'Pot_abil' },
         { displayName: 'Starter Matches', attributeName: 'Strater_match' },
         { displayName: 'Substitute Matches', attributeName: 'Res_match' },
         { displayName: 'International Matches', attributeName: 'International_match' },
         { displayName: 'Minutes', attributeName: 'Min' },
-        { displayName: 'Yellow Cards', attributeName: 'Yel' },
-        { displayName: 'Red Cards', attributeName: 'Red' },
         { displayName: 'Distance / 90', attributeName: 'Dist_90' },
-        { displayName: 'Shirt Number', attributeName: 'Dorsal' }
+        { displayName: 'Shirt Number', attributeName: 'Dorsal' },
+        { displayName: 'Name', attributeName: 'Name' },
+        { displayName: 'Nationality', attributeName: 'Nacionality' },
+        { displayName: 'Club', attributeName: 'Club' }, 
+        { displayName: 'League', attributeName: 'League' },
     ],
     goalkeeping: [
         { displayName: 'Clean Sheets', attributeName: 'Clean_sheet' },
@@ -48,7 +50,9 @@ fieldCategories = {
         { displayName: 'Headers Won Ratio', attributeName: 'Hdr_rat' },
         { displayName: 'Key Headers / 90', attributeName: 'Key_hdr_90' },
         { displayName: 'Mistakes that Lead to Goals', attributeName: 'Gl_mistake' },
-        { displayName: 'Fouls Commited', attributeName: 'Fcomm' }
+        { displayName: 'Fouls Commited', attributeName: 'Fcomm' }, 
+        { displayName: 'Yellow Cards', attributeName: 'Yel' },
+        { displayName: 'Red Cards', attributeName: 'Red' }
     ],
     creative: [
         { displayName: 'Assists', attributeName: 'Asis' },
@@ -118,6 +122,19 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('resize', function() {
         addDots();
     });
+
+    const filterTypeSelect = document.getElementById("filter-type");
+    const filterValueInput = document.getElementById("filter-value");
+
+    // Function to update filter value input type
+    function updateFilterValueType() {
+        const selectedType = filterTypeSelect.value;
+        filterValueInput.type = selectedType === "contains" ? "text" : "number";
+    }
+
+    // Call the function initially and whenever the filter type changes
+    updateFilterValueType();
+    filterTypeSelect.addEventListener("change", updateFilterValueType);
 
 
     // Function to handle filter category

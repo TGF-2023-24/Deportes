@@ -104,9 +104,6 @@ def advanced_search(request):
             # Retrieve parameters from the request
             selected_positions = request.GET.getlist('selectedPositions')
             filters = request.GET.get('filters')
-            print("We are in the advanced search view")
-            print(selected_positions)  # Print selected positions to console
-            print(filters)  # Print filters to console  
 
             if selected_positions != [] and filters != None:
                 filters_list = json.loads(filters)
@@ -114,7 +111,6 @@ def advanced_search(request):
                 url = f'/search_results/?positions={",".join(selected_positions)}&filters={json.dumps(filters_list)}'
                 return redirect(url)
             else:
-                print("We do this once")
                 return render(request, 'advanced_search.html', {})
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
@@ -125,10 +121,11 @@ def search_results(request):
     filters_str = request.GET.get('filters', '')
     
     positions = positions_str.split(',') if positions_str else []
-    filters = filters_str.split(',') if filters_str else []
-    print("We are in the search results view")
-    print(positions)  # Print positions to console
-    print(filters)  # Print filters to console
+    try:
+        # Deserialize the entire filters JSON array
+        filters = json.loads(filters_str) if filters_str else []
+    except json.JSONDecodeError:
+        filters = []
 
     try:
         # Perform search based on positions and filters
@@ -145,8 +142,6 @@ def search_results(request):
     
 
 def perform_search(positions, filters):
-    print("We are in the perform search function")
-    print(positions)  # Print positions to console
     players = Player.objects.all()
 
     # Filter players by positions
@@ -156,6 +151,21 @@ def perform_search(positions, filters):
             position_filters |= Q(Pos__name=position)
         players = players.filter(position_filters)
 
-    print("We will return the players now")
-    print(players)  # Print players to console
+    if filters:
+        for filter_dict in filters:
+            # Extract filter properties from the dictionary
+            property_name = filter_dict.get('property')
+            filter_type = filter_dict.get('type')
+            filter_value = filter_dict.get('value')
+
+            # Construct the filter query based on the filter type
+            if filter_type == "less":
+                players = players.filter(**{f"{property_name}__lt": filter_value})
+            elif filter_type == "greater":
+                players = players.filter(**{f"{property_name}__gt": filter_value})
+            elif filter_type == "equal":
+                players = players.filter(**{f"{property_name}": filter_value})
+            elif filter_type == "contains":
+                players = players.filter(**{f"{property_name}__icontains": filter_value})
+
     return players
