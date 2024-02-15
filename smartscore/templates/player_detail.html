@@ -12,6 +12,16 @@
 
             <div class="main-nav-body">
                 <br>
+                <!--Shirt image with number-->
+                <div class="shirt-container">
+                    <!-- Use player's name and number to customize the shirt -->
+                    <img src="{% static 'smartscore/images/jersey.png' %}" alt="Shirt" class="shirt-image">
+                    <div class="player-details">
+                        <p class="player-name" id="player-name">{{ player.Name }}</p>
+                        <p class="player-number" id="player-number">{{ player.Dorsal }}</p>
+                    </div>
+                </div>
+                <br>
                 <h3>Current team: {{ player.Club }}</h3><br>
                 <h3>Country: {{ player.Nacionality }}</h3>
                 <h3>League: {{ player.League }}</h3>

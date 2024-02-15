@@ -309,3 +309,46 @@ footer {
 .secondary-search-btn:hover {
     background-color: #6a6a6a;
 }
+
+
+/*In order to display the jersey number on the shirt*/
+
+.shirt-container {
+    position: relative;
+    display: inline-block;
+}
+
+.shirt-image {
+    width: 200px; /* Adjust size as needed */
+    height: auto;
+}
+
+.player-details {
+    position: absolute;
+    top: 22%; /* Adjust to move closer to the top */
+    left: 50%; /* Position at the center horizontally */
+    transform: translateX(-50%); /* Center horizontally */
+    text-align: center;
+}
+
+.player-name {
+    font-size: 16px; /* Adjust font size as needed */
+    font-weight: bold;
+    color: white; /* Adjust text color as needed */
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5); /* Add shadow for better visibility */
+    margin: 0; /* Remove all margins */
+}
+
+.player-number {
+    font-size: 60px; /* Adjust font size as needed */
+    font-weight: bold;
+    color: white; /* Adjust text color as needed */
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5); /* Add shadow for better visibility */
+    position: absolute;
+    top: 0; /* Glue to the top of the shirt container */
+    left: 50%; /* Position at the center horizontally */
+    transform: translateX(-50%); /* Center horizontally */
+    margin-top: 5px; /* Remove all margins */
+}
+
+

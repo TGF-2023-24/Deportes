@@ -200,9 +200,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const [property, type, value] = filterElement.textContent.trim().split(' ');
             return { property, type, value };
         });
-
-        //console.log('Selected positions:', selectedPositions);
-        //console.log('Applied filters:', filters);
     
         // Construct the query parameters string
         const params = new URLSearchParams({

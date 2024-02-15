@@ -114,5 +114,12 @@ document.addEventListener('DOMContentLoaded', function() {
         radarChart.update();
     }
 
+    // Get player surname to display
+    var playerNameElement = document.getElementById('player-name');
+    var nameParts = playerNameElement.textContent.split(' ');
+    var lastName = nameParts[nameParts.length - 1];
+    playerNameElement.textContent = lastName;
+
+
     
 });
