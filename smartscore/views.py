@@ -9,7 +9,7 @@ from django.db.models import Q
 from django import forms
 from .forms import CreateUserForm
 from django.contrib.auth.decorators import login_required #utilizar este decorador para proteger las rutas que requieren autenticación
-from .utils import get_dot_positions, get_player_stats, get_pos_stats  # Import the get_dot_positions function
+from .utils import get_dot_positions, get_player_stats, get_pos_stats, get_default_stats  # Import the get_dot_positions function
 from django.http import JsonResponse, Http404
 import json
 #se usa @login_required(login_url='login') en la vista que se quiere proteger
@@ -27,12 +27,17 @@ def player_detail(request, custom_id):
     player = Player.objects.get(custom_id=custom_id)
     # Call the get_dot_positions function to calculate dot positions
     dot_positions = get_dot_positions(player.Pos)
-    stats = get_player_stats(player)
+    stats = get_default_stats(player)
     return render(request, 'player_detail.html', {'player': player, 'dot_positions': dot_positions, 'stats': stats})
 
-def position_stats_api(request, position):
+def position_stats_api(request, position, custom_id):
     # Retrieve statistics for the given position
-    stats = get_pos_stats(position)
+    avg_stats = get_pos_stats(position)
+    player = Player.objects.get(custom_id=custom_id)
+    player_stats = get_player_stats(player, position)
+
+    # Merge both dictionaries
+    stats = {**avg_stats, **player_stats}
 
     # Return statistics as JSON response
     return JsonResponse(stats)

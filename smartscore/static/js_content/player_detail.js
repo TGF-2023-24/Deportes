@@ -20,16 +20,18 @@ document.addEventListener('DOMContentLoaded', function() {
         '125px,250px': 'STC'
     };
 
+
+
+
     // Function to create the initial radar chart
-    function createInitialRadarChart(playerStats) {
+    function createInitialRadarChart() {
         var ctx = document.getElementById('radarChart').getContext('2d');
         radarChart = new Chart(ctx, {
             type: 'radar',
             data: {
-                labels: ['Goal', 'Curr ability', 'Poss lost', 'Penalty saved'],
+                labels: ['', ' ', ' ', ' ', ' ', ' '],
                 datasets: [{
-                    label: 'Player Stats',
-                    data: [playerStats.Goal, playerStats.CAbil, playerStats.Poss_lost_90, playerStats.Penalty_sav],
+                    label: player_name,
                     backgroundColor: 'rgba(255, 99, 132, 0.2)',
                     borderColor: 'rgba(255, 99, 132, 1)',
                     borderWidth: 1
@@ -38,14 +40,15 @@ document.addEventListener('DOMContentLoaded', function() {
             options: {
                 scale: {
                     ticks: {
-                        beginAtZero: true
+                        min: 0,  // Set the minimum value of the scale
+                        max: 100,  // Set the maximum value of the scale
                     }
                 }
             }
         });
     }
 
-    createInitialRadarChart(initialPlayerStats);
+    createInitialRadarChart();
 
     // Add event listener for dot click
     dots.forEach(function(dot) {
@@ -73,24 +76,42 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Activated dot:', position);
 
          // Send an AJAX request to fetch stats for the clicked position
-         fetch(`/api/position-stats/${position}/`)
+         fetch(`/api/position-stats/${position}/${custom_id}`)
          .then(response => response.json())
          .then(data => {
              console.log(data);
+
               // Update the UI to display the stats for the clicked position
               document.getElementById('avg_stats_title').innerHTML = `
               <h3>Avg stats for: ${position}</h3>
-          `;
-          
-          let statsHTML = ''; // Cadena para almacenar las estadísticas en formato HTML
-      
-          for (const [key, value] of Object.entries(data[position])) {
-              statsHTML += `<li>${key}: ${value}</li>`;
-          }
-      
-          document.getElementById('avg_stats').innerHTML = statsHTML;
-      
-          addDatasetToRadarChart(data[position], position);
+            `;
+            
+            let statsHTML = ''; // Cadena para almacenar las estadísticas en formato HTML
+        
+            for (const [key, value] of Object.entries(data[position])) {
+                statsHTML += `<li>${key}: ${value}</li>`;
+            }
+        
+            document.getElementById('avg_stats').innerHTML = statsHTML;
+
+            // Clean all datasets from radar chart and add player stats
+            radarChart.data.datasets.splice(0);
+            
+
+            const keys = Object.keys(data[player_name]);
+            const player_values = Object.values(data[player_name]);
+
+            // Add a new dataset with the data from the fetched position
+            radarChart.data.datasets.push({
+                label: player_name + ' Stats',
+                labels: keys,
+                data: player_values,
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            });
+        
+            addDatasetToRadarChart(data[position], position);
             
          })
          .catch(error => {
@@ -102,13 +123,10 @@ document.addEventListener('DOMContentLoaded', function() {
         // Clear existing datasets
         radarChart.data.datasets.splice(1);
     
-        // Extracting keys and values from statsData
-        const keys = Object.keys(statsData);
         const values = Object.values(statsData);
-    
         // Add a new dataset with the data from the fetched position
         radarChart.data.datasets.push({
-            label: position + ' Stats',
+            label: 'Avg ' + position + ' Stats',
             data: values,
             backgroundColor: 'rgba(54, 162, 235, 0.2)', // Change color if needed
             borderColor: 'rgba(54, 162, 235, 1)',
@@ -124,7 +142,6 @@ document.addEventListener('DOMContentLoaded', function() {
     var nameParts = playerNameElement.textContent.split(' ');
     var lastName = nameParts[nameParts.length - 1];
     playerNameElement.textContent = lastName;
-
 
     
 });

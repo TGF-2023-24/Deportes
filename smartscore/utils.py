@@ -57,16 +57,27 @@ def get_player_positions(player_pos):
                 name_positions.append(position)
     return name_positions
 
-def get_player_stats(player):
-    
-    stats = {
-        'Goal': player.Goal,
-        'CAbil': player.CAbil,
-        'Poss_lost_90': player.Poss_lost_90,
-        'Penalty_sav': player.Pen_saved_rat,
-    }
+def get_player_stats(player, position_name):
+    stats = {}
+    stats[player.Name] = {}
+
+    for attribute_list in stats_position_dictionary[position_name]:
+        attribute_display_name = attribute_list['displayName']
+        attribute_name = attribute_list['attributeName']
+        stats[player.Name] [attribute_display_name] = getattr(player, attribute_name)
 
     return stats
+
+def get_default_stats(player):
+    stats = {}
+
+    for attribute_list in stats_position_dictionary['DEFAULT']:
+        attribute_display_name = attribute_list['displayName']
+        attribute_name = attribute_list['attributeName']
+        stats[attribute_display_name] = getattr(player, attribute_name)
+
+    return stats
+
 def get_pos_stats(position_name):
     stats = {}
     position = Position.objects.get(name=position_name)

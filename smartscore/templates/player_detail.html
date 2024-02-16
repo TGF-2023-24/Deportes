@@ -63,10 +63,9 @@
                 <canvas id="radarChart" width="400" height="400"></canvas>
                 <h3>Player stats: </h3>
                 <ul>
-                    <li>Goal: {{ stats.Goal }}</li>
-                    <li>Curr ability: {{ stats.CAbil }}</li>
-                    <li>Poss lost: {{ stats.Poss_lost_90 }}</li>
-                    <li>Penalty saved: {{ stats.Penalty_sav }}</li>
+                    {% for key, value in stats.items %}
+                        <li>{{ key }}: {{ value }}</li>
+                    {% endfor %}
                 </ul>
                 <h3 id="avg_stats_title">Avg stats: </h3>
                 <ul id="avg_stats">
@@ -74,16 +73,14 @@
                 </ul>
         </div>
 
-        <script>
-            var initialPlayerStats = {
-                Goal: {{ stats.Goal }},
-                CAbil: {{ stats.CAbil }},
-                Poss_lost_90: {{ stats.Poss_lost_90 }},
-                Penalty_sav: {{ stats.Penalty_sav }}
-            };
-        </script>
         
     </div>
+
+    <script>
+        var custom_id = {{ player.custom_id }};
+        var player_name = "{{ player.Name }}";
+    </script>
+
 
     <script src="{% static 'js_content/player_detail.js' %}"></script>
 
