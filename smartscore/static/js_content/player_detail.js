@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 borderColor: 'rgba(255, 99, 132, 1)',
                 borderWidth: 1
             });
-        
+            radarChart.data.labels = keys; // Assuming keys contains the labels
             addDatasetToRadarChart(data[position], position);
             
          })
