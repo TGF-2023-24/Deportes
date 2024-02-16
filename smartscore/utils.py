@@ -1,4 +1,4 @@
-from django.db.models import Avg
+from django.db.models import Avg, Max, Min
 from .models import Player, Position
 from .dictionary import stats_position_dictionary
 
@@ -89,9 +89,21 @@ def get_pos_stats(position_name):
     for attribute_list in stats_position_dictionary[position_name]:
         attribute_display_name = attribute_list['displayName']
         attribute_name = attribute_list['attributeName']
-        # Calculating average for each attribute
+        
+        # Calculating average, maximum, and minimum for each attribute
         avg_value = players.aggregate(Avg(attribute_name))[f"{attribute_name}__avg"] or 0
+        max_value = players.aggregate(Max(attribute_name))[f"{attribute_name}__max"] or 0
+        min_value = players.aggregate(Min(attribute_name))[f"{attribute_name}__min"] or 0
+        
         rounded_avg_value = round(avg_value, 2)
-        stats[position_name][attribute_display_name] = rounded_avg_value
+        rounded_max_value = round(max_value, 2)
+        rounded_min_value = round(min_value, 2)
+        
+        # Storing avg, max, and min values in the stats dictionary
+        stats[position_name][attribute_display_name] = {
+            'avg': rounded_avg_value,
+            'max': rounded_max_value,
+            'min': rounded_min_value
+        }
 
     return stats

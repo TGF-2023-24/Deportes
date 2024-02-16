@@ -39,7 +39,7 @@ with open('new_short_dataset.csv',  encoding='utf-8') as csvfile:
         player.Fcomm = 0 if row[17] == '-' else int(row[31])
         player.Yel = 0 if row[17] == '-' else int(row[32])
         player.Red  = 0 if row[17] == '-' else int(row[33])
-        player.Dist_90 = 0 if row[17] == '-' else float(row[34].split()[0].replace(',', '').replace('km', ''))
+        player.Dist_90 = 0 if row[17] == '-' else float(row[34].split()[0].replace(',', '.').replace('km', ''))
         player.Key_tck_90 = 0 if row[35] == '-' else float(row[35].replace(',', '.').split()[0])
         player.Key_hdr_90 = 0 if row[36] == '-' else float(row[36].replace(',', '.').split()[0])
         player.Blocks_90 = 0 if row[37] == '-' else float(row[37].replace(',', '.').split()[0])
