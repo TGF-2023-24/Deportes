@@ -5,7 +5,7 @@ from django.db import models
 class Player(models.Model):
     custom_id = models.IntegerField(primary_key=True)  # Define a custom primary key field
     Name = models.CharField(max_length=100)
-    Nacionality = models.CharField(max_length=5)
+    Nationality = models.CharField(max_length=5)
     International_match = models.IntegerField()
     Club = models.CharField(max_length=100)
     League = models.CharField(max_length=100)	

@@ -1,5 +1,6 @@
 from django.db.models import Avg
 from .models import Player, Position
+from .dictionary import stats_position_dictionary
 
 def get_dot_positions(player_pos):
     position_mapping = {
@@ -66,17 +67,20 @@ def get_player_stats(player):
     }
 
     return stats
-
 def get_pos_stats(position_name):
     stats = {}
     position = Position.objects.get(name=position_name)
     players = Player.objects.filter(Pos=position)
 
-    stats[position_name] = {
-        'Goal': players.aggregate(Avg('Goal'))['Goal__avg'] or 0,
-        'CAbil': players.aggregate(Avg('CAbil'))['CAbil__avg'] or 0,
-        'Poss_lost_90': players.aggregate(Avg('Poss_lost_90'))['Poss_lost_90__avg'] or 0,
-        'Penalty_sav': players.aggregate(Avg('Pen_saved_rat'))['Pen_saved_rat__avg'] or 0,
-    }
+    stats[position_name] = {}
+
+    # Iterating over the attributes defined in the dictionary
+    for attribute_list in stats_position_dictionary[position_name]:
+        attribute_display_name = attribute_list['displayName']
+        attribute_name = attribute_list['attributeName']
+        # Calculating average for each attribute
+        avg_value = players.aggregate(Avg(attribute_name))[f"{attribute_name}__avg"] or 0
+        rounded_avg_value = round(avg_value, 2)
+        stats[position_name][attribute_display_name] = rounded_avg_value
 
     return stats

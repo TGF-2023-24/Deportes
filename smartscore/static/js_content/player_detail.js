@@ -79,17 +79,18 @@ document.addEventListener('DOMContentLoaded', function() {
              console.log(data);
               // Update the UI to display the stats for the clicked position
               document.getElementById('avg_stats_title').innerHTML = `
-                <h3>Avg stats for: ${position}</h3>
-            `;
-              document.getElementById('avg_stats').innerHTML = `
-              <li>Goal: ${data[position].Goal}</li>
-              <li>Curr ability: ${data[position].CAbil}</li>
-              <li>Poss lost: ${data[position].Poss_lost_90}</li>
-              <li>Penalty saved: ${data[position].Penalty_sav}</li>
-            `;
-
-            addDatasetToRadarChart(data[position], position);
-
+              <h3>Avg stats for: ${position}</h3>
+          `;
+          
+          let statsHTML = ''; // Cadena para almacenar las estadísticas en formato HTML
+      
+          for (const [key, value] of Object.entries(data[position])) {
+              statsHTML += `<li>${key}: ${value}</li>`;
+          }
+      
+          document.getElementById('avg_stats').innerHTML = statsHTML;
+      
+          addDatasetToRadarChart(data[position], position);
             
          })
          .catch(error => {
@@ -97,19 +98,23 @@ document.addEventListener('DOMContentLoaded', function() {
          });
     }
 
-    // Function to add a new dataset to the radar chart
     function addDatasetToRadarChart(statsData, position) {
-        //Clear existing datasets
+        // Clear existing datasets
         radarChart.data.datasets.splice(1);
+    
+        // Extracting keys and values from statsData
+        const keys = Object.keys(statsData);
+        const values = Object.values(statsData);
+    
         // Add a new dataset with the data from the fetched position
         radarChart.data.datasets.push({
             label: position + ' Stats',
-            data: [statsData.Goal, statsData.CAbil, statsData.Poss_lost_90, statsData.Penalty_sav],
+            data: values,
             backgroundColor: 'rgba(54, 162, 235, 0.2)', // Change color if needed
             borderColor: 'rgba(54, 162, 235, 1)',
             borderWidth: 1
         });
-
+    
         // Update the chart
         radarChart.update();
     }
