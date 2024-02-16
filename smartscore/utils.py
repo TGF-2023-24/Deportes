@@ -1,5 +1,5 @@
 from django.db.models import Avg, Max, Min
-from .models import Player, Position
+from .models import Player, Position, Squad
 from .dictionary import stats_position_dictionary
 
 def get_dot_positions(player_pos):
@@ -107,3 +107,14 @@ def get_pos_stats(position_name):
         }
 
     return stats
+
+
+
+def get_squad_players(squad_id):
+    try:
+        squad = Squad.objects.get(id=squad_id)
+        players = squad.players.all()
+        return players
+    except Squad.DoesNotExist:
+        return []
+

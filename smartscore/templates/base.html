@@ -51,6 +51,19 @@
                         <ul class="cat-sub-menu">
                             <li>
                                 <a href="{% url 'advanced_search' %}"><span class="icon setting" aria-hidden="true"></span>Advanced Search</a>
+                                <a href="{% url 'squad_builder' %}"><span class="icon setting" aria-hidden="true"></span>Squad Builder</a>
+                            </li>
+                        </ul>
+
+                        <a class="show-cat-btn" href="##">
+                            <span class="icon category" aria-hidden="true"></span>Library
+                            <span class="category__btn transparent-btn" title="Open list">
+                                <span class="sr-only">Open list</span>
+                                <span class="icon arrow-down" aria-hidden="true"></span>
+                            </span>
+                        </a>
+                        <ul class="cat-sub-menu">
+                            <li>
                                 <a href="{% url 'my_squads' %}"><span class="icon setting" aria-hidden="true"></span>My Squads</a>
                             </li>
                         </ul>

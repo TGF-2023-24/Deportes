@@ -9,7 +9,7 @@ from django.db.models import Q
 from django import forms
 from .forms import CreateUserForm
 from django.contrib.auth.decorators import login_required #utilizar este decorador para proteger las rutas que requieren autenticación
-from .utils import get_dot_positions, get_player_stats, get_pos_stats, get_default_stats  # Import the get_dot_positions function
+from .utils import get_dot_positions, get_player_stats, get_pos_stats, get_default_stats, get_squad_players # Import the get_dot_positions function
 from django.http import JsonResponse, Http404
 import json
 #se usa @login_required(login_url='login') en la vista que se quiere proteger
@@ -180,3 +180,14 @@ def my_squads(request):
     user = request.user
     my_squads = user.userprofile.squads.all() 
     return render(request, 'my_squads.html', {'my_squads': my_squads})
+
+@login_required(login_url='login')
+def squad_builder(request):
+    user_profile = request.user.userprofile
+    squads = user_profile.squads.all()
+    return render(request, 'squad_builder.html', {'squads': squads})
+
+def squad_players(request, squad_id):
+    players = get_squad_players(squad_id)
+    player_names = [player.Name for player in players]
+    return JsonResponse(player_names, safe=False)

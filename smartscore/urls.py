@@ -13,4 +13,6 @@ urlpatterns = [
     path('search_results/', views.search_results, name='search_results'),
     path('api/position-stats/<str:position>/<int:custom_id>/', views.position_stats_api, name='position_stats_api'),
     path('my_squads/', views.my_squads, name='my_squads'),
+    path('squad_builder/', views.squad_builder, name='squad_builder'),
+    path('squad/<int:squad_id>/players/', views.squad_players, name='squad_players'),
 ]
