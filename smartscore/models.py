@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import User
+
 
 # Create your models here.
 
@@ -66,3 +68,17 @@ class Position(models.Model):
 
     def __str__(self):
         return self.name
+    
+class Squad(models.Model):
+    name = models.CharField(max_length=100)
+    players = models.ManyToManyField(Player)
+
+    def __str__(self):
+        return self.name
+    
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    squads = models.ManyToManyField(Squad)
+
+    def __str__(self):
+        return self.user.username

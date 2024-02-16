@@ -12,5 +12,5 @@ urlpatterns = [
     path('advanced_search/', views.advanced_search, name='advanced_search'),
     path('search_results/', views.search_results, name='search_results'),
     path('api/position-stats/<str:position>/<int:custom_id>/', views.position_stats_api, name='position_stats_api'),
-
+    path('my_squads/', views.my_squads, name='my_squads'),
 ]

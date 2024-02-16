@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from .models import Player, Position
+from .models import Player, Position, Squad
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -174,3 +174,9 @@ def perform_search(positions, filters):
                 players = players.filter(**{f"{property_name}__icontains": filter_value})
 
     return players
+
+@login_required(login_url='login')
+def my_squads(request):
+    user = request.user
+    my_squads = user.userprofile.squads.all() 
+    return render(request, 'my_squads.html', {'my_squads': my_squads})

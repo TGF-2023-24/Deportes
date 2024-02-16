@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Search results{% endblock %}
+{% block content %}
+
+    <h1>My Squads</h1>
+    <ul>
+        {% for squad in my_squads %}
+            <li>{{ squad.name }}</li>
+            <ul>
+                {% for player in squad.players.all %}
+                    <li>{{ player.Name }}</li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

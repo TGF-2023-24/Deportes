@@ -135,6 +135,7 @@ document.addEventListener('DOMContentLoaded', function() {
             borderColor: 'rgba(54, 162, 235, 1)',
             borderWidth: 1
         });
+
     
         // Update the chart
         radarChart.update();
