@@ -1,4 +1,4 @@
-from django.db.models import Avg, Max, Min
+from django.db.models import Avg, Max, Min, Q
 from .models import Player, Position, Squad
 from .dictionary import stats_position_dictionary
 
@@ -117,4 +117,25 @@ def get_squad_players(squad_id):
         return players
     except Squad.DoesNotExist:
         return []
+    
+def search_players_by_positions(players, positions):
+    filtered_players = players
+
+    # Ensure positions is a list
+    if not isinstance(positions, list):
+        positions = [positions]
+
+    print (positions)
+    # Filter players by positions
+    if positions:
+        position_filters = Q()
+        for position in positions:
+            position_filters |= Q(Pos__name=position)
+        filtered_players = filtered_players.filter(position_filters)
+
+    print(filtered_players)
+    player_names = [player.Name for player in filtered_players]
+
+    return player_names
+
 

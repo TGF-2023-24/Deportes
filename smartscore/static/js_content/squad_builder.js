@@ -96,15 +96,16 @@ document.addEventListener('DOMContentLoaded', function() {
         // Fetch and display players for the selected position
         if (dot.classList.contains('activated')) {
             const position = dot.position;
-            fetch(`/api/players/?position=${position}`)
+            const squadId = document.getElementById('squad-select').value;
+            fetch(`/squad/${squadId}/players/${position}`)
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('Failed to fetch players');
+                        throw new Error('Failed to fetch players for position ' + position);
                     }
                     return response.json();
                 })
-                .then(players => {
-                    displayPlayers(players);
+                .then(data => {
+                    displayPlayers(data);
                 })
                 .catch(error => {
                     console.error('Error fetching players:', error);
@@ -120,7 +121,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const playerList = document.getElementById('player-list');
         playerList.innerHTML = ''; // Clear previous player list
 
+        console.log("Players:", players); // Log players array to console
+
         players.forEach(player => {
+            console.log("Player:", player); // Log each player object to console
             const playerItem = document.createElement('li');
             playerItem.textContent = player.Name;
             // Add click event listener to select player
@@ -140,7 +144,13 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             playerList.appendChild(playerItem);
         });
+
+        // Add "Select a player" header after displaying players
+        playerList.innerHTML += '<li class="player-list-header">Select a player</li>';
+
+        console.log("Player list:", playerList); // Log the player list element to console
     }
+
 
     // Function to add player name under selected position
     function addPlayerName(position, playerName) {

@@ -15,4 +15,5 @@ urlpatterns = [
     path('my_squads/', views.my_squads, name='my_squads'),
     path('squad_builder/', views.squad_builder, name='squad_builder'),
     path('squad/<int:squad_id>/players/', views.squad_players, name='squad_players'),
+    path('squad/<int:squad_id>/players/<str:position>/', views.players_by_position, name='players_by_position'),
 ]

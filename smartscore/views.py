@@ -9,7 +9,7 @@ from django.db.models import Q
 from django import forms
 from .forms import CreateUserForm
 from django.contrib.auth.decorators import login_required #utilizar este decorador para proteger las rutas que requieren autenticación
-from .utils import get_dot_positions, get_player_stats, get_pos_stats, get_default_stats, get_squad_players # Import the get_dot_positions function
+from .utils import get_dot_positions, get_player_stats, get_pos_stats, get_default_stats, get_squad_players, search_players_by_positions # Import the get_dot_positions function
 from django.http import JsonResponse, Http404
 import json
 #se usa @login_required(login_url='login') en la vista que se quiere proteger
@@ -148,11 +148,13 @@ def search_results(request):
 
 def perform_search(positions, filters):
     players = Player.objects.all()
-
+    print(positions)
+    print(players)
     # Filter players by positions
     if positions:
         position_filters = Q()
         for position in positions:
+            print(position)
             position_filters |= Q(Pos__name=position)
         players = players.filter(position_filters)
 
@@ -190,4 +192,15 @@ def squad_builder(request):
 def squad_players(request, squad_id):
     players = get_squad_players(squad_id)
     player_names = [player.Name for player in players]
+    return JsonResponse(player_names, safe=False)
+
+def players_by_position(request, squad_id, position):
+    # Convert position to string if it's passed as a list
+    if isinstance(position, list) and len(position) == 1:
+        position = position[0]
+    
+    # Retrieve players by position for the specified squad
+    players = get_squad_players(squad_id)
+    print(players)
+    player_names = search_players_by_positions(players, position)
     return JsonResponse(player_names, safe=False)
