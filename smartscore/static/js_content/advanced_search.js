@@ -8,7 +8,7 @@ const positionMapping = {
     'WBR': { top: '525px', left: '425px' },
     'MC': { top: '400px', left: '250px' },
     'ML': { top: '400px', left: '75px' },
-    'MD': { top: '400px', left: '425px' },
+    'MR': { top: '400px', left: '425px' },
     'AMC': { top: '250px', left: '250px' },
     'AML': { top: '250px', left: '75px' },
     'AMR': { top: '250px', left: '425px' },

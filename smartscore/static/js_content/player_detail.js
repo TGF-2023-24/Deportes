@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
         '525px,425px': 'WBR',
         '400px,250px': 'MC',
         '400px,75px': 'ML',
-        '400px,425px': 'MD',
+        '400px,425px': 'MR',
         '250px,250px': 'AMC',
         '250px,75px': 'AML',
         '250px,425px': 'AMR',

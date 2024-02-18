@@ -123,5 +123,14 @@ stats_position_dictionary = {
         { 'displayName': 'Yellow Cards', 'attributeName': 'Yel' },
         { 'displayName': 'Assists', 'attributeName': 'Asis' },
         { 'displayName': 'Goals', 'attributeName': 'Goal' }
-        ]
+        ],
+
+    'DR': [
+        { 'displayName': 'Interceptions / 90', 'attributeName': 'Int_90' },
+        { 'displayName': 'Tackle Completion Ratio', 'attributeName': 'Tackles_rat' },
+        { 'displayName': 'Crosses completed / 90', 'attributeName': 'Cr_c_90' },
+        { 'displayName': 'Chances created / 90', 'attributeName': 'Ch_c_90' },
+        { 'displayName': 'Distance / 90', 'attributeName': 'Dist_90' },
+        { 'displayName': 'Blocks / 90', 'attributeName': 'Blocks_90' }
+        ],
 }

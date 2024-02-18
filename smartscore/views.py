@@ -94,7 +94,6 @@ def search_player(request):
             Q(League__icontains=searched) | 
             Q(Nationality__icontains=searched) | 
             Q(Pref_foot__icontains=searched) 
-            #| Q(Pos__icontains=searched) 
         )
 
 
@@ -157,6 +156,7 @@ def perform_search(positions, filters):
             print(position)
             position_filters |= Q(Pos__name=position)
         players = players.filter(position_filters)
+         
 
     if filters:
         for filter_dict in filters:
@@ -175,6 +175,9 @@ def perform_search(positions, filters):
             elif filter_type == "contains":
                 players = players.filter(**{f"{property_name}__icontains": filter_value})
 
+    # Ensure distinct players
+    players = players.distinct()
+    
     return players
 
 @login_required(login_url='login')
