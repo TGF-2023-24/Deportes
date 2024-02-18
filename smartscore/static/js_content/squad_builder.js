@@ -90,6 +90,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to handle dot click
     function handleDotClick(dot) {
+        const activatedDots = document.querySelectorAll('.player-position-dot.activated');
+    
+        // Deactivate all other dots
+        activatedDots.forEach(activatedDot => {
+            if (activatedDot !== dot) {
+                activatedDot.classList.remove('activated');
+            }
+        });
+        
         // Toggle dot activation
         dot.classList.toggle('activated');
         
@@ -126,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function() {
         players.forEach(player => {
             console.log("Player:", player); // Log each player object to console
             const playerItem = document.createElement('li');
-            playerItem.textContent = player.Name;
+            playerItem.textContent = player;
             // Add click event listener to select player
             playerItem.addEventListener('click', function() {
                 // Get selected position
