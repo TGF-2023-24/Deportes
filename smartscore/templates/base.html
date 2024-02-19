@@ -9,6 +9,7 @@
     <link rel="icon" href="{% static 'smartscore/images/icono.png' %}">
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Include jQuery first -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Then include Bootstrap's JavaScript -->
@@ -36,46 +37,38 @@
 
             <div class="sidebar-body">
 
-                <ul class="sidebar-body-menu">
-                    <li>
-                        <a class="active" href="{% url 'home' %}"><span class="icon home" aria-hidden="true"></span>Home</a>
-                    </li>
-                    <li>
-                        <a class="show-cat-btn" href="##">
-                            <span class="icon category" aria-hidden="true"></span>Tools
-                            <span class="category__btn transparent-btn" title="Open list">
-                                <span class="sr-only">Open list</span>
-                                <span class="icon arrow-down" aria-hidden="true"></span>
-                            </span>
-                        </a>
-                        <ul class="cat-sub-menu">
-                            <li>
-                                <a href="{% url 'advanced_search' %}"><span class="icon setting" aria-hidden="true"></span>Advanced Search</a>
-                                <a href="{% url 'squad_builder' %}"><span class="icon setting" aria-hidden="true"></span>Squad Builder</a>
-                            </li>
-                        </ul>
+                <div class="sidebar-body-menu">
+                   
+                    <a class="active" href="{% url 'home' %}">
+                        <i class="bi bi-house-fill"></i>Home
+                    </a>
+                
+                    <a class="show-cat-btn" href="##">
+                        <i class="bi bi-grid-1x2-fill"></i>Tools
+                        <i id="openListIcon" class="bi bi-caret-down"></i>
+                        
+                    </a>
+                    <ul class="cat-sub-menu">
+                        
+                        <a href="{% url 'advanced_search' %}"><i class="bi bi-search"></i>Advanced Search</a>
+                        <a href="{% url 'squad_builder' %}"><i class="bi bi-tools" aria-hidden="true"></i>Squad Builder</a>
+                        
+                    </ul>
 
-                        <a class="show-cat-btn" href="##">
-                            <span class="icon category" aria-hidden="true"></span>Library
-                            <span class="category__btn transparent-btn" title="Open list">
-                                <span class="sr-only">Open list</span>
-                                <span class="icon arrow-down" aria-hidden="true"></span>
-                            </span>
-                        </a>
-                        <ul class="cat-sub-menu">
-                            <li>
-                                <a href="{% url 'my_squads' %}"><span class="icon setting" aria-hidden="true"></span>My Squads</a>
-                            </li>
-                        </ul>
-                    </li>
-            
-                    <li>
-                        <a href="{% url 'about' %}"><span class="icon setting" aria-hidden="true"></span>About</a>
-                    </li>
-                    <li>
-                        <a href="##"><span class="icon setting" aria-hidden="true"></span>Settings</a>
-                    </li>
-                </ul>
+                    <a class="show-cat-btn" href="##">
+                        <i class="bi bi-bookshelf"></i>Library
+                        <i id="openListIcon" class="bi bi-caret-down"></i>
+                    </a>
+
+                    <ul class="cat-sub-menu">
+                        <a href="{% url 'my_squads' %}"><i class="bi bi-people-fill"></i>My Squads</a>
+                    </ul>
+                
+                    <a href="{% url 'about' %}"><i class="bi bi-info-circle-fill"></i></span>About</a>
+                
+                    <a href="##"><i class="bi bi-gear-fill"></i></span>Settings</a>
+                
+                </div>
             </div>
         </div>
         
@@ -102,20 +95,22 @@
     </div>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <div class="content">
-        {% if messages %}
-        <div class="container mt-4">
-            {% for message in messages %}
-                <div class="alert alert-info alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            {% endfor %}
-        </div>
-        {% endif %}
+        <div class="white-window">
+            {% if messages %}
+            <div class="container mt-4">
+                {% for message in messages %}
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            </div>
+            {% endif %}
 
-        {% block content %}{% endblock %}
+            {% block content %}{% endblock %}
+        </div>
     </div>
     
     <!-- Footer 
@@ -123,6 +118,7 @@
         <p>Pie de página común &copy; {% now "Y" %}</p>
     </footer>
    -->  
+   <script src="{% static 'js_content/utils.js' %}"></script>
 
    
    

@@ -1,4 +1,19 @@
-/* Estilo para el sidebar */
+body {
+    font-family: Arial, sans-serif; /* Change the default font family */
+    font-size: 16px; /* Adjust the default font size */
+    line-height: 1.6; /* Set the line height for better readability */
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Roboto', sans-serif; /* Change the font family for headings */
+    font-weight: bold; /* Set the font weight for headings */
+}
+
+p {
+    font-size: 16px; /* Adjust the font size for paragraphs */
+}
+
+/* Sidebar */
 .sidebar {
     position: fixed;
     top: 0;
@@ -15,36 +30,57 @@
 .sidebar-head {
     position: fixed;
     top: 0;
-    padding-top: 25px;
+    padding-top: 20px;
     text-align: center; /* Center the content of the head */
+    width: 250px; 
 }
 
 .sidebar-body {
-    margin-top: 80px; /* Ajusta el valor según el espacio deseado */
+    margin-top: 65px; 
     /*Add a separator between elements of the sidebar*/
     border-top: 1px solid #080808;
     border-top-style: groove;
+    
+}
+
+.sidebar-body-menu i {
+    font-size: 24px; /* Adjust the size of the icon */
+    margin-right: 20px; /* Add some space between the icon and text */
+    padding-left: 10px;
 }
 
 .sidebar a {
-    display: block;
+    display: flex;
     padding: 15px;
     color: #fff;
     text-decoration: none;
     transition: background-color 0.3s ease;
+    flex:1;
+    align-items: center;
 }
 
 .sidebar a:hover {
     background-color: #dc7575; /* Color de fondo al hacer hover */
 }
 
+
+
+
 /* Estilo para el contenido principal */
+
 .content {
+    background-color: #f4f4f4; /* Color de fondo del contenido principal */
     margin-left: 250px; /* Ancho del sidebar */
     margin-top: 60px; /* Altura del top bar */
     padding: 20px;
     transition: margin-left 0.3s ease;
     align-items: center;
+}
+.white-window {
+    background-color: #fff; /* Color de fondo del contenido principal */
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle shadow for depth */
 }
 
 /* Estilo para el top bar */
