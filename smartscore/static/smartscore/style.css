@@ -1,5 +1,6 @@
+/*Style reset*/
 body {
-    font-family: Arial, sans-serif; /* Change the default font family */
+    font-family:  'Roboto', sans-serif; /* Change the default font family */
     font-size: 16px; /* Adjust the default font size */
     line-height: 1.6; /* Set the line height for better readability */
 }
@@ -10,6 +11,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 p {
+
     font-size: 16px; /* Adjust the font size for paragraphs */
 }
 
@@ -63,10 +65,7 @@ p {
     background-color: #dc7575; /* Color de fondo al hacer hover */
 }
 
-
-
-
-/* Estilo para el contenido principal */
+/* Main content style */
 
 .content {
     background-color: #f4f4f4; /* Color de fondo del contenido principal */
@@ -83,14 +82,14 @@ p {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle shadow for depth */
 }
 
-/* Estilo para el top bar */
+/* Top bar style */
 .top-bar {
     position: fixed;
     top: 0;
     left: 250px; /* Ancho del sidebar */
     width: calc(100% - 250px); /* Calcula el ancho del top bar */
     height: 60px; /* Altura del top bar */
-    background-color: #8f4141; /* Color de fondo del top bar */
+    background-color: #c92d2d; /* Color de fondo del top bar */
     color: #fff; /* Color del texto */
     display: flex;
     align-items: center;
@@ -100,7 +99,7 @@ p {
     z-index: 1000;
 }
 
-/* Estilo para el footer */
+/* Footer style */
 footer {
     position: relative;
     bottom: 0;
@@ -112,7 +111,7 @@ footer {
     padding: 10px;
 }
 
-/* Estilos para los botones */
+/* Buttons style */
 .primary-default-btn {
     display: inline-block;
     padding: 10px 20px;
@@ -145,10 +144,10 @@ footer {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    width: 200px; /* Ancho del campo de búsqueda */
+    width: 300px;
 }
 
-/* Estilo para el logo y los títulos */
+/* Logo */
 .logo-wrapper {
     display: flex;
     align-items: center;
@@ -158,7 +157,7 @@ footer {
 
 .logo-wrapper img {
     width: 40px; /* Ancho de la imagen del logo */
-    height: auto;
+    height: auto;   
     margin-right: 10px;
 }
 
@@ -172,20 +171,65 @@ footer {
     font-style: italic;
 }
 
-/* Estilo para los botones de inicio de sesión */
+/* Log in */
 .log-in-wrapper {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-/* Estilo para el campo de búsqueda */
+/* Search wrapper */
 .search-wrapper {
-    flex: 1; /* Ocupa todo el espacio disponible */
-    margin-right: 20px; /* Espacio entre el campo de búsqueda y los botones de inicio de sesión */
+    flex: 1; 
+    margin-right: 20px; 
 }
 
-/* Estilo para el contenido jugadores */
+/* Search results */
+
+/* Style for the results container */
+.results-container {
+    padding: 20px;
+}
+
+.results-grid {
+    display: flex;
+    justify-content: space-between;
+}
+
+.column {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.results-list, .results-list2 {
+    list-style-type: none;
+    padding: 0;
+}
+
+.results-list li, .results-list2 li {
+    margin-bottom: 5px;
+}
+
+/* Style for anchor tags */
+.results-list li a, .results-list2 li a {
+    text-decoration: none;
+    color: #333;
+}
+
+/* Style for list items */
+.results-list li, .results-list2 li {
+    margin-bottom: 5px;
+    transition: background-color 0.3s ease; /* Add transition effect */
+}
+
+/* Hover effect for list items */
+.results-list li:hover {
+    background-color: #f0f0f0; /* Change background color on hover */
+}
+
+
+
+/* Player detail content */
 .grid-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -196,13 +240,7 @@ footer {
     padding: 20px;
 }
 
-/* Styles for the football field container */
-.Football-field-container {
-    position: relative; /* Ensure the container is positioned relative to its parent */
-}
-
-/*Estilo para los puntos del campo de futbol*/
-/* style.css */
+/*Football field dots style */
 
 .player-position-dot {
     width: 40px; /* Adjust the size of the dot */
@@ -213,11 +251,6 @@ footer {
     transform: translate(-50%, -50%); /* Center the dot's position */
 }
 
-.football-field-container {
-    position: relative;
-    width: 75%; /* Adjust width as needed */
-    float: left;
-}
 
 .player-qualities {
     width: 50%; /* Adjust width as needed */
@@ -241,7 +274,9 @@ footer {
     border: 3px solid rgb(0, 255, 251); /* Add blue outline */
 }
 
-
+.Football-field-container {
+    position: relative;
+}
 
 /* Add custom styles for advanced player search page */
 .page-title {
@@ -264,6 +299,8 @@ footer {
     margin-bottom: 30px;
 }
 .football-field-container {
+    position: relative;
+    float: left;
     width: auto; /* Adjust the width automatically */
     height: calc(100vh - 200px); /* Set the height dynamically */
     max-height: calc(100vh - 200px); /* Set a maximum height */
@@ -330,9 +367,9 @@ footer {
 }
 
 .secondary-search-btn {
-    position: fixed; /* Fixed position */
+    position: absolute; 
     bottom: 20px; /* Distance from the bottom of the screen */
-    right: 20px; /* Distance from the right side of the screen */
+    right: 40px; /* Distance from the right side of the screen */
     padding: 10px 20px;
     background-color: #000000;
     color: #fff;
@@ -387,6 +424,12 @@ footer {
     margin-top: 5px; /* Remove all margins */
 }
 
+/*Squad builder container style*/	
+
+.squad-builder-container {
+    display: flex;
+    margin-bottom: 30px;
+}
 
 
 

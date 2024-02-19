@@ -2,32 +2,38 @@
 {% load static %}
 {% block title %}Squad Builder{% endblock %}
 {% block content %}
-<div class="main-nav">
     <h1>Squad Builder</h1>
+    <br>
+    <div class="squad-builder-container">
 
-    <!-- Select dropdown to choose the squad -->
-    <label for="squad-select">Select Squad:</label>
-    <select id="squad-select">
-        {% for squad in squads %}
-            <option value="{{ squad.id }}">{{ squad.name }}</option>
-        {% endfor %}
-    </select>
+        <!-- Football field image with player positions -->
+        <div class="football-field-container">
+            <img src="{% static 'smartscore/images/field.jpg' %}" alt="Football Field" id="football-field">
+            <!-- Player positions will be dynamically added here -->
+            <div id="player-dots"></div> <!-- Add this div for player dots -->
+        </div>
 
-    <!-- Add Squad button -->
-    <button id="add-squad-btn">Add Squad</button>
+        
+        <div class="squad-selection">
+            <!-- Select dropdown to choose the squad -->
+            <label for="squad-select">Select Squad:</label>
+            <select id="squad-select">
+                {% for squad in squads %}
+                    <option value="{{ squad.id }}">{{ squad.name }}</option>
+                {% endfor %}
+            </select>
 
-    <!-- Football field image with player positions -->
-    <div class="football-field-container">
-        <img src="{% static 'smartscore/images/field.jpg' %}" alt="Football Field" id="football-field">
-        <!-- Player positions will be dynamically added here -->
-        <div id="player-dots"></div> <!-- Add this div for player dots -->
-    </div>
+            <!-- Add Squad button -->
+            <button id="add-squad-btn">Add Squad</button>
 
-    <!-- List to display selected squad's players -->
-    <ul id="player-list"></ul>
+            <!-- List to display selected squad's players -->
+            <ul id="player-list"></ul>
+        </div>
 
-</div>
+        
 
-<!-- Include the JavaScript file -->
-<script src="{% static 'js_content/squad_builder.js' %}"></script>
+    </div>    
+
+    <!-- Include the JavaScript file -->
+    <script src="{% static 'js_content/squad_builder.js' %}"></script>
 {% endblock %}

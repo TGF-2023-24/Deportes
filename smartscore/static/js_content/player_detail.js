@@ -75,16 +75,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
         console.log('Activated dot:', position);
 
-         // Send an AJAX request to fetch stats for the clicked position
-         fetch(`/api/position-stats/${position}/${custom_id}`)
-         .then(response => response.json())
-         .then(data => {
-             console.log(data);
+        // Send an AJAX request to fetch stats for the clicked position
+        fetch(`/api/position-stats/${position}/${custom_id}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
 
-              // Update the UI to display the stats for the clicked position
-              document.getElementById('avg_stats_title').innerHTML = `
-              <h3>Avg stats for: ${position}</h3>
-            `;
             
             let statsHTML = ''; 
             let normalizedStats = []; // Array to store normalized stats
@@ -92,7 +88,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
             for (const [key, value] of Object.entries(data[position])) {
                 normalized_avg = (100 * (value.avg - value.min) / (value.max - value.min)).toFixed(2);
-                statsHTML += `<li>${key}: ${normalized_avg}</li>`;
                 normalizedStats[key] = normalized_avg; // Store normalized stats in an array
                 normalizedPlayerValues.push((100 * (data[player_name][key] - value.min) / (value.max - value.min)).toFixed(2));
             }
@@ -116,10 +111,10 @@ document.addEventListener('DOMContentLoaded', function() {
             radarChart.data.labels = keys; // Assuming keys contains the labels
             addDatasetToRadarChart(normalizedStats, position);
             
-         })
-         .catch(error => {
+        })
+        .catch(error => {
              console.error('Error fetching position stats:', error);
-         });
+        });
     }
 
     function addDatasetToRadarChart(statsData, position) {
