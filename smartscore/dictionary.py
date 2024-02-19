@@ -118,11 +118,13 @@ stats_position_dictionary = {
     
     'DEFAULT': [
         { 'displayName': 'Starter Matches', 'attributeName': 'Strater_match' },
-        { 'displayName': 'International Matches', 'attributeName': 'International_match' },
-        { 'displayName': 'Minutes', 'attributeName': 'Min' },
+        { 'displayName': 'Substitute Matches', 'attributeName': 'Res_match' },
+        { 'displayName': 'International Matches (all time)', 'attributeName': 'International_match' },
+        { 'displayName': 'Minutes played', 'attributeName': 'Min' },
         { 'displayName': 'Yellow Cards', 'attributeName': 'Yel' },
+        { 'displayName': 'Red Cards', 'attributeName': 'Red' },
         { 'displayName': 'Assists', 'attributeName': 'Asis' },
-        { 'displayName': 'Goals', 'attributeName': 'Goal' }
+        { 'displayName': 'Goals', 'attributeName': 'Goal' },
         ],
 
     'DR': [

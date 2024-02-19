@@ -27,6 +27,7 @@ def player_detail(request, custom_id):
     player = Player.objects.get(custom_id=custom_id)
     # Call the get_dot_positions function to calculate dot positions
     dot_positions = get_dot_positions(player.Pos)
+    squads = None
     stats = get_default_stats(player)
     if request.user.is_authenticated:
         user = request.user
