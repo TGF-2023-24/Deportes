@@ -179,6 +179,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const appliedFilters = document.getElementById('applied-filters');
         // Create filter element
         const filterElement = document.createElement('div');
+        filterElement.classList.add('filter-item'); // Add a class for styling
         filterElement.textContent = `${filterProperty} ${filterType} ${filterValue}`;
         appliedFilters.appendChild(filterElement);
     });

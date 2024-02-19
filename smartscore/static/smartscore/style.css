@@ -347,6 +347,24 @@ footer {
     margin-top: 20px;
 }
 
+/* Style for each filter item */
+.filter-item {
+    background-color: #282828; /* Background color for filter items */
+    color: #ffffff; /* Text color */
+    padding: 5px 10px; /* Padding around the filter text */
+    margin-bottom: 5px; /* Spacing between filter items */
+    border-radius: 5px; /* Rounded corners */
+    border: 1px solid #000000; /* Border around filter items */
+    cursor: pointer; /* Cursor style */
+    transition: background-color 0.3s ease; /* Smooth transition on hover */
+    text-align: center;
+}
+
+/* Hover effect for filter items */
+.filter-item:hover {
+    background-color: #e0e0e0; /* Darker background color on hover */
+}
+
 
 .primary-default-btn,
 .primary-search-btn {
@@ -431,6 +449,22 @@ footer {
     margin-bottom: 30px;
 }
 
+.player-button {
+    display: inline-block;
+    padding: 8px 16px;
+    margin: 4px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
 
+.player-button:hover {
+    background-color: #0056b3;
+}
 
 

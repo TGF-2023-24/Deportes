@@ -52,6 +52,7 @@ function displaySquadPlayers(players) {
     players.forEach(playerName => {
         const playerItem = document.createElement('li');
         playerItem.textContent = playerName;
+
         playerList.appendChild(playerItem);
     });
 }
@@ -61,7 +62,6 @@ document.getElementById('squad-select').addEventListener('change', handleSquadSe
 
 // Initialize by fetching players for the selected squad
 handleSquadSelection();
-
 
 document.addEventListener('DOMContentLoaded', function() {
     // Function to add dots for each position
@@ -133,16 +133,21 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log("Players:", players); // Log players array to console
 
         players.forEach(player => {
+
             console.log("Player:", player); // Log each player object to console
-            const playerItem = document.createElement('li');
-            playerItem.textContent = player;
+            const playerBut = document.createElement('button');
+            playerBut.textContent = player;
+            //const playerItem = document.createElement('li');
+            //playerItem.textContent = player;
             // Add click event listener to select player
-            playerItem.addEventListener('click', function() {
-                // Get selected position
+            playerBut.classList.add('player-button'); // Add a class for styling
+
+            playerBut.addEventListener('click', function() {
+                console.log('Button clicked'); // Check if the button click event is registered
                 const selectedPosition = document.querySelector('.player-position-dot.activated').position;
-                // Add player name under selected position
-                addPlayerName(selectedPosition, player.Name);
-                // Disable dot selection for this player
+                console.log("Selected position:", selectedPosition);
+                console.log("Selected player:", player);
+                addPlayerName(selectedPosition, player);
                 document.querySelectorAll('.player-position-dot').forEach(dot => {
                     if (dot.position === selectedPosition) {
                         dot.classList.add('disabled');
@@ -151,11 +156,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Remove click event listener to prevent reselection
                 this.removeEventListener('click', arguments.callee);
             });
-            playerList.appendChild(playerItem);
+            
+            playerList.appendChild(playerBut);
+
         });
 
         // Add "Select a player" header after displaying players
-        playerList.innerHTML += '<li class="player-list-header">Select a player</li>';
+        playerList.innerHTML += '<p class="player-list-header">Select a player</p>';
 
         console.log("Player list:", playerList); // Log the player list element to console
     }
