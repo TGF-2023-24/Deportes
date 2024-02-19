@@ -506,3 +506,16 @@ footer {
     margin-right: 10px;
 }
 
+/* Style for the form */
+.add-to-squad-form {
+    margin-top: 20px; /* Add margin from the top */
+}
+
+/* Style for the squad select dropdown */
+.squad-select {
+    padding: 8px; /* Padding for the dropdown */
+    border-radius: 5px; /* Add border radius */
+    border: 1px solid #ccc; /* Add border */
+    font-size: 16px; /* Font size */
+    width: 200px; /* Width of the dropdown */
+}

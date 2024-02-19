@@ -28,7 +28,10 @@ def player_detail(request, custom_id):
     # Call the get_dot_positions function to calculate dot positions
     dot_positions = get_dot_positions(player.Pos)
     stats = get_default_stats(player)
-    return render(request, 'player_detail.html', {'player': player, 'dot_positions': dot_positions, 'stats': stats})
+    if request.user.is_authenticated:
+        user = request.user
+        squads = user.userprofile.squads.all()
+    return render(request, 'player_detail.html', {'player': player, 'dot_positions': dot_positions, 'stats': stats, 'squads': squads})
 
 def position_stats_api(request, position, custom_id):
     # Retrieve statistics for the given position
@@ -243,3 +246,23 @@ def delete_squad(request, squad_id):
         squad.delete()
         return redirect('my_squads')
     return render(request, 'delete_squad.html', {'squad': squad})
+
+
+@login_required(login_url='login')
+def add_to_squad(request, custom_id):
+    player = get_object_or_404(Player, pk=custom_id)
+    if request.method == 'POST':
+        squad_id = request.POST.get('squad')
+        if squad_id:
+            squad = get_object_or_404(Squad, pk=squad_id)
+            if player not in squad.players.all():
+                squad.players.add(player)
+                messages.success(request, f"{player.Name} added to {squad.name} squad successfully.")
+                return redirect('player_detail', custom_id=custom_id)
+            else:
+                messages.warning(request, f"{player.Name} is already in {squad.name} squad.")
+        else:
+            messages.error(request, "Please select a squad.")
+            pass
+    # Redirect to player detail page if there is an error or no squad is selected
+    return redirect('player_detail', custom_id=custom_id)

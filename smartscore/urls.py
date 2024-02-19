@@ -19,4 +19,6 @@ urlpatterns = [
     path('create_squad/', views.create_squad, name='create_squad'),
     path('edit_squad/<int:squad_id>/', views.edit_squad, name='edit_squad'),
     path('delete_squad/<int:squad_id>/', views.delete_squad, name='delete_squad'),
+    path('add_to_squad/<int:custom_id>/', views.add_to_squad, name='add_to_squad'),
+
 ]

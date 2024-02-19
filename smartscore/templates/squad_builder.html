@@ -17,7 +17,7 @@
         <div class="squad-selection">
             <!-- Select dropdown to choose the squad -->
             <label for="squad-select">Select Squad:</label>
-            <select id="squad-select">
+            <select id="squad-select" class="squad-select">
                 {% for squad in squads %}
                     <option value="{{ squad.id }}">{{ squad.name }}</option>
                 {% endfor %}

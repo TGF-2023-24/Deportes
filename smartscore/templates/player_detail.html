@@ -74,6 +74,24 @@
 
         
     </div>
+    
+     <!-- Add to Squad Form -->
+     {% if request.user.is_authenticated %}
+     <form action="{% url 'add_to_squad' player.custom_id %}" method="post">
+         {% csrf_token %}
+         <select name="squad" class="squad-select">
+             {% for squad in squads %}
+                <option value="{{ squad.id }}">{{ squad.name }}</option>
+             {% endfor %}
+             {% if not squads %}
+                <option value="0">No squads available</option>
+             {% endif %}
+         </select>
+         <button class ="primary-default-btn" type="submit">Add to Squad</button>
+     </form>
+     {% else %}
+     <p>Please <a href="{% url 'login' %}">login</a> to add this player to a squad.</p>
+     {% endif %}
 
     <script>
         var custom_id = {{ player.custom_id }};
