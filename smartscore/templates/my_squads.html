@@ -18,9 +18,9 @@
                     <h3>{{ squad.name }}</h3>
                     <ul class="player-list">
                         {% for player in squad.players.all %}
-                            <li>{{ player.Name }}</li>
+                            <a>{{ player.Name }}</a>
                         {% endfor %}
-                    </ul>
+                    </ul>  
                     <br>
                     <div class="squad-actions">
                         <form action="{% url 'edit_squad' squad.id %}" method="get">

@@ -473,7 +473,6 @@ footer {
 /* My squad container style */
 
 .squad-container {
-    display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
@@ -481,19 +480,29 @@ footer {
 }
 
 .squad-list {
-    display: block;
-    flex: 0 0 calc(33.33%  - 20px); /* Adjust the width of each column */
     padding: 15px;
-    border-radius: 5px;
 }
+
 
 .player-list {
     list-style-type: none;
     padding-left: 20px;
+
+}
+
+.player-list a {
+    display: block;
+    padding: 5px 0;
+    color: #333;
+    text-decoration: none;
+}
+
+.player-list a:hover {
+    background-color: #f0f0f0;
 }
 
 .squad-actions form {
-    display: flex;
-    align-items: center;
+    display: inline;
+    margin-right: 10px;
 }
 
