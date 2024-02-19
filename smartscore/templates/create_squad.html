@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Create Squad{% endblock %}
+{% block content %}
+    <h1>Create Squad</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Create Squad</button>
+    </form>
+{% endblock %}

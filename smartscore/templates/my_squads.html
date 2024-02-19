@@ -2,17 +2,41 @@
 {% load static %}
 {% block title %}Search results{% endblock %}
 {% block content %}
+    <div class="squads-container">
 
-    <h1>My Squads</h1>
-    <ul>
-        {% for squad in my_squads %}
-            <li>{{ squad.name }}</li>
-            <ul>
-                {% for player in squad.players.all %}
-                    <li>{{ player.Name }}</li>
-                {% endfor %}
-            </ul>
-        {% endfor %}
-    </ul>
+        <h1>My Squads</h1>
+
+        <!-- Create New Squad Button -->
+        <form action="{% url 'create_squad' %}" method="get">
+            {% csrf_token %}
+            <button class="squad-create-button" type="submit">Create New Squad</button>
+        </form>
+
+        <ul class="squad-list">
+            {% for squad in my_squads %}
+                <div class="squad-list">
+                    <h3>{{ squad.name }}</h3>
+                    <ul class="player-list">
+                        {% for player in squad.players.all %}
+                            <li>{{ player.Name }}</li>
+                        {% endfor %}
+                    </ul>
+                    <br>
+                    <div class="squad-actions">
+                        <form action="{% url 'edit_squad' squad.id %}" method="get">
+                            {% csrf_token %}
+                            <button class ="squad-create-button" type="submit">Edit</button>
+                        </form>
+                        <form action="{% url 'delete_squad' squad.id %}" method="post" onsubmit="return confirm('Are you sure you want to delete this squad?');">
+                            {% csrf_token %}
+                            <button class ="squad-create-button" type="submit">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </ul>
+
+        
+    </div>
 
 {% endblock %}

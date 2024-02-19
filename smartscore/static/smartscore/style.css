@@ -112,7 +112,7 @@ footer {
 }
 
 /* Buttons style */
-.primary-default-btn {
+.primary-default-btn, .player-button, .squad-create-button {
     display: inline-block;
     padding: 10px 20px;
     background-color: #007bff;
@@ -122,7 +122,7 @@ footer {
     transition: background-color 0.3s ease;
 }
 
-.primary-default-btn:hover {
+.primary-default-btn:hover, .player-button:hover, .squad-create-button:hover {
     background-color: #0056b3;
 }
 
@@ -298,6 +298,7 @@ footer {
     justify-content: space-between; /* Align items to the start and end of the container */
     margin-bottom: 30px;
 }
+
 .football-field-container {
     position: relative;
     float: left;
@@ -449,22 +450,50 @@ footer {
     margin-bottom: 30px;
 }
 
-.player-button {
-    display: inline-block;
-    padding: 8px 16px;
-    margin: 4px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    text-decoration: none;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-}
-
 .player-button:hover {
-    background-color: #0056b3;
+    background-color: #000000;
 }
 
+.player-button.clicked {
+    background-color: #000000; 
+}
+
+.player-position {
+    /* Additional styles */
+    background-color: #f17676; /* Set background color */
+    border: 1px solid #ff0000; /* Add a border */
+    border-radius: 5px; /* Add border radius */
+    transform: translate(-50%, -50%); /* Center the dot's position */
+}
+
+#example-btn {
+    display: none; /* Initially hide the button */
+}
+
+/* My squad container style */
+
+.squad-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.squad-list {
+    display: block;
+    flex: 0 0 calc(33.33%  - 20px); /* Adjust the width of each column */
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.player-list {
+    list-style-type: none;
+    padding-left: 20px;
+}
+
+.squad-actions form {
+    display: flex;
+    align-items: center;
+}
 

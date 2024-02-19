@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from .models import Player, Position, Squad
 from django.contrib.auth import authenticate, login, logout
@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Q
 from django import forms
-from .forms import CreateUserForm
+from .forms import CreateUserForm, SquadCreationForm
 from django.contrib.auth.decorators import login_required #utilizar este decorador para proteger las rutas que requieren autenticación
 from .utils import get_dot_positions, get_player_stats, get_pos_stats, get_default_stats, get_squad_players, search_players_by_positions # Import the get_dot_positions function
 from django.http import JsonResponse, Http404
@@ -207,3 +207,39 @@ def players_by_position(request, squad_id, position):
     print(players)
     player_names = search_players_by_positions(players, position)
     return JsonResponse(player_names, safe=False)
+
+
+@login_required(login_url='login')
+def create_squad(request):
+    if request.method == 'POST':
+        form = SquadCreationForm(request.POST)
+        if form.is_valid():
+            squad = form.save(commit=False)
+            squad = form.save()
+            # Add the current user to the squad
+            request.user.userprofile.squads.add(squad)
+            return redirect('my_squads')
+    else:
+        form = SquadCreationForm()
+    return render(request, 'create_squad.html', {'form': form})
+
+
+@login_required(login_url='login')
+def edit_squad(request, squad_id):
+    squad = get_object_or_404(Squad, pk=squad_id)
+    if request.method == 'POST':
+        form = SquadCreationForm(request.POST, instance=squad)
+        if form.is_valid():
+            form.save()
+            return redirect('my_squads')
+    else:
+        form = SquadCreationForm(instance=squad)
+    return render(request, 'edit_squad.html', {'form': form})
+
+@login_required(login_url='login')
+def delete_squad(request, squad_id):
+    squad = get_object_or_404(Squad, pk=squad_id)
+    if request.method == 'POST':
+        squad.delete()
+        return redirect('my_squads')
+    return render(request, 'delete_squad.html', {'squad': squad})

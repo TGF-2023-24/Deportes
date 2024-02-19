@@ -64,6 +64,12 @@ document.getElementById('squad-select').addEventListener('change', handleSquadSe
 handleSquadSelection();
 
 document.addEventListener('DOMContentLoaded', function() {
+    let activePlayerButton = null; // Track the active player button
+    // Define a Set to keep track of used players
+    let blockedPlayers = new Set();
+    const playerCounts = {};
+
+
     // Function to add dots for each position
     function addDots() {
         const dotContainer = document.getElementById('player-dots');
@@ -115,6 +121,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
                 .then(data => {
                     displayPlayers(data);
+                    document.getElementById('example-btn').style.display = 'inline-block';
+
                 })
                 .catch(error => {
                     console.error('Error fetching players:', error);
@@ -122,62 +130,107 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             // Clear player list when dot is deactivated
             clearPlayerList();
+            document.getElementById('example-btn').style.display = 'none';
+
         }
     }
 
-    // Function to display players
-    function displayPlayers(players) {
+     // Function to add players dynamically
+     function displayPlayers(players) {
         const playerList = document.getElementById('player-list');
         playerList.innerHTML = ''; // Clear previous player list
 
-        console.log("Players:", players); // Log players array to console
 
         players.forEach(player => {
-
-            console.log("Player:", player); // Log each player object to console
             const playerBut = document.createElement('button');
             playerBut.textContent = player;
-            //const playerItem = document.createElement('li');
-            //playerItem.textContent = player;
-            // Add click event listener to select player
             playerBut.classList.add('player-button'); // Add a class for styling
 
-            playerBut.addEventListener('click', function() {
-                console.log('Button clicked'); // Check if the button click event is registered
-                const selectedPosition = document.querySelector('.player-position-dot.activated').position;
-                console.log("Selected position:", selectedPosition);
-                console.log("Selected player:", player);
-                addPlayerName(selectedPosition, player);
-                document.querySelectorAll('.player-position-dot').forEach(dot => {
-                    if (dot.position === selectedPosition) {
-                        dot.classList.add('disabled');
-                    }
-                });
-                // Remove click event listener to prevent reselection
-                this.removeEventListener('click', arguments.callee);
-            });
-            
-            playerList.appendChild(playerBut);
+            // Apply style if player is blocked
+            if (blockedPlayers.has(player)) {
+                playerBut.style.textDecoration = 'line-through';
+            }
 
+            // Check if the player is blocked
+            playerBut.addEventListener('click', function () {
+                handlePlayerButtonClick(playerBut);
+            });
+
+            playerList.appendChild(playerBut);
         });
 
         // Add "Select a player" header after displaying players
         playerList.innerHTML += '<p class="player-list-header">Select a player</p>';
+    }
+    
+    // Function to handle player button click
+    function handlePlayerButtonClick(playerBut) {
+         // Check if the player is already blocked
+        if (playerBut.classList.contains('active')) {
+            // Remove active class from the clicked button
+            playerBut.classList.remove('active');
+            playerBut.classList.remove('clicked');
+            activePlayerButton = null;
+            return;
+        }
 
-        console.log("Player list:", playerList); // Log the player list element to console
+        // Remove active class from previously active button
+        if (activePlayerButton) {
+            activePlayerButton.classList.remove('active');
+        }
+
+        // Set the current button as active
+        playerBut.classList.add('active');
+        activePlayerButton = playerBut;
+
+         // Add the "clicked" class to change color
+        playerBut.classList.add('clicked');
+
+        // Block the player
+        blockedPlayers.add(playerBut.textContent);
+        console.log('Player blocked:', playerBut.textContent);
     }
 
+    // Add event listener to player buttons
+    document.querySelectorAll('.player-button').forEach(playerBut => {
+        playerBut.addEventListener('click', function () {
+            handlePlayerButtonClick(playerBut);
+        });
+    });
+    
 
     // Function to add player name under selected position
     function addPlayerName(position, playerName) {
-        const fieldContainer = document.querySelector('.football-field-container');
+        console.log('Adding player name:', playerName, 'at position:', position);
+        const fieldContainer = document.querySelector('.football-field-container'); 
+        const containerWidth = fieldContainer.offsetWidth;
+        const containerHeight = fieldContainer.offsetHeight;
+
+        // Initialize player count for this position if it doesn't exist
+        if (!playerCounts[position]) {
+            playerCounts[position] = 0;
+        }
+
+        // Get the number of players already present at this position
+        const numPlayers = playerCounts[position];
+        
+   
         const playerPosition = document.createElement('div');
         playerPosition.className = 'player-position';
+        playerPosition.style.position = 'absolute'; // Position absolutely
         playerPosition.textContent = playerName;
-        playerPosition.style.left = positionMapping[position].left;
-        playerPosition.style.top = positionMapping[position].top;
+        // Calculate the position of the dot based on container dimensions
+        const left = parseFloat(positionMapping[position].left) / 500 * containerWidth; // Normalize left position
+        const top = parseFloat(positionMapping[position].top) / 800 * containerHeight + numPlayers * 30; // Normalize top position
+        playerPosition.style.left = left + 'px';
+        playerPosition.style.top = top + 'px';
         fieldContainer.appendChild(playerPosition);
+        console.log('Player added:', playerName, 'at position:', left, top);
+        // Increment the player count for this position
+        playerCounts[position]++;
+  
     }
+    
 
     // Function to clear player list
     function clearPlayerList() {
@@ -199,4 +252,34 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('resize', function() {
         addDots();
     });
+
+    // Function to handle example button click
+    document.getElementById('example-btn').addEventListener('click', function () {
+        if (activePlayerButton) {
+            const selectedPosition = document.querySelector('.player-position-dot.activated').position;
+            const playerName = activePlayerButton.textContent; // Retrieve active player name
+            addPlayerName(selectedPosition, playerName);
+            // Disable the dot corresponding to the selected position
+            document.querySelectorAll('.player-position-dot').forEach(dot => {
+                if (dot.position === selectedPosition) {
+                    dot.classList.add('disabled');
+                }
+            });
+            // Remove the active class from the active player button
+            activePlayerButton.classList.remove('active');
+            activePlayerButton = null; // Reset the active player button
+        } else {
+            console.log('No player selected.');
+        }
+    });
+
+
+    // Attach event listener to the parent element and delegate the event to the dynamic elements
+    document.getElementById('player-list').addEventListener('click', function (event) {
+        const target = event.target;
+        if (target.classList.contains('player-button')) {
+            handlePlayerButtonClick(target);
+        }
+    });
+
 });
