@@ -472,22 +472,34 @@ footer {
 
 /* My squad container style */
 
-.squad-container {
-    flex-wrap: wrap;
-    align-items: center;
+.squad-builder-container {
+    display: flex;
     justify-content: space-between;
-    gap: 20px;
+    align-items: flex-start; /* Align items to the top */
 }
 
-.squad-list {
-    padding: 15px;
+.football-field-container {
+    width: 25%; /* Adjust width as needed */
+    position: relative; /* Position relative for absolutely positioned children */
 }
 
+.squad-selection-container {
+    width: 75%; /* Adjust width as needed */
+}
 
-.player-list {
-    list-style-type: none;
+.squad-selection {
+    padding: 20px; /* Adjust padding as needed */
+    background-color: #f0f0f0; /* Background color for squad selection container */
+}
+
+#player-list {
+    list-style-type: none; /* Remove list bullet points */
     padding-left: 20px;
+    margin: 0;
+}
 
+#player-list li {
+    margin-bottom: 10px; /* Adjust margin between player items */
 }
 
 .player-list a {

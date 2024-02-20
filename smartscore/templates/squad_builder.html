@@ -14,23 +14,23 @@
         </div>
 
         
-        <div class="squad-selection">
-            <!-- Select dropdown to choose the squad -->
-            <label for="squad-select">Select Squad:</label>
-            <select id="squad-select" class="squad-select">
-                {% for squad in squads %}
-                    <option value="{{ squad.id }}">{{ squad.name }}</option>
-                {% endfor %}
-            </select>
-            <p id="squad-help-txt">Select a position to add players to field</p>
-            <!-- Add Squad button 
-            <button id="add-squad-btn">Add Squad</button>-->
-
-            <!-- List to display selected squad's players -->
-            <ul id="player-list"></ul>
-
-            <button id="example-btn">Add player</button>
+        <div class="squad-selection-container">
+            <div class="squad-selection">
+                <!-- Select dropdown to choose the squad -->
+                <label for="squad-select">Select Squad:</label>
+                <select id="squad-select" class="squad-select">
+                    {% for squad in squads %}
+                        <option value="{{ squad.id }}">{{ squad.name }}</option>
+                    {% endfor %}
+                </select>
+                <p id="squad-help-txt">Select a position to add players to the field</p>
+                <!-- List to display selected squad's players -->
+                <ul id="player-list"></ul>
+                <button id="add-player-btn">Add player</button>
+            </div>
         </div>
+
+        <button id="analyze-squad-btn" class="secondary-search-btn">Analyze</button>
 
     </div>    
 

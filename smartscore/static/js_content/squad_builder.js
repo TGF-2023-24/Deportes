@@ -15,6 +15,8 @@ const positionMapping = {
     'STC': { top: '125px', left: '250px' }
 };
 
+addedPlayerCount = 0;
+
 // Define a function to handle the selection of a squad
 function handleSquadSelection() {
     // Get the selected squad ID from the dropdown
@@ -33,6 +35,7 @@ function handleSquadSelection() {
         .then(data => {
             // Display the squad players on the football field
             displaySquadPlayers(data);
+            addedPlayerCount = 0;
         })
         .catch(error => {
             console.error('Error fetching squad players:', error);
@@ -68,6 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Define a Set to keep track of used players
     let blockedPlayers = new Set();
     const playerCounts = {};
+    const playerPositionMapping = {};
 
 
     // Function to add dots for each position
@@ -214,7 +218,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Get the number of players already present at this position
         const numPlayers = playerCounts[position];
         
-   
+        playerPositionMapping[playerName] = position;
         const playerPosition = document.createElement('div');
         playerPosition.className = 'player-position';
         playerPosition.style.position = 'absolute'; // Position absolutely
@@ -254,10 +258,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Function to handle example button click
-    document.getElementById('example-btn').addEventListener('click', function () {
+    document.getElementById('add-player-btn').addEventListener('click', function () {
+        console.log(addedPlayerCount, 'players added.');
+        if (addedPlayerCount >= 11) {
+            alert('Football is played with 11 players.');
+            return;
+        }
         if (activePlayerButton) {
             const selectedPosition = document.querySelector('.player-position-dot.activated').position;
             const playerName = activePlayerButton.textContent; // Retrieve active player name
+            addedPlayerCount++;
             addPlayerName(selectedPosition, playerName);
             // Disable the dot corresponding to the selected position
             document.querySelectorAll('.player-position-dot').forEach(dot => {
@@ -281,5 +291,37 @@ document.addEventListener('DOMContentLoaded', function() {
             handlePlayerButtonClick(target);
         }
     });
+
+
+    // Function to handle the analyze squad button click
+    document.getElementById('analyze-squad-btn').addEventListener('click', function() {
+        // Check if there are 11 players added to the field
+        if (addedPlayerCount === 11) {
+            console.log('Analyzing squad...');
+            const squadPlayers = {}; // Object to store players by position
+            const fieldContainer = document.querySelector('.football-field-container');
+            const fieldWidth = fieldContainer.offsetWidth;
+            const fieldHeight = fieldContainer.offsetHeight;
+    
+            // Iterate over player names and get their positions
+            Object.keys(playerPositionMapping).forEach(playerName => {
+                const position = playerPositionMapping[playerName];
+                console.log('Player found:', playerName, 'at position:', position);
+                squadPlayers[position] = {
+                    name: playerName,
+                    position: position,
+                    left: (parseFloat(positionMapping[position].left) / 500) * fieldWidth,
+                    top: (parseFloat(positionMapping[position].top) / 800) * fieldHeight
+                };
+            });
+    
+            // Display squad players with their positions
+            console.log('Squad Players:', squadPlayers);
+        } else {
+            alert('Please add 11 players to analyze the squad.');
+        }
+    });
+    
+
 
 });
