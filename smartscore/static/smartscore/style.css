@@ -478,13 +478,13 @@ footer {
     align-items: flex-start; /* Align items to the top */
 }
 
-.football-field-container {
+.football-field-container-squad-builder {
     width: 25%; /* Adjust width as needed */
     position: relative; /* Position relative for absolutely positioned children */
 }
 
 .squad-selection-container {
-    width: 75%; /* Adjust width as needed */
+    width: 80%; /* Adjust width as needed */
 }
 
 .squad-selection {
@@ -530,4 +530,21 @@ footer {
     border: 1px solid #ccc; /* Add border */
     font-size: 16px; /* Font size */
     width: 200px; /* Width of the dropdown */
+}
+
+.main-nav {
+    /* Ensure the main-nav takes up the remaining space */
+    padding: 20px; /* Add padding to the contents */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    /* Ensure the main-nav scrolls if content overflows */
+    overflow-y: auto;
+}
+
+/* Adjustments for smaller screens */
+@media (max-width: 768px) {
+    .main-nav {
+        width: 100%; /* Take up the full width on smaller screens */
+        margin-left: 0; /* Remove left margin */
+        margin-top: 0; /* Remove top margin */
+    }
 }

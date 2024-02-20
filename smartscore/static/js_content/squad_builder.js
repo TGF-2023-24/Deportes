@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
         dotContainer.innerHTML = ''; // Clear previous dots
 
         // Get the dimensions of the football field container
-        const fieldContainer = document.querySelector('.football-field-container');
+        const fieldContainer = document.querySelector('.football-field-container-squad-builder');
         const containerWidth = fieldContainer.offsetWidth;
         const containerHeight = fieldContainer.offsetHeight;
 
@@ -306,22 +306,59 @@ document.addEventListener('DOMContentLoaded', function() {
             // Iterate over player names and get their positions
             Object.keys(playerPositionMapping).forEach(playerName => {
                 const position = playerPositionMapping[playerName];
-                console.log('Player found:', playerName, 'at position:', position);
-                squadPlayers[position] = {
-                    name: playerName,
-                    position: position,
-                    left: (parseFloat(positionMapping[position].left) / 500) * fieldWidth,
-                    top: (parseFloat(positionMapping[position].top) / 800) * fieldHeight
-                };
+                // Store player name under their position
+                if (!squadPlayers[position]) {
+                    squadPlayers[position] = [];
+                }
+                squadPlayers[position].push(playerName);
             });
     
+            // Iterate over positions and get stats
+            Object.keys(squadPlayers).forEach(position => {
+                const squadPosition = squadPlayers[position];
+                console.log('Analyzing position:', position, 'with players:', squadPosition);
+                // Fetch stats for the position from the server
+                fetch(`/api/position-stats/${position}/${custom_id}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`Failed to fetch stats for position ${position}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Store stats for the position
+                        squadStats[position] = data;
+                        // Check for standout stats (good or bad) and display them
+                        displayStandoutStats(position, data);
+                    })
+                    .catch(error => {
+                        //Ahora está fallando, no sé como se hace el fetch en el servidor (he intentado hacerlo como en player_detail.js pero no funciona)
+                        console.error('Error fetching stats:', error);
+                    });
+            });
+
             // Display squad players with their positions
             console.log('Squad Players:', squadPlayers);
+            console.log('Squad Stats:', squadStats);
         } else {
             alert('Please add 11 players to analyze the squad.');
         }
     });
     
 
-
 });
+
+
+// Function to display standout stats (good or bad) for a position
+function displayStandoutStats(position, stats) {
+    // Iterate over stats for the position and check for standout values
+    Object.keys(stats[position]).forEach(attribute => {
+        const attributeStats = stats[position][attribute];
+        // Check for standout values (e.g., above-average or below-average)
+        if (attributeStats.avg > 0) { //De prueba, habría que cambiarlo por algo más significativo
+            console.log(`Position ${position}: ${attribute} has above-average value: ${attributeStats.avg}`);
+        }
+        //Estaría bien que se mostrara en la interfaz para cada jugador un resumen de en qué destaca y qué le falta
+        //Igual esto es mejor hacerlo en python para poder reutilizarlo en otros sitios
+    });
+}

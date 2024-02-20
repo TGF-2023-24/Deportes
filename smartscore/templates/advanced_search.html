@@ -4,48 +4,45 @@
 {% block content %}
 <h1 class="page-title">Advanced Player Search</h1>
 
-<div class="container">
     
-    <div class="search-container">
-        <!-- Football field image with dots -->
-        <div class="football-field-container">
-            <img src="{% static 'smartscore/images/field.jpg' %}" alt="Football Field" id="football-field">
-            <div id="player-dots"></div>
-        </div>
-
-        <!-- Filter section -->
-        <div class="filter-section">
-            <h2 class="section-title">Add Filter:</h2>
-            <button id="add-filter-btn" class="primary-default-btn">Add Filter</button>
-            <div id="filter-menu" style="display: none;">
-                <select id="filter-category">
-                    <option value="general">General</option>
-                    <option value="goalkeeping">Goalkeeping</option>
-                    <option value="defensive">Defensive</option>
-                    <option value="creative">Creative</option>
-                    <option value="attacking">Attacking</option>
-                </select>
-                <select id="filter-property">
-                    <!-- Options will be populated dynamically -->
-                </select>
-                <select id="filter-type">
-                    <option value="less">Less than</option>
-                    <option value="greater">Greater than</option>
-                    <option value="equal">Equal to</option>
-                    <option value="contains">Contains</option>
-                </select>
-                <input type="number" id="filter-value" placeholder="Enter value">
-                <button id="apply-filter-btn" class="primary-default-btn">Apply Filter</button>
-            </div>
-            <div id="applied-filters" class="applied-filters"></div>
-        </div>
+<div class="search-container">
+    <!-- Football field image with dots -->
+    <div class="football-field-container">
+        <img src="{% static 'smartscore/images/field.jpg' %}" alt="Football Field" id="football-field">
+        <div id="player-dots"></div>
     </div>
 
-    <!-- Search button -->
-    <button id="adv-search-btn" class="secondary-search-btn">Search</button>
-
-    
+    <!-- Filter section -->
+    <div class="filter-section">
+        <h2 class="section-title">Add Filter:</h2>
+        <button id="add-filter-btn" class="primary-default-btn">Add Filter</button>
+        <div id="filter-menu" style="display: none;">
+            <select id="filter-category">
+                <option value="general">General</option>
+                <option value="goalkeeping">Goalkeeping</option>
+                <option value="defensive">Defensive</option>
+                <option value="creative">Creative</option>
+                <option value="attacking">Attacking</option>
+            </select>
+            <select id="filter-property">
+                <!-- Options will be populated dynamically -->
+            </select>
+            <select id="filter-type">
+                <option value="less">Less than</option>
+                <option value="greater">Greater than</option>
+                <option value="equal">Equal to</option>
+                <option value="contains">Contains</option>
+            </select>
+            <input type="number" id="filter-value" placeholder="Enter value">
+            <button id="apply-filter-btn" class="primary-default-btn">Apply Filter</button>
+        </div>
+        <div id="applied-filters" class="applied-filters"></div>
+    </div>
 </div>
+
+<!-- Search button -->
+<button id="adv-search-btn" class="secondary-search-btn">Search</button>
+
 
 <!-- JavaScript for handling interactions -->
 <script src="{% static 'js_content/advanced_search.js' %}"></script>
