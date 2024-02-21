@@ -139,13 +139,30 @@ def search_players_by_positions(players, positions):
 
     return player_names
 
+import requests
+
 def get_transfermarkt_market_value(player_name):
     url = f'https://transfermarkt-api.vercel.app/players/search/{player_name}?page_number=1'
     response = requests.get(url)
     if response.status_code == 200:
         data = response.json()
         if 'results' in data and data['results']:
-            return data['results'][0].get('marketValue', 'Unknown')
+            market_value = data['results'][0].get('marketValue', 'Unknown')
+            return parse_market_value(market_value)
     return 'Unknown'
+
+def parse_market_value(market_value):
+    if market_value == 'Unknown':
+        return market_value
+
+    if market_value.endswith('m'):
+        value = float(market_value[1:-1].replace(',', ''))  # Remove euro symbol and 'm', replace commas
+        return value
+    elif market_value.endswith('k'):
+        value = float(market_value[1:-1].replace(',', '')) / 1000  # Remove euro symbol and 'k', replace commas, divide by 1000
+        return value
+    else:
+        return 'Unknown'
+
 
 
