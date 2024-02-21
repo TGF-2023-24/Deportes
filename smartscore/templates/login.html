@@ -14,7 +14,8 @@
         <label for="id_password">Password:</label>
         <input type="password" name="password" id="id_password">
         <br><br>
-        
+        <input type="hidden" name="next" value="{{ request.GET.next }}">
+
         <button type="submit">Login</button>
     </form>
     <br>
