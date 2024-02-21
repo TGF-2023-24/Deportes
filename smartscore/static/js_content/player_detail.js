@@ -142,5 +142,31 @@ document.addEventListener('DOMContentLoaded', function() {
     var lastName = nameParts[nameParts.length - 1];
     playerNameElement.textContent = lastName;
 
+
+    // Fetch Transfermarkt estimated value
+    fetch(`https://transfermarkt-api.vercel.app/players/search/${playerNameElement}?page_number=1`)
+    .then(response => response.json())
+    .then(data => {
+        // Check if there are results
+        if (data.results && data.results.length > 0) {
+            console.log('There are results:', data.results);
+            // Get the market value of the first result
+            const marketValue = data.results[0].marketValue;
+            // Display the market value
+            const transfermarktValueElement = document.getElementById('transfermarkt-value');
+            if (marketValue) {
+                transfermarktValueElement.textContent = `€${marketValue}`;
+            } else {
+                transfermarktValueElement.textContent = 'Not available';
+            }
+        } else {
+            // No results found
+            document.getElementById('transfermarkt-value').textContent = 'Not available';
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching Transfermarkt estimated value:', error);
+        document.getElementById('transfermarkt-value').textContent = 'Not available';
+    });
     
 });
