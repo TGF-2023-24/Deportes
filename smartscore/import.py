@@ -63,7 +63,7 @@ with open('new_short_dataset.csv',  encoding='utf-8') as csvfile:
         
         player.Country_league = row[54].split()[0]  # Extraer solo el nombre del país
 
-        player.market_value = get_transfermarkt_market_value(player.name) #Get market value from transfermarkt
+        player.market_value = get_transfermarkt_market_value(player.Name) #Get market value from transfermarkt
 
         player.save()
 

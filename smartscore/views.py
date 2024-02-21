@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-from .models import Player, Position, Squad
+from .models import Player, Position, Squad, UserProfile
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -80,6 +80,9 @@ def signup_user(request):
             form = CreateUserForm(request.POST)
             if form.is_valid():
                 user = form.save()
+
+                UserProfile.objects.create(user=user)
+
                 username = form.cleaned_data.get('username')
                 login(request, user)
                 messages.success(request, 'User created successfully!')
