@@ -316,7 +316,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const squadPosition = squadPlayers[position];
                 console.log('Analyzing position:', position, 'with players:', squadPosition);
                 // Fetch stats for the position from the server
-                fetch(`/api/position-stats/${position}/${custom_id}`)
+                fetch(`/api/squad-stats/${position}/${squadPosition}`)
                     .then(response => {
                         if (!response.ok) {
                             throw new Error(`Failed to fetch stats for position ${position}`);

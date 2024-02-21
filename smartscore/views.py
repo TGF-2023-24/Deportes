@@ -9,7 +9,7 @@ from django.db.models import Q
 from django import forms
 from .forms import CreateUserForm, SquadCreationForm
 from django.contrib.auth.decorators import login_required #utilizar este decorador para proteger las rutas que requieren autenticación
-from .utils import get_dot_positions, get_player_stats, get_pos_stats, get_default_stats, get_squad_players, search_players_by_positions # Import the get_dot_positions function
+from .utils import get_dot_positions, get_player_stats, get_pos_stats, get_default_stats, get_squad_players, search_players_by_positions, get_squad_stats
 from django.http import JsonResponse, Http404
 import json
 #se usa @login_required(login_url='login') en la vista que se quiere proteger
@@ -274,3 +274,13 @@ def add_to_squad(request, custom_id):
             pass
     # Redirect to player detail page if there is an error or no squad is selected
     return redirect('player_detail', custom_id=custom_id)
+
+def squad_stats_api(request, position, players):
+    # Deserialize the players JSON array
+    players_list = json.loads(players)
+
+    # Retrieve statistics for the given position and players
+    stats = get_squad_stats(position, players_list)
+
+    # Return statistics as JSON response
+    return JsonResponse(stats)
