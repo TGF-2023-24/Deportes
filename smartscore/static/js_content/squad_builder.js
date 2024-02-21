@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
                 .then(data => {
                     displayPlayers(data);
-                    document.getElementById('example-btn').style.display = 'inline-block';
+                    document.getElementById('example-btn');
 
                 })
                 .catch(error => {
@@ -206,7 +206,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to add player name under selected position
     function addPlayerName(position, playerName) {
         console.log('Adding player name:', playerName, 'at position:', position);
-        const fieldContainer = document.querySelector('.football-field-container'); 
+        const fieldContainer = document.querySelector('.football-field-container-squad-builder'); 
+        console.log(fieldContainer);
         const containerWidth = fieldContainer.offsetWidth;
         const containerHeight = fieldContainer.offsetHeight;
 
@@ -299,10 +300,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (addedPlayerCount === 11) {
             console.log('Analyzing squad...');
             const squadPlayers = {}; // Object to store players by position
-            const fieldContainer = document.querySelector('.football-field-container');
-            const fieldWidth = fieldContainer.offsetWidth;
-            const fieldHeight = fieldContainer.offsetHeight;
-    
+              
             // Iterate over player names and get their positions
             Object.keys(playerPositionMapping).forEach(playerName => {
                 const position = playerPositionMapping[playerName];
