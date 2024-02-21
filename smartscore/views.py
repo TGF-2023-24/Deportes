@@ -56,9 +56,12 @@ def login_user(request):
             user = authenticate(request, username=username, password=password)
             if(user is not None):
                 login(request, user)
-                messages.success(request, 'Login successfully!')
-                messages.info(request, 'Welcome ' + username)
-                return redirect('home')
+                messages.success(request, 'Login successfully! ' + 'Welcome ' + username)
+                next_url = request.POST.get('next')  # Default redirect to 'home'
+                if next_url:
+                    return redirect(next_url)
+                else:
+                    return redirect('home')
             else:
                 messages.success(request, 'Login failed!')
         return render(request, 'login.html', {})
@@ -69,18 +72,19 @@ def logout_user(request):
     return redirect('home')
 
 def signup_user(request):
-    if request.user.is_authenticated: #habrá q cambiarlo tmb
+    if request.user.is_authenticated: 
         return redirect('home') 
     else:
         form = CreateUserForm()
         if request.method == 'POST':
             form = CreateUserForm(request.POST)
             if form.is_valid():
-                form.save()
-                user = form.cleaned_data.get('username')
+                user = form.save()
+                username = form.cleaned_data.get('username')
+                login(request, user)
                 messages.success(request, 'User created successfully!')
-                messages.info(request, 'Welcome ' + user)
-                return redirect('login') # Redirigir al usuario a la página de inicio de sesión, hay que cambiarlo
+                messages.info(request, 'Welcome ' + username)
+                return redirect('home')
             else:
                 messages.error(request, 'An error occurred during the registration process')
         
