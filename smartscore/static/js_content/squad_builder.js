@@ -316,7 +316,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 const squadPosition = squadPlayers[position];
                 console.log('Analyzing position:', position, 'with players:', squadPosition);
                 // Fetch stats for the position from the server
-                fetch(`/api/squad-stats/${position}/${squadPosition}`)
+
+                const playerString = JSON.stringify(squadPlayers[position]);
+                console.log('Player string:', playerString);
+                // Fetch stats for the position from the server
+                fetch(`/api/squad-stats/${position}/${playerString}`)
                     .then(response => {
                         if (!response.ok) {
                             throw new Error(`Failed to fetch stats for position ${position}`);
@@ -325,9 +329,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     })
                     .then(data => {
                         // Store stats for the position
-                        squadStats[position] = data;
+                        console.log('Stats for position:', position, data);
+                        //squadStats[position] = data;
                         // Check for standout stats (good or bad) and display them
-                        displayStandoutStats(position, data);
+                        //displayStandoutStats(position, data);
                     })
                     .catch(error => {
                         //Ahora está fallando, no sé como se hace el fetch en el servidor (he intentado hacerlo como en player_detail.js pero no funciona)
@@ -336,8 +341,8 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             // Display squad players with their positions
-            console.log('Squad Players:', squadPlayers);
-            console.log('Squad Stats:', squadStats);
+            //console.log('Squad Players:', squadPlayers);
+           // console.log('Squad Stats:', squadStats);
         } else {
             alert('Please add 11 players to analyze the squad.');
         }

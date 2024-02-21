@@ -12,6 +12,7 @@ from django.contrib.auth.decorators import login_required #utilizar este decorad
 from .utils import get_dot_positions, get_player_stats, get_pos_stats, get_default_stats, get_squad_players, search_players_by_positions, get_squad_stats
 from django.http import JsonResponse, Http404
 import json
+from .dictionary import fifa_country_codes  
 #se usa @login_required(login_url='login') en la vista que se quiere proteger
 
 # Create your views here.
@@ -29,10 +30,14 @@ def player_detail(request, custom_id):
     dot_positions = get_dot_positions(player.Pos)
     squads = None
     stats = get_default_stats(player)
+    # Check if the player's nationality code exists in the FIFA country codes
+    flag_number = None
+    if player.Nationality in fifa_country_codes:
+        flag_number = fifa_country_codes[player.Nationality] 
     if request.user.is_authenticated:
         user = request.user
         squads = user.userprofile.squads.all()
-    return render(request, 'player_detail.html', {'player': player, 'dot_positions': dot_positions, 'stats': stats, 'squads': squads})
+    return render(request, 'player_detail.html', {'player': player, 'dot_positions': dot_positions, 'stats': stats, 'squads': squads, 'flag_number': flag_number})
 
 def position_stats_api(request, position, custom_id):
     # Retrieve statistics for the given position
@@ -283,4 +288,4 @@ def squad_stats_api(request, position, players):
     stats = get_squad_stats(position, players_list)
 
     # Return statistics as JSON response
-    return JsonResponse(stats)
+    return JsonResponse(players_list)

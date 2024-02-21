@@ -548,3 +548,10 @@ footer {
         margin-top: 0; /* Remove top margin */
     }
 }
+
+.flag-icon {
+    width: 50px; /* Adjust the width of the flag icon */
+    height: auto; /* Adjust the height of the flag icon */
+    margin-right: 10px; /* Add margin to the right of the flag icon */
+    display: inline-block !important; 
+}
