@@ -1,7 +1,7 @@
 import csv
 from smartscore.models import Player, Position
 from datetime import datetime
-from .utils import get_player_positions # Import the function from utils.py
+from .utils import get_player_positions, get_transfermarkt_market_value # Import the function from utils.py
 
 with open('new_short_dataset.csv',  encoding='utf-8') as csvfile:
     readCSV = csv.reader(csvfile, delimiter=',')
@@ -62,6 +62,8 @@ with open('new_short_dataset.csv',  encoding='utf-8') as csvfile:
         
         
         player.Country_league = row[54].split()[0]  # Extraer solo el nombre del país
+
+        player.market_value = get_transfermarkt_market_value(player.name) #Get market value from transfermarkt
 
         player.save()
 

@@ -138,13 +138,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Get player surname to display
     var playerNameElement = document.getElementById('player-name');
+    nameForSearch = playerNameElement.textContent;
     var nameParts = playerNameElement.textContent.split(' ');
     var lastName = nameParts[nameParts.length - 1];
     playerNameElement.textContent = lastName;
+    
 
 
     // Fetch Transfermarkt estimated value
-    fetch(`https://transfermarkt-api.vercel.app/players/search/${playerNameElement}?page_number=1`)
+    fetch(`https://transfermarkt-api.vercel.app/players/search/${nameForSearch}?page_number=1`)
     .then(response => response.json())
     .then(data => {
         // Check if there are results

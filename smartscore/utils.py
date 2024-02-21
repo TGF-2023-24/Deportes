@@ -1,6 +1,7 @@
 from django.db.models import Avg, Max, Min, Q
 from .models import Player, Position, Squad
 from .dictionary import stats_position_dictionary
+import requests
 
 def get_dot_positions(player_pos):
     position_mapping = {
@@ -137,5 +138,14 @@ def search_players_by_positions(players, positions):
     player_names = [player.Name for player in filtered_players]
 
     return player_names
+
+def get_transfermarkt_market_value(player_name):
+    url = f'https://transfermarkt-api.vercel.app/players/search/{player_name}?page_number=1'
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        if 'results' in data and data['results']:
+            return data['results'][0].get('marketValue', 'Unknown')
+    return 'Unknown'
 
 

@@ -58,6 +58,7 @@ class Player(models.Model):
     Conv_rat = models.IntegerField() #conversion rate over 100
     Dorsal = models.IntegerField() 
     Country_league = models.CharField(max_length=100) #country league
+    market_value = models.CharField(max_length=100, default='Unknown') #market value
 
 
     def __str__(self):

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django_extensions' , # Add this line to install django-extensions and execute the import script
     'smartscore.apps.SmartscoreConfig', # Add this line to connect the app to the project
     'corsheaders', # Add this line to install django-cors-headers
+    'requests', # Add this line to install requests
 ]
 
 MIDDLEWARE = [
@@ -51,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware', # Add this line to enable CORS
+    'django.middleware.common.CommonMiddleware', # Add this line to enable CORS
 ]
 
 ROOT_URLCONF = 'tfg.urls'
