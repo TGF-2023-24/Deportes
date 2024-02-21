@@ -8,6 +8,10 @@
 
             <div class="main-nav-header">
                 <h1>{{ player.Name }}</h1>
+                {% with country_id=fifa_country_codes.player.Nationality %}
+                    <!-- Use the country_id to get the flag image -->
+                    <img src="{% static 'smartscores/images/Flags/normal/'|add:country_id|add:'.png' %}" alt="{{ player.Nationality }}">
+                {% endwith %}
             </div>
 
             <div class="main-nav-body">
@@ -27,8 +31,8 @@
                     <h3 style="display: inline-block; vertical-align: middle;">Country: {{ player.Nationality }}
                     <img src="https://raw.githubusercontent.com/adamoliver/Country-Flags-ISO-3/master/gif/{{ player.Nationality|lower }}.gif" alt="" style="width: 24px; height: 24px; vertical-align: middle; margin-bottom: 6px"></h3>
                 </div>
-                <h3>Transfermarkt Estimated Value: {{player.market_value}}</h3>
-                <p id="transfermarkt-value">Loading...</p>                
+
+                <h3>Transfermarkt Estimated Value: €{{player.market_value}}M</h3>
                 <h3>League: {{ player.League }}</h3>
                 <h3>League Country: {{ player.Country_league }}</h3>
                 <h3>Contract Due: {{ player.End_contract }}</h3>
