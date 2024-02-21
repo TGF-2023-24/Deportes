@@ -284,8 +284,10 @@ def squad_stats_api(request, position, players):
     # Deserialize the players JSON array
     players_list = json.loads(players)
 
+    players = Player.objects.filter(Name__in=players_list)
+
     # Retrieve statistics for the given position and players
-    stats = get_squad_stats(position, players_list)
+    stats = get_squad_stats(position, players)
 
     # Return statistics as JSON response
-    return JsonResponse(players_list)
+    return JsonResponse(stats, safe=False)

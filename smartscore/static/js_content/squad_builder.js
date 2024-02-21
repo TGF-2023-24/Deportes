@@ -297,7 +297,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to handle the analyze squad button click
     document.getElementById('analyze-squad-btn').addEventListener('click', function() {
         // Check if there are 11 players added to the field
-        if (addedPlayerCount === 11) {
+        //if (addedPlayerCount === 11) {
             console.log('Analyzing squad...');
             const squadPlayers = {}; // Object to store players by position
               
@@ -343,9 +343,9 @@ document.addEventListener('DOMContentLoaded', function() {
             // Display squad players with their positions
             //console.log('Squad Players:', squadPlayers);
            // console.log('Squad Stats:', squadStats);
-        } else {
-            alert('Please add 11 players to analyze the squad.');
-        }
+        //} else {
+        //    alert('Please add 11 players to analyze the squad.');
+        //}
     });
     
 
