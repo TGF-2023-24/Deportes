@@ -9,7 +9,7 @@ from django.db.models import Q
 from django import forms
 from .forms import CreateUserForm, SquadCreationForm
 from django.contrib.auth.decorators import login_required #utilizar este decorador para proteger las rutas que requieren autenticación
-from .utils import get_dot_positions, get_player_stats, get_pos_stats, get_default_stats, get_squad_players, search_players_by_positions, get_squad_stats
+from .utils import get_dot_positions, get_player_stats, get_pos_stats, get_default_stats, get_squad_players, search_players_by_positions, get_squad_stats, get_default_avg_stats
 from django.http import JsonResponse, Http404
 import json
 from .dictionary import fifa_country_codes  
@@ -286,8 +286,11 @@ def squad_stats_api(request, position, players):
 
     players = Player.objects.filter(Name__in=players_list)
 
+    avg_stats = get_pos_stats(position)
+    avg_defaulf_stats = get_default_avg_stats(position)
+
     # Retrieve statistics for the given position and players
-    stats = get_squad_stats(position, players)
+    stats = get_squad_stats(avg_stats, avg_defaulf_stats, position, players)
 
     # Return statistics as JSON response
     return JsonResponse(stats, safe=False)

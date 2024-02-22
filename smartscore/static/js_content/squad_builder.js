@@ -329,10 +329,31 @@ document.addEventListener('DOMContentLoaded', function() {
                     })
                     .then(data => {
                         // Store stats for the position
-                        console.log('Stats for position:', position, data);
-                        //squadStats[position] = data;
-                        // Check for standout stats (good or bad) and display them
-                        //displayStandoutStats(position, data);
+                        console.log('Stats for position:', data);
+                        // Iterate over the received data
+                        Object.keys(data).forEach(position => {
+                            const positionStats = data[position];
+                            
+                            // Iterate over players in the position
+                            Object.keys(positionStats).forEach(playerName => {
+                                const playerStats = positionStats[playerName];
+                                
+                                // Iterate over player stats
+                                Object.keys(playerStats).forEach(statName => {
+                                    const stat = playerStats[statName];
+                                    
+                                    // Check if the stat is standout
+                                    if (stat.is_max || stat.is_min || stat.comparison !== 'equal to average') {
+                                        // Display the standout stat in your HTML
+                                        const statElement = document.createElement('div');
+                                        statElement.innerHTML = `${playerName}: ${statName} - ${stat.value} (${stat.comparison})`;
+                                        
+                                        // Append the stat element to your HTML
+                                        document.getElementById('standout-stats').appendChild(statElement);
+                                    }
+                                });
+                            });
+                        });
                     })
                     .catch(error => {
                         //Ahora está fallando, no sé como se hace el fetch en el servidor (he intentado hacerlo como en player_detail.js pero no funciona)

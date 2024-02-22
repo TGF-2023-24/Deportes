@@ -555,3 +555,11 @@ footer {
     margin-right: 10px; /* Add margin to the right of the flag icon */
     display: inline-block !important; 
 }
+
+.standout-stats {
+    margin-top: 20px; /* Add margin to create space between the squad selection container and standout stats */
+    width: 100%; /* Make the standout stats div take up the full width */
+    display: flex; /* Use flexbox for layout */
+    justify-content: space-between; /* Distribute space between elements */
+    align-items: flex-start; /* Align items to the top */
+}
