@@ -121,11 +121,11 @@ position_weights = {
 }
 
 
-def smart_score(player, weights, budget, short_term, long_term):
+def smart_score(player, pos, weights, budget, short_term, long_term):
     smart_score = 0
 
     for attribute, weight in weights.items():
-        max, min = get_max_min_attribute(attribute, player.get('position'))
+        max, min = get_max_min_attribute(attribute, player.get(pos))
         # Normalize attribute value if necessary
         normalized_value = normalize(player.get(attribute), min, max)
         smart_score += normalized_value * weight
@@ -151,5 +151,4 @@ def adjust_for_expectations(short_term, long_term):
     # Implement adjustment logic here
     pass
 
-    return smart_score
 

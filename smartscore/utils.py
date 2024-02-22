@@ -272,8 +272,9 @@ def get_squad_stats(avg_stats, avg_default_stats, position, players):
     return stats
 
 
-def get_max_min_attribute (attribute_name):
-    players = Player.objects.all()
+def get_max_min_attribute (attribute_name, pos):
+    position = Position.objects.get(name=pos)
+    players = Player.objects.filter(Pos=position)
 
     max_value = players.aggregate(Max(attribute_name))[f"{attribute_name}__max"] or 0
     min_value = players.aggregate(Min(attribute_name))[f"{attribute_name}__min"] or 0
