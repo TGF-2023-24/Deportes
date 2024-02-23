@@ -24,7 +24,6 @@
                 <br>
                 <h3>Club: {{ player.Club }}</h3>
                 <h3>Country: {{ player.Nationality }} </h3>
-                {% with flag_number=player.Nationality|lower|slice:":2"  %}
                 <img src="{% static 'smartscore/images/flags/normal/'|add:flag_number|add:'.png' %}" alt="{{ player.Nationality }}" class="flag-icon">
                 <h3>Transfermarkt Estimated Value: €{{player.market_value}}M</h3>
                 <h3>League: {{ player.League }}</h3>
