@@ -338,20 +338,44 @@ document.addEventListener('DOMContentLoaded', function() {
                             Object.keys(positionStats).forEach(playerName => {
                                 const playerStats = positionStats[playerName];
                                 
+                                // Display the player's name
+                                const playerNameElement = document.createElement('div');
+                                playerNameElement.innerHTML = `<strong>${playerName}:</strong>`;
+                                document.getElementById('standout-stats').appendChild(playerNameElement);
+                                
                                 // Iterate over player stats
                                 Object.keys(playerStats).forEach(statName => {
                                     const stat = playerStats[statName];
-                                    
+                                    let hasStandoutStat = false;
                                     // Check if the stat is standout
-                                    if (stat.is_max || stat.is_min || stat.comparison !== 'equal to average') {
+                                    if ((stat.is_max || stat.is_min || stat.comparison !== 'average') && stat.comparison !== 'average') {
+                                        hasStandoutStat = true;
+                                        let symbol = '';
+                                        let color = '';
+                                        if (stat.comparison.includes('above')) {
+                                            symbol = '+';
+                                            color = 'green';
+                                        } else if (stat.comparison.includes('below')) {
+                                            symbol = '-';
+                                            color = 'red';
+                                        }
+                                        
                                         // Display the standout stat in your HTML
                                         const statElement = document.createElement('div');
-                                        statElement.innerHTML = `${playerName}: ${statName} - ${stat.value} (${stat.comparison})`;
+                                        statElement.style.color = color;
+                                        statElement.innerHTML = `${symbol} ${statName} - ${stat.value} (${stat.comparison})`;
                                         
                                         // Append the stat element to your HTML
                                         document.getElementById('standout-stats').appendChild(statElement);
                                     }
                                 });
+
+                                // If no standout stats, display "Player is solid"
+                                if (!hasStandoutStat) {
+                                    const solidPlayerElement = document.createElement('div');
+                                    solidPlayerElement.innerHTML = `Player is solid`;
+                                    document.getElementById('standout-stats').appendChild(solidPlayerElement);
+                                }
                             });
                         });
                     })

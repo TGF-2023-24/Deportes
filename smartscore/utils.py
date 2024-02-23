@@ -2,6 +2,7 @@ from django.db.models import Avg, Max, Min, Q
 from .models import Player, Position, Squad
 from .dictionary import stats_position_dictionary
 import requests
+import numpy as np
 
 def get_dot_positions(player_pos):
     position_mapping = {
@@ -128,16 +129,25 @@ def get_pos_stats(position_name):
         avg_value = players.aggregate(Avg(attribute_name))[f"{attribute_name}__avg"] or 0
         max_value = players.aggregate(Max(attribute_name))[f"{attribute_name}__max"] or 0
         min_value = players.aggregate(Min(attribute_name))[f"{attribute_name}__min"] or 0
+
+        # Calculating 70th and 30th percentiles for each attribute
+        values = players.values_list(attribute_name, flat=True)
+        percentile_70 = np.percentile(values, 70)
+        percentile_30 = np.percentile(values, 30)
         
         rounded_avg_value = round(avg_value, 2)
         rounded_max_value = round(max_value, 2)
         rounded_min_value = round(min_value, 2)
+        rounded_percentile_70 = round(percentile_70, 2)
+        rounded_percentile_30 = round(percentile_30, 2)
         
         # Storing avg, max, and min values in the stats dictionary
         stats[position_name][attribute_display_name] = {
             'avg': rounded_avg_value,
             'max': rounded_max_value,
             'min': rounded_min_value,
+            'percentile_70': rounded_percentile_70,
+            'percentile_30': rounded_percentile_30,
             'attribute_name': attribute_name  # Add attribute name to the dictionary
 
         }
@@ -213,20 +223,24 @@ def get_squad_stats(avg_stats, avg_default_stats, position, players):
         for attribute_display_name, attribute_info in avg_stats[position].items():
             attribute_name = attribute_info['attribute_name']  # Access attribute name
             avg_stat_value = attribute_info['avg']
+            min_stat_value = attribute_info['min']
+            max_stat_value = attribute_info['max']
+            percentile70_stat_value = attribute_info['percentile_70']
+            percentile30_stat_value = attribute_info['percentile_30']
 
             player_stat_value = getattr(player, attribute_name)
 
-            # Compare player's stat with average
-            if player_stat_value > avg_stat_value:
-                comparison = "above average"
-            elif player_stat_value < avg_stat_value:
-                comparison = "below average"
+            # Determine if the player's stat is significantly above or below average
+            if player_stat_value >= percentile70_stat_value:
+                comparison = "significantly above average"
+            elif player_stat_value <= percentile30_stat_value:
+                comparison = "significantly below average"
             else:
-                comparison = "equal to average"
+                comparison = "average" #The player is mid for this attribute
 
             # Check if the player's stat is the maximum or minimum
-            is_max = player_stat_value == attribute_info['max']
-            is_min = player_stat_value == attribute_info['min']
+            is_max = player_stat_value == max_stat_value
+            is_min = player_stat_value == min_stat_value
 
             player_stats[attribute_display_name] = {
                 'value': player_stat_value,
@@ -237,37 +251,40 @@ def get_squad_stats(avg_stats, avg_default_stats, position, players):
 
         stats[position][player.Name] = player_stats
 
-    # Compare player stats with average for default stats
-    for player in players:
-        player_stats = {}
-
+    if position == "": #If the position is not specified, we use the default stats
         # Compare player stats with average for default stats
-        for attribute_display_name, attribute_info in avg_default_stats['DEFAULT'].items():
-            attribute_name = attribute_info['attribute_name']  # Access attribute name
-            avg_stat_value = attribute_info['avg']
+        for player in players:
+            player_stats = {}
 
-            player_stat_value = getattr(player, attribute_name)
+            # Compare player stats with average for default stats
+            for attribute_display_name, attribute_info in avg_default_stats['DEFAULT'].items():
+                attribute_name = attribute_info['attribute_name']  # Access attribute name
+                avg_stat_value = attribute_info['avg']
+                # Check if the player's stat is the maximum or minimum
+                is_max = player_stat_value == attribute_info['max']
+                is_min = player_stat_value == attribute_info['min']
+                percentile70_stat_value = attribute_info['percentile_70']
+                percentile30_stat_value = attribute_info['percentile_30']
 
-            # Compare player's stat with average
-            if player_stat_value > avg_stat_value:
-                comparison = "above average"
-            elif player_stat_value < avg_stat_value:
-                comparison = "below average"
-            else:
-                comparison = "equal to average"
+                player_stat_value = getattr(player, attribute_name)
 
-            # Check if the player's stat is the maximum or minimum
-            is_max = player_stat_value == attribute_info['max']
-            is_min = player_stat_value == attribute_info['min']
+                # Determine if the player's stat is significantly above or below average
+                if player_stat_value >= percentile70_stat_value:
+                    comparison = "significantly above average"
+                elif player_stat_value <= percentile30_stat_value:
+                    comparison = "significantly below average"
+                else:
+                    comparison = "average" #The player is mid for this attribute
+                
 
-            player_stats[attribute_display_name] = {
-                'value': player_stat_value,
-                'comparison': comparison,
-                'is_max': is_max,
-                'is_min': is_min
-            }
+                player_stats[attribute_display_name] = {
+                    'value': player_stat_value,
+                    'comparison': comparison,
+                    'is_max': is_max,
+                    'is_min': is_min
+                }
 
-        stats['DEFAULT'][player.Name] = player_stats
+            stats['DEFAULT'][player.Name] = player_stats
 
     return stats
 
