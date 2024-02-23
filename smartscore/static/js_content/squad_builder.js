@@ -337,16 +337,17 @@ document.addEventListener('DOMContentLoaded', function() {
                             // Iterate over players in the position
                             Object.keys(positionStats).forEach(playerName => {
                                 const playerStats = positionStats[playerName];
-                                
+                                let hasStandoutStat = false;
+                                let positiveStatsCount = 0;
+                                let negativeStatsCount = 0;
                                 // Display the player's name
                                 const playerNameElement = document.createElement('div');
-                                playerNameElement.innerHTML = `<strong>${playerName}:</strong>`;
+                                playerNameElement.innerHTML = `<strong>${playerName} (${position}):</strong>`;
                                 document.getElementById('standout-stats').appendChild(playerNameElement);
                                 
                                 // Iterate over player stats
                                 Object.keys(playerStats).forEach(statName => {
                                     const stat = playerStats[statName];
-                                    let hasStandoutStat = false;
                                     // Check if the stat is standout
                                     if ((stat.is_max || stat.is_min || stat.comparison !== 'average') && stat.comparison !== 'average') {
                                         hasStandoutStat = true;
@@ -355,9 +356,11 @@ document.addEventListener('DOMContentLoaded', function() {
                                         if (stat.comparison.includes('above')) {
                                             symbol = '+';
                                             color = 'green';
+                                            positiveStatsCount++;
                                         } else if (stat.comparison.includes('below')) {
                                             symbol = '-';
                                             color = 'red';
+                                            negativeStatsCount++;
                                         }
                                         
                                         // Display the standout stat in your HTML
@@ -376,6 +379,20 @@ document.addEventListener('DOMContentLoaded', function() {
                                     solidPlayerElement.innerHTML = `Player is solid`;
                                     document.getElementById('standout-stats').appendChild(solidPlayerElement);
                                 }
+                                
+                                else if (negativeStatsCount > positiveStatsCount) {
+                                    //Add a replace button
+                                    console.log(`We need to replace ${playerName}`)
+                                    const replaceButton = document.createElement('button');
+                                    replaceButton.innerHTML = 'Replace';
+                                    replaceButton.classList.add('replace-button');
+                                    replaceButton.addEventListener('click', () => {
+                                        // Hay que implementar esto
+                                        console.log(`Replace ${playerName}`);
+                                    });
+                                    document.getElementById('standout-stats').appendChild(replaceButton);
+                                }
+
                             });
                         });
                     })

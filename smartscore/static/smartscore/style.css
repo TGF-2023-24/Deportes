@@ -556,10 +556,41 @@ footer {
     display: inline-block !important; 
 }
 
-.standout-stats {
-    margin-top: 20px; /* Add margin to create space between the squad selection container and standout stats */
-    width: 100%; /* Make the standout stats div take up the full width */
-    display: flex; /* Use flexbox for layout */
-    justify-content: space-between; /* Distribute space between elements */
-    align-items: flex-start; /* Align items to the top */
+/* Squad analysis container */
+#squad-analysys-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px; /* Adjust the margin-top value as needed */
+}
+
+/* Standout stats container */
+#standout-stats {
+    flex: 1;
+    background-color: #f2f2f2; /* Grey background */
+    padding: 20px;
+    border-radius: 5px;
+    margin-right: 10px; /* Adjust the margin as needed */
+}
+
+/* Replacement player container */
+#replacement-player-container {
+    flex: 1;
+    background-color: #f2f2f2; /* Grey background */
+    padding: 20px;
+    border-radius: 5px;
+    margin-left: 10px; /* Adjust the margin as needed */
+}
+
+.replace-button {
+    background-color: #ff5252; /* Red background */
+    color: #fff; /* White text color */
+    padding: 10px 20px; /* Adjust padding as needed */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth transition for background color */
+}
+
+.replace-button:hover {
+    background-color: #ff0000; /* Darker red background on hover */
 }
