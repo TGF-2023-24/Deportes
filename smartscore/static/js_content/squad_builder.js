@@ -223,7 +223,19 @@ document.addEventListener('DOMContentLoaded', function() {
         const playerPosition = document.createElement('div');
         playerPosition.className = 'player-position';
         playerPosition.style.position = 'absolute'; // Position absolutely
-        playerPosition.textContent = playerName;
+        //Split player name to get surname
+        const playerNameSplit = playerName.split(" ");
+        //If it's a double name, we take the second part
+        if (playerNameSplit.length > 2) {
+            printedName = playerNameSplit[1] + " " + playerNameSplit[2];
+        }
+        else if (playerNameSplit.length == 1) {
+            printedName = playerNameSplit[0];
+        }
+        else {
+            printedName = playerNameSplit[1];
+        }
+        playerPosition.textContent = printedName;
         // Calculate the position of the dot based on container dimensions
         const left = parseFloat(positionMapping[position].left) / 500 * containerWidth; // Normalize left position
         const top = parseFloat(positionMapping[position].top) / 800 * containerHeight + numPlayers * 30; // Normalize top position
@@ -268,6 +280,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (activePlayerButton) {
             const selectedPosition = document.querySelector('.player-position-dot.activated').position;
             const playerName = activePlayerButton.textContent; // Retrieve active player name
+
             addedPlayerCount++;
             addPlayerName(selectedPosition, playerName);
             // Disable the dot corresponding to the selected position
@@ -355,11 +368,19 @@ document.addEventListener('DOMContentLoaded', function() {
                                         let color = '';
                                         if (stat.comparison.includes('above')) {
                                             symbol = '+';
-                                            color = 'green';
+                                            color = 'forestgreen';
                                             positiveStatsCount++;
                                         } else if (stat.comparison.includes('below')) {
                                             symbol = '-';
                                             color = 'red';
+                                            negativeStatsCount++;
+                                        } else if (stat.comparison.includes('exceptional')) {
+                                            symbol = '⬆';
+                                            color = 'darkgreen';
+                                            positiveStatsCount++;
+                                        } else if (stat.comparison.includes('horrible')) {
+                                            symbol = '⬇';
+                                            color = 'darkred';
                                             negativeStatsCount++;
                                         }
                                         
@@ -389,6 +410,19 @@ document.addEventListener('DOMContentLoaded', function() {
                                     replaceButton.addEventListener('click', () => {
                                         // Hay que implementar esto
                                         console.log(`Replace ${playerName}`);
+                                        fetch(`/api/replacement-players/${position}/${playerName}`)
+                                        .then(response => {
+                                            if (!response.ok) {
+                                                throw new Error(`Failed to fetch replacement players for ${playerName}`);
+                                            }
+                                            return response.json();
+                                        })
+                                        .then(data => {
+                                            displayReplacementPlayers(data);
+                                        })
+                                        .catch(error => {
+                                            console.error('Error fetching replacement players:', error);
+                                        });
                                     });
                                     document.getElementById('standout-stats').appendChild(replaceButton);
                                 }
@@ -397,7 +431,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         });
                     })
                     .catch(error => {
-                        //Ahora está fallando, no sé como se hace el fetch en el servidor (he intentado hacerlo como en player_detail.js pero no funciona)
                         console.error('Error fetching stats:', error);
                     });
             });
@@ -411,19 +444,22 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
 
+    // Function to display replacement players
+    function displayReplacementPlayers(replacementPlayers) {
+        const replacementPlayerContainer = document.getElementById('replacement-player-container');
+        replacementPlayerContainer.innerHTML = ''; // Clear previous content
+
+        const replacementPlayerList = document.createElement('ul');
+        replacementPlayers.forEach(player => {
+            const listItem = document.createElement('li');
+            listItem.textContent = player.name;
+            replacementPlayerList.appendChild(listItem);
+        });
+        replacementPlayerContainer.appendChild(replacementPlayerList);
+    }
+
 });
 
 
-// Function to display standout stats (good or bad) for a position
-function displayStandoutStats(position, stats) {
-    // Iterate over stats for the position and check for standout values
-    Object.keys(stats[position]).forEach(attribute => {
-        const attributeStats = stats[position][attribute];
-        // Check for standout values (e.g., above-average or below-average)
-        if (attributeStats.avg > 0) { //De prueba, habría que cambiarlo por algo más significativo
-            console.log(`Position ${position}: ${attribute} has above-average value: ${attributeStats.avg}`);
-        }
-        //Estaría bien que se mostrara en la interfaz para cada jugador un resumen de en qué destaca y qué le falta
-        //Igual esto es mejor hacerlo en python para poder reutilizarlo en otros sitios
-    });
-}
+
+

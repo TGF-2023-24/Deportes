@@ -294,3 +294,9 @@ def squad_stats_api(request, position, players):
 
     # Return statistics as JSON response
     return JsonResponse(stats, safe=False)
+
+
+def get_replacement_players(request, position, player_name):
+    # Retrieve replacement players based on position and exclude the current player
+    replacement_players = Player.objects.filter(Pos=position).exclude(Name=player_name).values('Name')
+    return JsonResponse(list(replacement_players), safe=False)

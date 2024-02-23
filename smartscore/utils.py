@@ -134,12 +134,16 @@ def get_pos_stats(position_name):
         values = players.values_list(attribute_name, flat=True)
         percentile_70 = np.percentile(values, 70)
         percentile_30 = np.percentile(values, 30)
+        percentile_95 = np.percentile(values, 95)
+        percentile_5 = np.percentile(values, 5)
         
         rounded_avg_value = round(avg_value, 2)
         rounded_max_value = round(max_value, 2)
         rounded_min_value = round(min_value, 2)
         rounded_percentile_70 = round(percentile_70, 2)
         rounded_percentile_30 = round(percentile_30, 2)
+        rounded_percentile_95 = round(percentile_95, 2)
+        rounded_percentile_5 = round(percentile_5, 2)
         
         # Storing avg, max, and min values in the stats dictionary
         stats[position_name][attribute_display_name] = {
@@ -148,6 +152,8 @@ def get_pos_stats(position_name):
             'min': rounded_min_value,
             'percentile_70': rounded_percentile_70,
             'percentile_30': rounded_percentile_30,
+            'percentile_95': rounded_percentile_95,
+            'percentile_5': rounded_percentile_5,
             'attribute_name': attribute_name  # Add attribute name to the dictionary
 
         }
@@ -227,14 +233,20 @@ def get_squad_stats(avg_stats, avg_default_stats, position, players):
             max_stat_value = attribute_info['max']
             percentile70_stat_value = attribute_info['percentile_70']
             percentile30_stat_value = attribute_info['percentile_30']
+            percentile95_stat_value = attribute_info['percentile_95']
+            percentile5_stat_value = attribute_info['percentile_5']
 
             player_stat_value = getattr(player, attribute_name)
 
             # Determine if the player's stat is significantly above or below average
             if player_stat_value >= percentile70_stat_value:
                 comparison = "significantly above average"
+                if player_stat_value >= percentile95_stat_value:
+                    comparison = "exceptional"
             elif player_stat_value <= percentile30_stat_value:
                 comparison = "significantly below average"
+                if player_stat_value <= percentile5_stat_value:
+                    comparison = "horrible"
             else:
                 comparison = "average" #The player is mid for this attribute
 
