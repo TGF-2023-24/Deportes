@@ -61,6 +61,7 @@ def get_player_positions(player_pos):
 
 def get_player_stats(player, position_name):
     stats = {}
+    stats[player.Name] = {}
     for attribute_list in stats_position_dictionary[position_name]:
         attribute_display_name = attribute_list['displayName']
         attribute_name = attribute_list['attributeName']
@@ -183,7 +184,7 @@ def search_players_by_positions(players, positions):
             position_filters |= Q(Pos__name=position)
         filtered_players = filtered_players.filter(position_filters)
 
-    print(filtered_players)
+
     player_names = [player.Name for player in filtered_players]
 
     return player_names
