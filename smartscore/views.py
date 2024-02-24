@@ -217,7 +217,8 @@ def players_by_position(request, squad_id, position):
     
     # Retrieve players by position for the specified squad
     players = get_squad_players(squad_id)
-    player_names = search_players_by_positions(players, position)
+    filtered_players = search_players_by_positions(players, position)
+    player_names = [player.Name for player in filtered_players]
     return JsonResponse(player_names, safe=False)
 
 
@@ -299,4 +300,5 @@ def get_replacement_players(request, position, player):
 
     replacedPlayer = Player.objects.get(Name=player)
     replacement_players = get_better_players(replacedPlayer, replacement_players, position)
-    return JsonResponse(replacement_players, safe=False)
+    player_names = [player.Name for player in replacement_players]
+    return JsonResponse(player_names, safe=False)

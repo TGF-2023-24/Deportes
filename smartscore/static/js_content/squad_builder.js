@@ -311,6 +311,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('analyze-squad-btn').addEventListener('click', function() {
         // Check if there are 11 players added to the field
         //if (addedPlayerCount === 11) {
+            document.getElementById('standout-stats').innerHTML = '';
             console.log('Analyzing squad...');
             const squadPlayers = {}; // Object to store players by position
               

@@ -184,10 +184,7 @@ def search_players_by_positions(players, positions):
             position_filters |= Q(Pos__name=position)
         filtered_players = filtered_players.filter(position_filters)
 
-
-    player_names = [player.Name for player in filtered_players]
-
-    return player_names
+    return filtered_players
 
 import requests
 
@@ -319,10 +316,10 @@ def get_better_players(playerToReplace, players, position):
         # We compare each of the player's atrributes for the position
         player_stats = get_player_stats(player, position)
         headToHead = 0
-        for attribute in player_stats[player]:
-            if player_stats[player][attribute] > playerToReplace_stats[playerToReplace][attribute]:
+        for attribute in player_stats[player.Name]:
+            if player_stats[player.Name][attribute] > playerToReplace_stats[playerToReplace.Name][attribute]:
                 headToHead += 1
-            elif player_stats[player][attribute] < playerToReplace_stats[playerToReplace][attribute]:
+            elif player_stats[player.Name][attribute] < playerToReplace_stats[playerToReplace.Name][attribute]:
                 headToHead -= 1
 
         print (f"Head to head for {player} is {headToHead}")
