@@ -61,8 +61,6 @@ def get_player_positions(player_pos):
 
 def get_player_stats(player, position_name):
     stats = {}
-    stats[player.Name] = {}
-
     for attribute_list in stats_position_dictionary[position_name]:
         attribute_display_name = attribute_list['displayName']
         attribute_name = attribute_list['attributeName']
@@ -309,4 +307,26 @@ def get_max_min_attribute (attribute_name, pos):
     min_value = players.aggregate(Min(attribute_name))[f"{attribute_name}__min"] or 0
 
     return max_value, min_value
+
+def get_better_players(playerToReplace, players, position):
+    better_players = []
+    print(f"Player to replace is {playerToReplace.Name}")
+    print(f"Position is {position}")
+    print(f"Players are {players}")
+    playerToReplace_stats = get_player_stats(playerToReplace, position)
+    for player in players:
+        # We compare each of the player's atrributes for the position
+        player_stats = get_player_stats(player, position)
+        headToHead = 0
+        for attribute in player_stats[player]:
+            if player_stats[player][attribute] > playerToReplace_stats[playerToReplace][attribute]:
+                headToHead += 1
+            elif player_stats[player][attribute] < playerToReplace_stats[playerToReplace][attribute]:
+                headToHead -= 1
+
+        print (f"Head to head for {player} is {headToHead}")
+        if headToHead > 0:
+            print (f"{player} is better than {playerToReplace}")
+            better_players.append(player)
+    return better_players
 

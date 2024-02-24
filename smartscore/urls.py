@@ -21,5 +21,5 @@ urlpatterns = [
     path('delete_squad/<int:squad_id>/', views.delete_squad, name='delete_squad'),
     path('add_to_squad/<int:custom_id>/', views.add_to_squad, name='add_to_squad'),
     path('api/squad-stats/<str:position>/<str:players>/', views.squad_stats_api, name='squad_stats_api'),
-    path('api/replacement-players/<str:position>/<str:player_name>/', views.get_replacement_players, name='get_replacement_players'),
+    path('api/replacement-players/<str:position>/<str:player>/', views.get_replacement_players, name='get_replacement_players'),
 ]

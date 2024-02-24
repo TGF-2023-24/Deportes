@@ -9,7 +9,7 @@ from django.db.models import Q
 from django import forms
 from .forms import CreateUserForm, SquadCreationForm
 from django.contrib.auth.decorators import login_required #utilizar este decorador para proteger las rutas que requieren autenticación
-from .utils import get_dot_positions, get_player_stats, get_pos_stats, get_default_stats, get_squad_players, search_players_by_positions, get_squad_stats, get_default_avg_stats
+from .utils import get_dot_positions, get_player_stats, get_pos_stats, get_default_stats, get_squad_players, search_players_by_positions, get_squad_stats, get_default_avg_stats, get_better_players
 from django.http import JsonResponse, Http404
 import json
 from .dictionary import fifa_country_codes  
@@ -163,13 +163,10 @@ def search_results(request):
 
 def perform_search(positions, filters):
     players = Player.objects.all()
-    print(positions)
-    print(players)
     # Filter players by positions
     if positions:
         position_filters = Q()
         for position in positions:
-            print(position)
             position_filters |= Q(Pos__name=position)
         players = players.filter(position_filters)
          
@@ -220,7 +217,6 @@ def players_by_position(request, squad_id, position):
     
     # Retrieve players by position for the specified squad
     players = get_squad_players(squad_id)
-    print(players)
     player_names = search_players_by_positions(players, position)
     return JsonResponse(player_names, safe=False)
 
@@ -296,7 +292,11 @@ def squad_stats_api(request, position, players):
     return JsonResponse(stats, safe=False)
 
 
-def get_replacement_players(request, position, player_name):
+def get_replacement_players(request, position, player):
     # Retrieve replacement players based on position and exclude the current player
-    replacement_players = Player.objects.filter(Pos=position).exclude(Name=player_name).values('Name')
-    return JsonResponse(list(replacement_players), safe=False)
+    replacement_players = search_players_by_positions(Player.objects.all(), position)
+    print("replacement_players", replacement_players)
+
+    replacedPlayer = Player.objects.get(Name=player)
+    replacement_players = get_better_players(replacedPlayer, replacement_players, position)
+    return JsonResponse(replacement_players, safe=False)

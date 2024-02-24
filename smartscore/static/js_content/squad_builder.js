@@ -418,6 +418,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                             return response.json();
                                         })
                                         .then(data => {
+                                            console.log('Replacement players:', data);
                                             displayReplacementPlayers(data);
                                         })
                                         .catch(error => {
@@ -448,11 +449,11 @@ document.addEventListener('DOMContentLoaded', function() {
     function displayReplacementPlayers(replacementPlayers) {
         const replacementPlayerContainer = document.getElementById('replacement-player-container');
         replacementPlayerContainer.innerHTML = ''; // Clear previous content
-
+        console.log('Replacement players(display):', replacementPlayers);
         const replacementPlayerList = document.createElement('ul');
         replacementPlayers.forEach(player => {
             const listItem = document.createElement('li');
-            listItem.textContent = player.name;
+            listItem.textContent = player;
             replacementPlayerList.appendChild(listItem);
         });
         replacementPlayerContainer.appendChild(replacementPlayerList);
