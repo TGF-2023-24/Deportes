@@ -321,10 +321,7 @@ def get_better_players(playerToReplace, players, position):
                 headToHead += 1
             elif player_stats[player.Name][attribute] < playerToReplace_stats[playerToReplace.Name][attribute]:
                 headToHead -= 1
-
-        print (f"Head to head for {player} is {headToHead}")
         if headToHead > 0:
-            print (f"{player} is better than {playerToReplace}")
             better_players.append(player)
     return better_players
 
