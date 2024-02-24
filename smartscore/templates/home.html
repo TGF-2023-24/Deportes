@@ -3,16 +3,24 @@
 {% block title %}Smart Score{% endblock %}
 {% block content %}
 
-    <h1>Home</h1>
-    <p>Esta es la página de inicio</p>
-    <br>
+    <div class="home-container">
+        <div class="home-section">
+            <h1>Welcome to Smart Score</h1>
+            <p>Smart Score is an innovative platform for analyzing and managing football teams.</p>
+        </div>
 
-    <br>
-    <img src="{% static 'smartscore/images/prueba.png' %}" alt="Home">
-    
-    {% for i in all %}
-        <p>{{i}}</p>
-    {% endfor %}
+        <div class="home-section">
+            <img src="{% static 'smartscore/images/football-coach.jpg' %}" alt="Football Image">
+        </div>
+
+        <div class="home-section">
+            <img src="{% static 'smartscore/images/field.jpg' %}" height ="200px" alt="Football Field Image">
+        </div>
+
+        <div class="home-section">
+            <p>Sign up or log in for the full experience!</p>
+            <a href="{% url 'signup' %}">Sign Up</a> | <a href="{% url 'login' %}">Log In</a>
+        </div>
+    </div>
 
 {% endblock %}
-     

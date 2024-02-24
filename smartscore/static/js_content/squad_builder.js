@@ -306,7 +306,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-
+    let currentPlayerIndex = 0;
     // Function to handle the analyze squad button click
     document.getElementById('analyze-squad-btn').addEventListener('click', function() {
         // Check if there are 11 players added to the field
@@ -332,7 +332,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Fetch stats for the position from the server
 
                 const playerString = JSON.stringify(squadPlayers[position]);
-                console.log('Player string:', playerString);
                 // Fetch stats for the position from the server
                 fetch(`/api/squad-stats/${position}/${playerString}`)
                     .then(response => {
@@ -420,7 +419,8 @@ document.addEventListener('DOMContentLoaded', function() {
                                         })
                                         .then(data => {
                                             console.log('Replacement players:', data);
-                                            displayReplacementPlayers(data);
+                                            currentPlayerIndex = 0;
+                                            displayReplacementPlayers(data, position);
                                         })
                                         .catch(error => {
                                             console.error('Error fetching replacement players:', error);
@@ -444,21 +444,55 @@ document.addEventListener('DOMContentLoaded', function() {
         //    alert('Please add 11 players to analyze the squad.');
         //}
     });
-    
+
 
     // Function to display replacement players
-    function displayReplacementPlayers(replacementPlayers) {
+    function displayReplacementPlayers(replacementPlayers, position) {
         const replacementPlayerContainer = document.getElementById('replacement-player-container');
         replacementPlayerContainer.innerHTML = ''; // Clear previous content
-        console.log('Replacement players(display):', replacementPlayers);
-        const replacementPlayerList = document.createElement('ul');
-        replacementPlayers.forEach(player => {
-            const listItem = document.createElement('li');
-            listItem.textContent = player;
-            replacementPlayerList.appendChild(listItem);
+
+        if (replacementPlayers.length === 0) {
+            const noReplacementMsg = document.createElement('p');
+            noReplacementMsg.textContent = 'No replacement players available.';
+            replacementPlayerContainer.appendChild(noReplacementMsg);
+            return;
+        }
+
+        // Get the current player based on the currentPlayerIndex
+        const currentPlayer = replacementPlayers[currentPlayerIndex];
+
+        const playerNameElement = document.createElement('p');
+        playerNameElement.innerHTML = `<h3>${currentPlayer} (${position})</h3>`;
+
+        const nextButton = document.createElement('button');
+        nextButton.textContent = 'Next';
+        nextButton.classList.add('next-button'); // Add the next-button class
+        nextButton.addEventListener('click', () => {
+            // Update currentPlayerIndex to display the next player
+            currentPlayerIndex = (currentPlayerIndex + 1) % replacementPlayers.length;
+            const nextPlayer = replacementPlayers[currentPlayerIndex];
+            playerNameElement.innerHTML = `<h3>${nextPlayer} (${position})</h3>`;
         });
-        replacementPlayerContainer.appendChild(replacementPlayerList);
+
+        const replaceButton = document.createElement('button');
+        replaceButton.textContent = 'Replace';
+        replaceButton.classList.add('replace2-button'); // Add the replace-button class
+        replaceButton.addEventListener('click', () => {
+            // Implement the functionality to replace the player in the squad
+            // PASOS PARA HACER ESTO - POR HACER - 
+            // Get the squad ID from the dropdown
+            const squadId = document.getElementById('squad-select').value;
+            // Get the player to be replaced
+            // Remove the player from the squad
+            // Add the new player to the squad
+            console.log('Replace player:', currentPlayer);
+        });
+
+        replacementPlayerContainer.appendChild(playerNameElement);
+        replacementPlayerContainer.appendChild(nextButton);
+        replacementPlayerContainer.appendChild(replaceButton);
     }
+
 
 });
 

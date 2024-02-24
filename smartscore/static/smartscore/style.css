@@ -594,3 +594,62 @@ footer {
 .replace-button:hover {
     background-color: #ff0000; /* Darker red background on hover */
 }
+
+
+.next-button {
+    background-color: #6ea2f7; 
+    color: #333; /* Dark text color */
+    padding: 10px 20px; /* Adjust padding as needed */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth transition for background color */
+    margin: 0 10px; /* Add margin between buttons */
+}
+
+.next-button:hover {
+    background-color: #4a82fb; 
+}
+
+.replace2-button {
+    background-color: #41cb3e; 
+    color: #fff; /* White text color */
+    padding: 10px 20px; /* Adjust padding as needed */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth transition for background color */
+    margin: 0 10px; /* Add margin between buttons */
+}
+
+.replace2-button:hover {
+    background-color: #57ad22; 
+}
+
+
+.home-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, minmax(100px, auto)); /* Updated */
+    gap: 20px;
+}
+
+.home-section {
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle shadow for depth */
+}
+
+.home-section img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+
