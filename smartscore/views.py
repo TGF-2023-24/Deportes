@@ -302,3 +302,11 @@ def get_replacement_players(request, position, player):
     replacement_players = get_better_players(replacedPlayer, replacement_players, position)
     player_names = [player.Name for player in replacement_players]
     return JsonResponse(player_names, safe=False)
+
+def compare_players(request, player1, player2, position):
+    stats = {}
+    stats[player1] = get_player_stats(Player.objects.get(Name=player1), position)
+    stats[player2] = get_player_stats(Player.objects.get(Name=player2), position)
+
+    # Return the player statistics as a JSON response
+    return JsonResponse(stats, safe=False)

@@ -18,8 +18,14 @@
         </div>
 
         <div class="home-section">
-            <p>Sign up or log in for the full experience!</p>
-            <a href="{% url 'signup' %}">Sign Up</a> | <a href="{% url 'login' %}">Log In</a>
+            {% if user.is_authenticated %}
+                <h2>Get Started</h2>
+                <p>Start analyzing and managing your football team!</p>
+                <a href="{% url 'my_squads' %}">My Teams</a>
+            {% else %}
+                <p>Sign up or log in for the full experience!</p>
+                <a href="{% url 'signup' %}">Sign Up</a> | <a href="{% url 'login' %}">Log In</a>
+            {% endif %}
         </div>
     </div>
 

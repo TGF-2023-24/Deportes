@@ -22,4 +22,5 @@ urlpatterns = [
     path('add_to_squad/<int:custom_id>/', views.add_to_squad, name='add_to_squad'),
     path('api/squad-stats/<str:position>/<str:players>/', views.squad_stats_api, name='squad_stats_api'),
     path('api/replacement-players/<str:position>/<str:player>/', views.get_replacement_players, name='get_replacement_players'),
+    path('api/compare-players/<str:player1>/<str:player2>/<str:position>/', views.compare_players, name='compare_players'),
 ]

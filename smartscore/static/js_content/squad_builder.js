@@ -420,7 +420,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                         .then(data => {
                                             console.log('Replacement players:', data);
                                             currentPlayerIndex = 0;
-                                            displayReplacementPlayers(data, position);
+                                            displayReplacementPlayers(data, position, playerName);
                                         })
                                         .catch(error => {
                                             console.error('Error fetching replacement players:', error);
@@ -447,7 +447,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     // Function to display replacement players
-    function displayReplacementPlayers(replacementPlayers, position) {
+    function displayReplacementPlayers(replacementPlayers, position, playerName) {
         const replacementPlayerContainer = document.getElementById('replacement-player-container');
         replacementPlayerContainer.innerHTML = ''; // Clear previous content
 
@@ -488,11 +488,99 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Replace player:', currentPlayer);
         });
 
+        const compareButton = document.createElement('button');
+        compareButton.textContent = 'Compare stats';
+        compareButton.classList.add('compare-button'); // Add the compare-button class
+        compareButton.addEventListener('click', () => {
+            
+            // Implement the functionality to compare the player with the current squad
+            fetch (`/api/compare-players/${currentPlayer}/${playerName}/${position}`) 
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch stats for ${currentPlayer}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Player stats:', data);
+                displayRadarChart(data);
+            })
+
+            
+            console.log('Compare player:', currentPlayer);
+        });
         replacementPlayerContainer.appendChild(playerNameElement);
         replacementPlayerContainer.appendChild(nextButton);
         replacementPlayerContainer.appendChild(replaceButton);
+        replacementPlayerContainer.appendChild(compareButton);
     }
 
+
+    // Function to display radar chart
+    
+    function displayRadarChart(stats) {
+        // Create a new div element for the radar chart
+        const radarChartDiv = document.createElement('div');
+        radarChartDiv.classList.add('radar-chart-container');
+
+        // Create a canvas element for the chart
+        const canvas = document.createElement('canvas');
+        canvas.width = 400;
+        canvas.height = 400;
+        radarChartDiv.appendChild(canvas);
+
+        // Create a close button
+        const closeButton = document.createElement('button');
+        closeButton.textContent = 'Close';
+        closeButton.addEventListener('click', () => {
+            radarChartDiv.remove(); // Remove the radar chart div when the close button is clicked
+        });
+        radarChartDiv.appendChild(closeButton);
+
+        // Append the radar chart div to the document body or a specific container
+        document.body.appendChild(radarChartDiv);
+
+         // Extract player names and their stats
+        const playerNames = Object.keys(stats);
+        const playerStats = Object.values(stats);
+
+        console.log('Player names:', playerNames);
+        console.log('Player stats:', playerStats);
+
+        // Extract labels from the first player's stats
+        const labels = Object.keys(playerStats[0][playerNames[0]]);
+        console.log('Labels:', labels);
+
+        // Create datasets for each player
+        const datasets = playerNames.map((playerName, index) => {
+            const playerValues = Object.values(playerStats[playerNames.indexOf(playerName)][playerName]);
+            console.log('Player values:', playerValues);
+            return {
+                label: playerName,
+                data: playerValues,
+                backgroundColor: `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.2)`,
+                borderColor: `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 1)`,
+                borderWidth: 1
+            };
+        });
+
+        // Create the radar chart using Chart.js
+        const ctx = canvas.getContext('2d');
+        new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: labels,
+                datasets: datasets
+            },
+            options: {
+                scale: {
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
 
 });
 

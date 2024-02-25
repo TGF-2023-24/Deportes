@@ -626,6 +626,21 @@ footer {
     background-color: #57ad22; 
 }
 
+.compare-button {
+    background-color: #ff8800; 
+    color: #fff; /* White text color */
+    padding: 10px 20px; /* Adjust padding as needed */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth transition for background color */
+    margin: 0 10px; /* Add margin between buttons */
+}
+
+.compare-button:hover {
+    background-color: #ff6a00; 
+}
+
 
 .home-container {
     display: grid;
