@@ -148,16 +148,15 @@ document.addEventListener('DOMContentLoaded', function() {
         players.forEach(player => {
             const playerBut = document.createElement('button');
             playerBut.textContent = player;
-            playerBut.classList.add('player-button'); // Add a class for styling
-
-            // Apply style if player is blocked
-            if (blockedPlayers.has(player)) {
-                playerBut.style.textDecoration = 'line-through';
-            }
+            playerBut.classList.add('player-button'); // Add a class for styling    
 
             // Check if the player is blocked
             playerBut.addEventListener('click', function () {
                 handlePlayerButtonClick(playerBut);
+                // Apply style if player is blocked
+                if (blockedPlayers.has(player)) {
+                    playerBut.style.textDecoration = 'line-through';
+                }
             });
 
             playerList.appendChild(playerBut);
@@ -181,6 +180,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Remove active class from previously active button
         if (activePlayerButton) {
             activePlayerButton.classList.remove('active');
+            activePlayerButton.classList.remove('clicked');
         }
 
         // Set the current button as active
@@ -710,5 +710,5 @@ function resetProgramState() {
     playerPositionMapping = {};
     addedPlayerCount = 0;
     handleSquadSelection();
-
+    console.log(playerCounts);
 }
