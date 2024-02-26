@@ -503,7 +503,7 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(data => {
                 console.log('Player stats:', data);
-                displayRadarChart(data);
+                displayRadarChart(data, position);
             })
 
             
@@ -518,7 +518,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to display radar chart
     
-    function displayRadarChart(stats) {
+    function displayRadarChart(stats, position) {
         // Create a new div element for the radar chart
         const radarChartDiv = document.createElement('div');
         radarChartDiv.classList.add('radar-chart-container');
@@ -531,7 +531,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Create a close button
         const closeButton = document.createElement('button');
-        closeButton.textContent = 'Close';
+        closeButton.classList.add('close-button');
+        closeButton.textContent = 'X';
         closeButton.addEventListener('click', () => {
             radarChartDiv.remove(); // Remove the radar chart div when the close button is clicked
         });
@@ -551,8 +552,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const labels = Object.keys(playerStats[0][playerNames[0]]);
         console.log('Labels:', labels);
 
+        
+        
+
         // Create datasets for each player
         const datasets = playerNames.map((playerName, index) => {
+            if (playerName == 'avg') {
+                return;
+            }
             const playerValues = Object.values(playerStats[playerNames.indexOf(playerName)][playerName]);
             console.log('Player values:', playerValues);
             return {
