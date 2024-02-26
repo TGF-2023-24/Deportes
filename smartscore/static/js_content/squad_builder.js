@@ -410,7 +410,9 @@ document.addEventListener('DOMContentLoaded', function() {
                                     replaceButton.addEventListener('click', () => {
                                         // Hay que implementar esto
                                         console.log(`Replace ${playerName}`);
-                                        fetch(`/api/replacement-players/${position}/${playerName}`)
+                                        const squadId = document.getElementById('squad-select').value;
+
+                                        fetch(`/api/replacement-players/${position}/${playerName}/${squadId}`)
                                         .then(response => {
                                             if (!response.ok) {
                                                 throw new Error(`Failed to fetch replacement players for ${playerName}`);
@@ -459,7 +461,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // Get the current player based on the currentPlayerIndex
-        const currentPlayer = replacementPlayers[currentPlayerIndex];
+        let  currentPlayer = replacementPlayers[currentPlayerIndex];
 
         const playerNameElement = document.createElement('p');
         playerNameElement.innerHTML = `<h3>${currentPlayer} (${position})</h3>`;
@@ -471,9 +473,12 @@ document.addEventListener('DOMContentLoaded', function() {
             // Update currentPlayerIndex to display the next player
             currentPlayerIndex = (currentPlayerIndex + 1) % replacementPlayers.length;
             const nextPlayer = replacementPlayers[currentPlayerIndex];
+            currentPlayer = nextPlayer;
             playerNameElement.innerHTML = `<h3>${nextPlayer} (${position})</h3>`;
+            
         });
 
+        
         const replaceButton = document.createElement('button');
         replaceButton.textContent = 'Replace';
         replaceButton.classList.add('replace2-button'); // Add the replace-button class
@@ -481,11 +486,41 @@ document.addEventListener('DOMContentLoaded', function() {
             // Implement the functionality to replace the player in the squad
             // PASOS PARA HACER ESTO - POR HACER - 
             // Get the squad ID from the dropdown
-            const squadId = document.getElementById('squad-select').value;
-            // Get the player to be replaced
-            // Remove the player from the squad
-            // Add the new player to the squad
-            console.log('Replace player:', currentPlayer);
+            const confirmMessage = `Are you sure you want to replace ${playerName}?`;
+            if (confirm(confirmMessage)) {
+                const squadId = document.getElementById('squad-select').value;
+                console.log(squadId);
+                // Get the player to be replaced
+                console.log('Player to be removed: ' + playerName);
+                // Remove the player from the squad
+                // Add the new player to the squad
+                console.log('New player:', currentPlayer);
+                fetch(`/api/replace-player/${squadId}/${playerName}/${currentPlayer}/${position}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Failed to replace player ${playerName} with ${currentPlayer}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Squad after replacement:', data);
+                    
+                    handleSquadSelection();
+                    addDots();
+                    document.getElementById('standout-stats').innerHTML = '';
+                    // Select all elements with the class 'player-position'
+                    const playerPositionDivs = document.querySelectorAll('.player-position');
+
+                    // Iterate over each div and remove it
+                    playerPositionDivs.forEach(div => {
+                        div.parentNode.removeChild(div); // Remove the div from its parent node
+});
+                    document.getElementById('replacement-player-container').innerHTML = '';
+                    // Clear the replacement player container
+                    replacementPlayerContainer.innerHTML = '';
+                })
+            }
+            
         });
 
         const compareButton = document.createElement('button');

@@ -293,14 +293,19 @@ def squad_stats_api(request, position, players):
     return JsonResponse(stats, safe=False)
 
 
-def get_replacement_players(request, position, player):
+def get_replacement_players(request, position, player, squad_id):
     # Retrieve replacement players based on position and exclude the current player
+
+    squad = Squad.objects.get(pk=squad_id)
+
+    current_players = squad.players.all()
+
     replacement_players = search_players_by_positions(Player.objects.all(), position)
     print("replacement_players", replacement_players)
 
     replacedPlayer = Player.objects.get(Name=player)
     replacement_players = get_better_players(replacedPlayer, replacement_players, position)
-    player_names = [player.Name for player in replacement_players]
+    player_names = [player.Name for player in replacement_players if player not in current_players]
     return JsonResponse(player_names, safe=False)
 
 def compare_players(request, player1, player2, position):
@@ -310,3 +315,16 @@ def compare_players(request, player1, player2, position):
     stats['avg'] = get_pos_stats(position)
     # Return the player statistics as a JSON response
     return JsonResponse(stats, safe=False)
+
+def replace_player(request, squad_id, old_player, new_player, pos):
+    try:
+        squad = Squad.objects.get(pk=squad_id)
+        old_player = Player.objects.get(Name=old_player)
+        new_player = Player.objects.get(Name=new_player)
+        if old_player in squad.players.all():
+            squad.players.remove(old_player)
+            squad.players.add(new_player)
+            return JsonResponse({'message': 'Player replaced successfully'}, status=200)  
+
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
