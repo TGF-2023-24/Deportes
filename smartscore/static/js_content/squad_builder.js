@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let activePlayerButton = null; // Track the active player button
     // Define a Set to keep track of used players
     let blockedPlayers = new Set();
-    const playerCounts = {};
+    let playerCounts = {};
     const playerPositionMapping = {};
 
 
@@ -190,9 +190,6 @@ document.addEventListener('DOMContentLoaded', function() {
          // Add the "clicked" class to change color
         playerBut.classList.add('clicked');
 
-        // Block the player
-        blockedPlayers.add(playerBut.textContent);
-        console.log('Player blocked:', playerBut.textContent);
     }
 
     // Add event listener to player buttons
@@ -218,6 +215,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Get the number of players already present at this position
         const numPlayers = playerCounts[position];
+
+        console.log('Number of players at position:', position, 'is:', numPlayers);
         
         playerPositionMapping[playerName] = position;
         const playerPosition = document.createElement('div');
@@ -246,7 +245,28 @@ document.addEventListener('DOMContentLoaded', function() {
         // Increment the player count for this position
         playerCounts[position]++;
   
-    }
+            
+        // Add the remove button
+        const removeButton = document.createElement('button');
+        removeButton.textContent = 'X';
+        removeButton.classList.add('remove-button');
+        removeButton.style.position = 'absolute';
+        removeButton.style.top = (top - 20) + 'px'; // Adjust the position of the button
+        removeButton.style.left = (left + 20) + 'px'; // Adjust the position of the button
+
+        // Add click event listener to remove the player
+        removeButton.addEventListener('click', function () {
+            playerPosition.remove();
+            removeButton.remove();
+            // Update player counts and position mapping
+            const removedPlayerName = playerName.trim();
+            playerCounts[position]--;
+            delete playerPositionMapping[removedPlayerName];
+            addedPlayerCount--;
+        });
+
+        fieldContainer.appendChild(removeButton);
+        }
     
 
     // Function to clear player list
@@ -270,7 +290,7 @@ document.addEventListener('DOMContentLoaded', function() {
         addDots();
     });
 
-    // Function to handle example button click
+    // Function to handle add-player button click
     document.getElementById('add-player-btn').addEventListener('click', function () {
         console.log(addedPlayerCount, 'players added.');
         if (addedPlayerCount >= 11) {
@@ -283,6 +303,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
             addedPlayerCount++;
             addPlayerName(selectedPosition, playerName);
+            // Block the player
+            blockedPlayers.add(playerName);
+            console.log('Player blocked:', playerName);
             // Disable the dot corresponding to the selected position
             document.querySelectorAll('.player-position-dot').forEach(dot => {
                 if (dot.position === selectedPosition) {
@@ -292,10 +315,12 @@ document.addEventListener('DOMContentLoaded', function() {
             // Remove the active class from the active player button
             activePlayerButton.classList.remove('active');
             activePlayerButton = null; // Reset the active player button
+
         } else {
             console.log('No player selected.');
         }
     });
+    
 
 
     // Attach event listener to the parent element and delegate the event to the dynamic elements
@@ -484,7 +509,6 @@ document.addEventListener('DOMContentLoaded', function() {
         replaceButton.classList.add('replace2-button'); // Add the replace-button class
         replaceButton.addEventListener('click', () => {
             // Implement the functionality to replace the player in the squad
-            // PASOS PARA HACER ESTO - POR HACER - 
             // Get the squad ID from the dropdown
             const confirmMessage = `Are you sure you want to replace ${playerName}?`;
             if (confirm(confirmMessage)) {
@@ -506,18 +530,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     console.log('Squad after replacement:', data);
                     
                     handleSquadSelection();
-                    addDots();
-                    document.getElementById('standout-stats').innerHTML = '';
-                    // Select all elements with the class 'player-position'
-                    const playerPositionDivs = document.querySelectorAll('.player-position');
-
-                    // Iterate over each div and remove it
-                    playerPositionDivs.forEach(div => {
-                        div.parentNode.removeChild(div); // Remove the div from its parent node
-});
-                    document.getElementById('replacement-player-container').innerHTML = '';
-                    // Clear the replacement player container
-                    replacementPlayerContainer.innerHTML = '';
+                    resetProgramState();
+                    
+                    playerCounts[position] = 0;
                 })
             }
             
@@ -661,4 +676,39 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
+// Function to reset the program state
+function resetProgramState() {
+    // Clear player positions
+    const playerPositionDivs = document.querySelectorAll('.player-position');
+    playerPositionDivs.forEach(div => {
+        div.parentNode.removeChild(div); // Remove the div from its parent node
+    });
 
+    // Clear remove buttons
+    const removeButtons = document.querySelectorAll('.remove-button');
+    removeButtons.forEach(button => {
+        button.parentNode.removeChild(button); // Remove the button from its parent node
+    });
+    // Clear replacement player container
+    document.getElementById('replacement-player-container').innerHTML = '';
+
+    // Clear standout stats
+    document.getElementById('standout-stats').innerHTML = '';
+
+    // Reset active player button
+    if (activePlayerButton) {
+        activePlayerButton.classList.remove('active');
+        activePlayerButton.classList.remove('clicked');
+        activePlayerButton = null;
+    }
+
+    // Reset player counts and position mapping
+    blockedPlayers.clear();
+    // Reset all values in playerCounts to 0
+    playerCounts = {};
+       
+    playerPositionMapping = {};
+    addedPlayerCount = 0;
+    handleSquadSelection();
+
+}
