@@ -538,37 +538,70 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         radarChartDiv.appendChild(closeButton);
 
-        // Append the radar chart div to the document body or a specific container
-        document.body.appendChild(radarChartDiv);
+        // Append the radar chart div to the specific container replacemt-player-container
+        document.getElementById('replacement-player-container').appendChild(radarChartDiv);
 
-         // Extract player names and their stats
+        // Extract player names and their stats
         const playerNames = Object.keys(stats);
         const playerStats = Object.values(stats);
-
-        console.log('Player names:', playerNames);
-        console.log('Player stats:', playerStats);
-
-        // Extract labels from the first player's stats
         const labels = Object.keys(playerStats[0][playerNames[0]]);
-        console.log('Labels:', labels);
 
-        
-        
+        // Extract max and min values from average stats
+        const avgStats = stats['avg'];
+        const maxValues = {};
+        const minValues = {};
+        const avgPosStat = {};
+        for (const positionName in avgStats) {
+            const positionStats = avgStats[positionName];
+            for (const statName in positionStats) {
+                if (statName !== 'attribute_name') { // Skip non-statistic fields
+                    const statValue = positionStats[statName];
+                    if (typeof statValue === 'object') {
+                        maxValues[statName] = statValue['max'];
+                        minValues[statName] = statValue['min'];
+                        avgPosStat[statName] = statValue['avg'];
+                    }
+                }
+            }
+        }
 
-        // Create datasets for each player
+        console.log('Max values:', maxValues);
+        console.log('Min values:', minValues);
+        console.log('Avg values:', avgPosStat);
+
+        // Create datasets for each player and the average
         const datasets = playerNames.map((playerName, index) => {
             if (playerName == 'avg') {
                 return;
             }
             const playerValues = Object.values(playerStats[playerNames.indexOf(playerName)][playerName]);
-            console.log('Player values:', playerValues);
+            const normalizedPlayerValues = playerValues.map((value, idx) => {
+                const statName = Object.keys(playerStats[playerNames.indexOf(playerName)][playerName])[idx];
+                const normalizedValue = (value - minValues[statName]) * 100 / (maxValues[statName] - minValues[statName]);
+                return normalizedValue;
+            });
             return {
                 label: playerName,
-                data: playerValues,
+                data: normalizedPlayerValues,
                 backgroundColor: `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.2)`,
                 borderColor: `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 1)`,
                 borderWidth: 1
             };
+        });
+
+        // Create dataset for average
+        const avgValues = Object.values(avgPosStat);
+        const normalizedAvgValues = avgValues.map((value, idx) => {
+            const statName = Object.keys(avgPosStat)[idx];
+            const normalizedValue = (value - minValues[statName]) * 100 / (maxValues[statName] - minValues[statName]);
+            return normalizedValue;
+        });
+        datasets.push({
+            label: 'Average',
+            data: normalizedAvgValues,
+            backgroundColor: 'rgba(255, 99, 132, 0.2)', // Example color
+            borderColor: 'rgba(255, 99, 132, 1)', // Example color
+            borderWidth: 1
         });
 
         // Create the radar chart using Chart.js
@@ -577,7 +610,7 @@ document.addEventListener('DOMContentLoaded', function() {
             type: 'radar',
             data: {
                 labels: labels,
-                datasets: datasets
+                datasets: datasets.filter(dataset => dataset !== undefined), // Filter out undefined datasets
             },
             options: {
                 scale: {
