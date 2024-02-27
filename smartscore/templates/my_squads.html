@@ -1,27 +1,55 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Search results{% endblock %}
+{% block title %}My Squads{% endblock %}
 {% block content %}
     <div class="squads-container">
-
         <h1>My Squads</h1>
-
         <!-- Create New Squad Button -->
         <form action="{% url 'create_squad' %}" method="get">
             {% csrf_token %}
             <button class="squad-create-button" type="submit">Create New Squad</button>
         </form>
-
-        <ul class="squad-list">
-            {% for squad in my_squads %}
-                <div class="squad-list">
-                    <h3>{{ squad.name }}</h3>
-                    <ul class="player-list">
-                        {% for player in squad.players.all %}
-                            <a>{{ player.Name }}</a>    
-                        {% endfor %}
-                    </ul>  
-                    <br>
+        <!-- Iterate over each squad -->
+        {% for squad, players_by_position in players_by_position_per_squad.items %}
+            <div class="squad">
+                <h2>{{ squad.name }}</h2>
+                <div class="player-columns">
+                    <!-- Goalkeepers -->
+                    <div class="player-column">
+                        <h3>Goalkeepers</h3>
+                        <ul class="player-list">
+                            {% for player in players_by_position.goalkeepers %}
+                                <a>{{ player.Name }}</a>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <!-- Defenders -->
+                    <div class="player-column">
+                        <h3>Defenders</h3>
+                        <ul class="player-list">
+                            {% for player in players_by_position.defenders %}
+                                <a>{{ player.Name }}</a>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <!-- Midfielders -->
+                    <div class="player-column">
+                        <h3>Midfielders</h3>
+                        <ul class="player-list">
+                            {% for player in players_by_position.midfielders %}
+                                <a>{{ player.Name }}</a>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <!-- Attackers -->
+                    <div class="player-column">
+                        <h3>Attackers</h3>
+                        <ul class="player-list">
+                            {% for player in players_by_position.attackers %}
+                                <a>{{ player.Name }}</a>
+                            {% endfor %}
+                        </ul>
+                    </div>
                     <div class="squad-actions">
                         <form action="{% url 'edit_squad' squad.id %}" method="get">
                             {% csrf_token %}
@@ -33,10 +61,7 @@
                         </form>
                     </div>
                 </div>
-            {% endfor %}
-        </ul>
-
-        
+            </div>
+        {% endfor %}
     </div>
-
 {% endblock %}

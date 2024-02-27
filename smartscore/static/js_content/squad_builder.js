@@ -168,7 +168,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Function to handle player button click
     function handlePlayerButtonClick(playerBut) {
-         // Check if the player is already blocked
+        // Check if the player is already blocked
+        if (blockedPlayers.has(playerBut.textContent)) {
+            alert('This player is already selected.');
+            return;
+        }
+
         if (playerBut.classList.contains('active')) {
             // Remove active class from the clicked button
             playerBut.classList.remove('active');
@@ -221,6 +226,7 @@ document.addEventListener('DOMContentLoaded', function() {
         playerPositionMapping[playerName] = position;
         const playerPosition = document.createElement('div');
         playerPosition.className = 'player-position';
+        playerPosition.id = `player-position-${playerName}`; // Add unique id for the player position
         playerPosition.style.position = 'absolute'; // Position absolutely
         //Split player name to get surname
         const playerNameSplit = playerName.split(" ");
@@ -250,6 +256,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const removeButton = document.createElement('button');
         removeButton.textContent = 'X';
         removeButton.classList.add('remove-button');
+        removeButton.id = `remove-button-${playerName}`; // Add unique id for the remove button
         removeButton.style.position = 'absolute';
         removeButton.style.top = (top - 20) + 'px'; // Adjust the position of the button
         removeButton.style.left = (left + 20) + 'px'; // Adjust the position of the button
@@ -260,9 +267,23 @@ document.addEventListener('DOMContentLoaded', function() {
             removeButton.remove();
             // Update player counts and position mapping
             const removedPlayerName = playerName.trim();
-            playerCounts[position]--;
             delete playerPositionMapping[removedPlayerName];
             addedPlayerCount--;
+            playerCounts[position]--;
+            //remove the player from the blocked players
+            blockedPlayers.delete(removedPlayerName);
+            console.log('Player removed:', removedPlayerName);
+            // remove linethrough style from the button
+            const playerButtons = document.querySelectorAll('.player-button');
+            playerButtons.forEach(button => {
+                if (button.textContent == removedPlayerName) {
+                    button.style.textDecoration = 'none';
+                    button.classList.remove('active'); 
+                    button.classList.remove('clicked');
+                   
+                }
+            });
+
         });
 
         fieldContainer.appendChild(removeButton);
@@ -306,10 +327,14 @@ document.addEventListener('DOMContentLoaded', function() {
             // Block the player
             blockedPlayers.add(playerName);
             console.log('Player blocked:', playerName);
+            // Apply the line-through style to the button
+            activePlayerButton.style.textDecoration = 'line-through';
+
             // Disable the dot corresponding to the selected position
             document.querySelectorAll('.player-position-dot').forEach(dot => {
                 if (dot.position === selectedPosition) {
                     dot.classList.add('disabled');
+
                 }
             });
             // Remove the active class from the active player button
@@ -528,11 +553,59 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
                 .then(data => {
                     console.log('Squad after replacement:', data);
+
+                    // Clear the replacement player container
+                    const replacementPlayerContainer = document.getElementById('replacement-player-container');
+                    replacementPlayerContainer.innerHTML = '';
+                    // Re-fetch and update squad analysis data
+                    //Eliminate oldplayer from squad and button
                     
-                    handleSquadSelection();
-                    resetProgramState();
+                    const playerToRemove = document.getElementById(`player-position-${playerName}`);
+                    if (playerToRemove) {
+                        playerToRemove.remove(); // Remove the player div
+                    }
+
+                    // Remove the remove button
+                    const removeButtonToRemove = document.getElementById(`remove-button-${playerName}`);
+                    if (removeButtonToRemove) {
+                        removeButtonToRemove.remove(); // Remove the remove button
+                    }
+                    // Update the player count for the position
+                    playerCounts[position]--;
+                    //Add new player to squad
+                    addPlayerName(position, currentPlayer);
+                    // Update the blocked players
+                    blockedPlayers.delete(playerName);
+                    blockedPlayers.add(currentPlayer);
                     
-                    playerCounts[position] = 0;
+                    // Update the player position mapping
+                    delete playerPositionMapping[playerName];
+                    playerPositionMapping[currentPlayer] = position;
+
+                    //delete old player button and add new player button active and clicked
+                    const playerButtons = document.querySelectorAll('.player-button');
+                    playerButtons.forEach(button => {
+                        if (button.textContent == playerName) {
+                            button.style.textDecoration = 'none';
+                            button.classList.remove('active');
+                            button.classList.remove('clicked');
+                        }
+                        if (button.textContent == currentPlayer) {
+                            button.classList.add('active');
+                            button.classList.add('clicked');
+                            button.style.textDecoration = 'line-through';
+                        }
+                    });
+                    // click the dot position button to display new button
+                    const dotButton = document.querySelectorAll('.player-position-dot')
+                    dotButton.forEach(dot => {
+                        if (dot.position == position) {
+                            dot.click();
+                            dot.click();
+                        }
+                    });
+                    document.getElementById('analyze-squad-btn').click();
+                                                
                 })
             }
             
@@ -674,41 +747,3 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 
-
-
-// Function to reset the program state
-function resetProgramState() {
-    // Clear player positions
-    const playerPositionDivs = document.querySelectorAll('.player-position');
-    playerPositionDivs.forEach(div => {
-        div.parentNode.removeChild(div); // Remove the div from its parent node
-    });
-
-    // Clear remove buttons
-    const removeButtons = document.querySelectorAll('.remove-button');
-    removeButtons.forEach(button => {
-        button.parentNode.removeChild(button); // Remove the button from its parent node
-    });
-    // Clear replacement player container
-    document.getElementById('replacement-player-container').innerHTML = '';
-
-    // Clear standout stats
-    document.getElementById('standout-stats').innerHTML = '';
-
-    // Reset active player button
-    if (activePlayerButton) {
-        activePlayerButton.classList.remove('active');
-        activePlayerButton.classList.remove('clicked');
-        activePlayerButton = null;
-    }
-
-    // Reset player counts and position mapping
-    blockedPlayers.clear();
-    // Reset all values in playerCounts to 0
-    playerCounts = {};
-       
-    playerPositionMapping = {};
-    addedPlayerCount = 0;
-    handleSquadSelection();
-    console.log(playerCounts);
-}

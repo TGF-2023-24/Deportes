@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Q
 from django import forms
-from .forms import CreateUserForm, SquadCreationForm
+from .forms import CreateUserForm, SquadUpdateForm, SquadCreationForm
 from django.contrib.auth.decorators import login_required #utilizar este decorador para proteger las rutas que requieren autenticación
 from .utils import get_dot_positions, get_player_stats, get_pos_stats, get_default_stats, get_squad_players, search_players_by_positions, get_squad_stats, get_default_avg_stats, get_better_players
 from django.http import JsonResponse, Http404
@@ -193,11 +193,36 @@ def perform_search(positions, filters):
     
     return players
 
+
 @login_required(login_url='login')
 def my_squads(request):
     user = request.user
     my_squads = user.userprofile.squads.all() 
-    return render(request, 'my_squads.html', {'my_squads': my_squads})
+
+    # Dictionary to hold players categorized by position for each squad
+    players_by_position_per_squad = {}
+
+    # Iterate through each squad
+    for squad in my_squads:
+        # Define positions to filter players
+        goalkeepers = Position.objects.filter(name__startswith='GK')
+        defenders = Position.objects.filter(name__in=('DC', 'DL', 'DR'))
+        midfielders = Position.objects.filter(name__in=('DM', 'MC', 'ML', 'MR', 'AMC'))
+        attackers = Position.objects.filter(name__in=('STC', 'AML', 'AMR'))
+
+        # Filter players based on positions within the current squad
+        players_by_position = {
+            'goalkeepers': squad.players.filter(Pos__in=goalkeepers).distinct(),
+            'defenders': squad.players.filter(Pos__in=defenders).distinct(),
+            'midfielders': squad.players.filter(Pos__in=midfielders).distinct(),
+            'attackers': squad.players.filter(Pos__in=attackers).distinct(),
+        }
+
+        # Add players categorized by position to the dictionary for the current squad
+        players_by_position_per_squad[squad] = players_by_position
+
+    return render(request, 'my_squads.html', {'my_squads': my_squads, 'players_by_position_per_squad': players_by_position_per_squad})
+
 
 @login_required(login_url='login')
 def squad_builder(request):
@@ -241,12 +266,12 @@ def create_squad(request):
 def edit_squad(request, squad_id):
     squad = get_object_or_404(Squad, pk=squad_id)
     if request.method == 'POST':
-        form = SquadCreationForm(request.POST, instance=squad)
+        form = SquadUpdateForm(request.POST, instance=squad)
         if form.is_valid():
             form.save()
             return redirect('my_squads')
     else:
-        form = SquadCreationForm(instance=squad)
+        form = SquadUpdateForm(instance=squad)
     return render(request, 'edit_squad.html', {'form': form})
 
 @login_required(login_url='login')
