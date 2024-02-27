@@ -515,16 +515,39 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const playerNameElement = document.createElement('p');
         playerNameElement.innerHTML = `<h3>${currentPlayer} (${position})</h3>`;
+        fetch (`/api/compare-players/${currentPlayer}/${playerName}/${position}`) 
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch stats for ${currentPlayer}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Player stats:', data);
+                radar = displayRadarChart(data, position);
+            })
 
         const nextButton = document.createElement('button');
         nextButton.textContent = 'Next';
         nextButton.classList.add('next-button'); // Add the next-button class
         nextButton.addEventListener('click', () => {
             // Update currentPlayerIndex to display the next player
+            radar.remove();
             currentPlayerIndex = (currentPlayerIndex + 1) % replacementPlayers.length;
             const nextPlayer = replacementPlayers[currentPlayerIndex];
             currentPlayer = nextPlayer;
             playerNameElement.innerHTML = `<h3>${nextPlayer} (${position})</h3>`;
+            fetch (`/api/compare-players/${nextPlayer}/${playerName}/${position}`) 
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Failed to fetch stats for ${nextPlayer}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Player stats:', data);
+                    radar = displayRadarChart(data, position);
+                })
             
         });
 
@@ -611,31 +634,10 @@ document.addEventListener('DOMContentLoaded', function() {
             
         });
 
-        const compareButton = document.createElement('button');
-        compareButton.textContent = 'Compare stats';
-        compareButton.classList.add('compare-button'); // Add the compare-button class
-        compareButton.addEventListener('click', () => {
-            
-            // Implement the functionality to compare the player with the current squad
-            fetch (`/api/compare-players/${currentPlayer}/${playerName}/${position}`) 
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch stats for ${currentPlayer}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Player stats:', data);
-                displayRadarChart(data, position);
-            })
-
-            
-            console.log('Compare player:', currentPlayer);
-        });
+        
         replacementPlayerContainer.appendChild(playerNameElement);
         replacementPlayerContainer.appendChild(nextButton);
         replacementPlayerContainer.appendChild(replaceButton);
-        replacementPlayerContainer.appendChild(compareButton);
     }
 
 
@@ -743,6 +745,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         });
+
+        return radarChartDiv;
     }
 
 });
