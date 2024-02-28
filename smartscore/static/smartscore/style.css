@@ -182,6 +182,7 @@ footer {
 .search-wrapper {
     flex: 1; 
     margin-right: 20px; 
+    margin-top: 17px;
 }
 
 /* Search results */
