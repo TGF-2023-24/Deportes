@@ -353,7 +353,19 @@ def replace_player(request, squad_id, old_player, new_player, pos):
 
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
-    
+
+def futureScope(request):
+    # Fetch leagues and categorize them by country
+    leagues = League.objects.all().order_by('country', 'name')
+    league_data = {}
+    for league in leagues:
+        if league.country not in league_data:
+            league_data[league.country] = []
+        league_data[league.country].append(league)
+
+    context = {'league_data': league_data}
+    return render(request, 'futureScope.html', context)
+
 def save_futureScope(request):
     if request.method == 'POST':
         transfer_budget = request.POST.get('transfer_budget')
@@ -363,12 +375,4 @@ def save_futureScope(request):
         # Return appropriate response, e.g., JsonResponse({'message': 'Settings saved successfully'})
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
-def get_leagues(request):
-    leagues_data = {}
-    leagues = League.objects.all()
-    for league in leagues:
-        country = league.country_league
-        if country not in leagues_data:
-            leagues_data[country] = []
-        leagues_data[country].append({'id': league.id, 'name': league.name})
-    return JsonResponse(leagues_data)
+

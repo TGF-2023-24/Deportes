@@ -8,48 +8,6 @@ document.addEventListener('DOMContentLoaded', function() {
         saveFutureScopeSettings(transferBudget, selectedLeague, selectedExpectations);
     });
 
-
-    // Fetch leagues
-    const leagueSelect = document.getElementById('league');
-
-    // Fetch leagues data from the server
-    fetch('/api/leagues/')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to fetch leagues data');
-            }
-            return response.json();
-        })
-        .then(data => {
-            populateLeagues(data);
-        })
-        .catch(error => {
-            console.error('Error fetching leagues data:', error);
-        });
-
-    function populateLeagues(leaguesData) {
-        // Clear existing options
-        leagueSelect.innerHTML = '';
-
-        // Iterate over league countries
-        for (const country in leaguesData) {
-            if (leaguesData.hasOwnProperty(country)) {
-                // Create optgroup for each country
-                const optgroup = document.createElement('optgroup');
-                optgroup.label = country;
-
-                // Iterate over leagues in the country
-                leaguesData[country].forEach(league => {
-                    const option = document.createElement('option');
-                    option.value = league.id;
-                    option.textContent = league.name;
-                    optgroup.appendChild(option);
-                });
-
-                leagueSelect.appendChild(optgroup);
-            }
-        }
-    }
 });
 
 function saveFutureScopeSettings(transferBudget, selectedLeague, selectedExpectations) {

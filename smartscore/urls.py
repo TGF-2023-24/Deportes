@@ -24,5 +24,6 @@ urlpatterns = [
     path('api/replacement-players/<str:position>/<str:player>/<str:squad_id>/', views.get_replacement_players, name='get_replacement_players'),
     path('api/compare-players/<str:player1>/<str:player2>/<str:position>/', views.compare_players, name='compare_players'),
     path('api/replace-player/<str:squad_id>/<str:old_player>/<str:new_player>/<str:pos>/', views.replace_player, name='replace_player'),
-    path('api/save-futureScope/', views.save_futureScope, name='save_futureScope')
+    path('api/save-futureScope/', views.save_futureScope, name='save_futureScope'),
+    path('futureScope/', views.futureScope, name='futureScope'),
 ]
