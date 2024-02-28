@@ -1,5 +1,5 @@
 import csv
-from smartscore.models import Player, Position
+from smartscore.models import Player, Position, League
 from datetime import datetime
 from .utils import get_player_positions, get_transfermarkt_market_value # Import the function from utils.py
 
@@ -74,5 +74,12 @@ with open('new_short_dataset.csv',  encoding='utf-8') as csvfile:
         for position_name in positions:
             position, created = Position.objects.get_or_create(name=position_name)
             player.Pos.add(position)
+
+
+        # Check if a league with the same name and country already exists
+        if not League.objects.filter(name=player.League, country=player.Country_league).exists():
+            # Create and save the league if it doesn't exist
+            league = League(name=player.League, country=player.Country_league)
+            league.save()
 
         player.save()

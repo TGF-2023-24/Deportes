@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}FutureScope{% endblock %}
+{% block content %}
+<div class="future-scope-container">
+    <h1>Future Scope</h1>
+    <form id="future-scope-form">
+        <div class="form-group">
+            <label for="transfer-budget">Transfer Budget:</label>
+            <input type="number" id="transfer-budget" name="transfer-budget" min="0" step="1" required>
+        </div>
+        <div class="form-group">
+            <label for="league">Select League:</label>
+            <select id="league" name="league" required>
+                <option value="premier-league">Premier League</option>
+                <option value="serie-a">Serie A</option>
+                <option value="la-liga">La Liga</option>
+                <option value="bundesliga">Bundesliga</option>
+                <option value="ligue-1">Ligue 1</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="expectations">Expectations:</label>
+            <select id="expectations" name="expectations" required>
+                <option value="short-term-success">Short Term Success</option>
+                <option value="long-term-success">Long Term Success</option>
+                <option value="balanced">Balanced</option>
+            </select>
+        </div>
+        <button type="submit">Save Settings</button>
+    </form>
+</div>
+<script src="{% static 'js/future_scope.js' %}"></script>
+{% endblock %}

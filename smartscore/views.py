@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-from .models import Player, Position, Squad, UserProfile
+from .models import Player, Position, Squad, UserProfile, League
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -353,3 +353,22 @@ def replace_player(request, squad_id, old_player, new_player, pos):
 
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
+    
+def save_futureScope(request):
+    if request.method == 'POST':
+        transfer_budget = request.POST.get('transfer_budget')
+        selected_league = request.POST.get('selected_league')
+        selected_expectations = request.POST.get('selected_expectations')
+        # Save the settings to the user's account
+        # Return appropriate response, e.g., JsonResponse({'message': 'Settings saved successfully'})
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+def get_leagues(request):
+    leagues_data = {}
+    leagues = League.objects.all()
+    for league in leagues:
+        country = league.country_league
+        if country not in leagues_data:
+            leagues_data[country] = []
+        leagues_data[country].append({'id': league.id, 'name': league.name})
+    return JsonResponse(leagues_data)
