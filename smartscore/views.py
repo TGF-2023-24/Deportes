@@ -355,15 +355,17 @@ def replace_player(request, squad_id, old_player, new_player, pos):
         return JsonResponse({'error': str(e)}, status=500)
 
 def futureScope(request):
-    # Fetch leagues and categorize them by country
-    leagues = League.objects.all().order_by('country', 'name')
-    league_data = {}
-    for league in leagues:
-        if league.country not in league_data:
-            league_data[league.country] = []
-        league_data[league.country].append(league)
-
-    context = {'league_data': league_data}
+    # Retrieve all leagues
+    leagues = League.objects.all().order_by('country_league', 'name')
+    
+    # Extract unique country names from leagues
+    countries = set(league.country_league for league in leagues)
+    
+    context = {
+        'leagues': leagues,
+        'countries': countries,
+    }
+    
     return render(request, 'futureScope.html', context)
 
 def save_futureScope(request):
@@ -373,6 +375,9 @@ def save_futureScope(request):
         selected_expectations = request.POST.get('selected_expectations')
         # Save the settings to the user's account
         # Return appropriate response, e.g., JsonResponse({'message': 'Settings saved successfully'})
+        # Lo que yo había pensado es que a la hora de calcular la media de la posición para el SmartScore,
+        # se tenga en cuenta la liga, que busque los jugadores de la liga y calcule la media de la posición
+        # Si no hay futureScope, que la media de la posición lo calcule con todos los jugadores
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 

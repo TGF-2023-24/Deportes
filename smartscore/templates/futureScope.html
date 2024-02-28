@@ -2,30 +2,39 @@
 {% load static %}
 {% block title %}FutureScope{% endblock %}
 {% block content %}
-<form method="post">
-  {% csrf_token %}
-  <label for="transfer-budget">Transfer Budget:</label>
-  <input type="number" id="transfer-budget" name="transfer_budget" required><br><br>
+<h1>Future Scope</h1>
+<div class="smartScore-container">
+    <form id="future-scope-form" method="post">
+        {% csrf_token %}
+        <label for="transfer-budget">Transfer Budget:</label>
+        <input type="number" id="transfer-budget" name="transfer-budget" maxlength="4">
+        <label>M€</label><br><br>
+        
+        <select id="country-select">
+            <option value="" selected disabled>Select Country</option>
+            {% for country in countries %}
+                <option value="{{ country }}">{{ country }}</option>
+            {% endfor %}
+        </select><br><br>
+        
+        <select id="league-select" disabled>
+            <option value="" selected disabled>Select League</option>
+            {% for league in leagues %}
+                <option value="{{ league.name }}" data-country="{{ league.country_league }}">{{ league.name }}</option>
+            {% endfor %}
+        </select><br><br>
+        
+        <select id="expectations" name="expectations">
+            <option value="">Select Expectations</option>
+            <option value="short-term">Short Term Success</option>
+            <option value="long-term">Long Term Success</option>
+            <option value="balanced">Balanced Approach</option>
+        </select><br><br>
+        
+        <input type="submit" class="primary-default-btn" value="Save">
+    </form>
+</div>
+ 
+<script src="{% static 'js_content/futureScope.js' %}"></script>
 
-  <label for="league">Select League:</label>
-  <select id="league" name="league">
-    <option value="" selected disabled>Select League</option>
-    {% for country, leagues in league_data.items %}
-      <optgroup label="{{ country }}">
-        {% for league in leagues %}
-          <option value="{{ league.id }}">{{ league.name }}</option>
-        {% endfor %}
-      </optgroup>
-    {% endfor %}
-  </select><br><br>
-
-  <label for="expectations">Expectations:</label>
-  <select id="expectations" name="expectations">
-    <option value="short_term">Short Term Success</option>
-    <option value="long_term">Long Term Success</option>
-    <option value="balanced">Balanced</option>
-  </select><br><br>
-
-  <input type="submit" value="Save">
-</form>
 {% endblock %}

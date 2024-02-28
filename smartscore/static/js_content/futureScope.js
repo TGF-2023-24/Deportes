@@ -1,13 +1,70 @@
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('Future Scope page loaded');
+    const countrySelect = document.getElementById('country-select');
+    const leagueSelect = document.getElementById('league-select');
+    console.log('Country Select:', countrySelect);
+    console.log('League Select:', leagueSelect);
+    // Function to populate leagues based on selected countryy
+    function populateLeagues(selectedCountry) {
+        const leagueSelect = document.getElementById('league-select');
+        leagueSelect.removeAttribute('disabled'); // Enable league selection
+
+        const leagueOptions = leagueSelect.querySelectorAll('option');
+        if (selectedCountry != ''){
+            // Clear current selection
+            leagueSelect.selectedIndex = -1;
+        }
+        
+        // Show all leagues if no country is selected
+        if (!selectedCountry) {
+            leagueOptions.forEach(option => {
+                option.style.display = '';
+            });
+            return;
+        }
+
+        // Hide leagues that do not belong to the selected country
+        leagueOptions.forEach(option => {
+            const leagueCountry = option.getAttribute('data-country');
+            if (leagueCountry !== selectedCountry) {
+                option.style.display = 'none';
+            } else {
+                option.style.display = '';
+            }
+        });
+    }
+
+
+    // Add event listener to the country selection dropdown
+    countrySelect.addEventListener('change', function() {
+        console.log('Country selected:', this.value);
+        const selectedCountry = this.value;
+        populateLeagues(selectedCountry);
+    });
+
+    // Populate leagues initially (in case there is a pre-selected country)
+    populateLeagues(countrySelect.value);
+
+    const transferBudget = document.getElementById('transfer-budget');
+    transferBudget.addEventListener('input', function() {
+        if (this.value.length > 4) {
+            this.value = this.value.slice(0, 4); // Limit input to four digits
+        }
+    });
+    
+
+    // Add event listener to the form submission
     const futureScopeForm = document.getElementById('future-scope-form');
     futureScopeForm.addEventListener('submit', function(event) {
         event.preventDefault();
-        const transferBudget = document.getElementById('transfer-budget').value;
-        const selectedLeague = document.getElementById('league').value;
+        transferBudget = document.getElementById('transfer-budget').value;
+        const selectedLeague = document.getElementById('league-select').value;
         const selectedExpectations = document.getElementById('expectations').value;
+        console.log('Submitting form with Transfer Budget:', transferBudget);
+        console.log('Selected League:', selectedLeague);
+        console.log('Selected Expectations:', selectedExpectations);
         saveFutureScopeSettings(transferBudget, selectedLeague, selectedExpectations);
     });
-
 });
 
 function saveFutureScopeSettings(transferBudget, selectedLeague, selectedExpectations) {

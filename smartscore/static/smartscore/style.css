@@ -744,3 +744,41 @@ footer {
     border: 1px solid #ddd;
     border-radius: 5px;
 }
+
+
+.smartScore-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Style for the transfer budget input box */
+#transfer-budget {
+    width: 80px; /* Adjust the width as needed */
+    padding: 8px; /* Add padding for better spacing */
+    border: 1px solid #ccc; /* Add a border */
+    border-radius: 4px; /* Add border radius for rounded corners */
+    font-size: 16px; /* Set font size */
+}
+
+/* Style for the label next to the input box */
+label[for="transfer-budget"] {
+    margin-right: 8px; /* Add margin to separate the label from the input box */
+    font-size: 16px; /* Set font size */
+}
+
+
+
+/* Style for the select dropdowns */
+select {
+    width: 200px; /* Set width of select dropdown */
+    padding: 8px; /* Add padding for better spacing */
+    border: 1px solid #ccc; /* Add a border */
+    border-radius: 4px; /* Add border radius for rounded corners */
+    font-size: 16px; /* Set font size */
+}
+
+/* Style for the form */
+form {
+    margin-bottom: 20px; /* Add margin at the bottom for spacing */
+}
