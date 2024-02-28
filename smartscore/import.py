@@ -77,9 +77,9 @@ with open('new_short_dataset.csv',  encoding='utf-8') as csvfile:
 
 
         # Check if a league with the same name and country already exists
-        if not League.objects.filter(name=player.League, country=player.Country_league).exists():
+        if not League.objects.filter(name=player.League, country_league=player.Country_league).exists():
             # Create and save the league if it doesn't exist
-            league = League(name=player.League, country=player.Country_league)
+            league = League(name=player.League, country_league=player.Country_league)
             league.save()
 
         player.save()
