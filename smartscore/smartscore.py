@@ -637,15 +637,15 @@ def normalize(value, min, max):
 
 def adjust_for_budget(budget):
     # Adjust score based on budget constraints
-    # Implement adjustment logic here
+    # Implement adjustment logic heres
     pass
 
-def adjust_for_expectations(short_term, long_term):
+def adjust_for_expectations():
     # Adjust score based on short-term and long-term expectations
     # Implement adjustment logic here
+    # Get the expectations from the user's profile (futureScope)
+    # Si no está definido, se asume que es 1
     pass
-
-
 
 
 def calculate_age_score(age, growth_factor):
