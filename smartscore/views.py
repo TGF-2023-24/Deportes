@@ -354,6 +354,7 @@ def replace_player(request, squad_id, old_player, new_player, pos):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
+@login_required(login_url='login')
 def futureScope(request):
     # Retrieve all leagues
     leagues = League.objects.all().order_by('country_league', 'name')
@@ -365,19 +366,35 @@ def futureScope(request):
         'leagues': leagues,
         'countries': countries,
     }
+
+    user_profile = request.user.userprofile
+    
+    if user_profile.league:
+        context['budget'] = user_profile.budget
+        context['selected_league'] = user_profile.league
+        context['selected_expectations'] = user_profile.expectations
     
     return render(request, 'futureScope.html', context)
 
 def save_futureScope(request):
     if request.method == 'POST':
-        transfer_budget = request.POST.get('transfer_budget')
-        selected_league = request.POST.get('selected_league')
-        selected_expectations = request.POST.get('selected_expectations')
-        # Save the settings to the user's account
-        # Return appropriate response, e.g., JsonResponse({'message': 'Settings saved successfully'})
-        # Lo que yo había pensado es que a la hora de calcular la media de la posición para el SmartScore,
-        # se tenga en cuenta la liga, que busque los jugadores de la liga y calcule la media de la posición
-        # Si no hay futureScope, que la media de la posición lo calcule con todos los jugadores
-    return JsonResponse({'error': 'Invalid request method'}, status=400)
+        data = json.loads(request.body)
+        transfer_budget = data.get('transfer_budget')
+        selected_league = data.get('selected_league')
+        selected_expectations = data.get('selected_expectations')
+
+        # Get the current user's profile
+        user_profile = request.user.userprofile
+
+        print(transfer_budget, selected_league, selected_expectations)
+        # Update the settings
+        user_profile.budget = transfer_budget
+        user_profile.league = selected_league
+        user_profile.expectations = selected_expectations
+        user_profile.save()
+
+        return JsonResponse({'message': 'Settings saved successfully'})
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 

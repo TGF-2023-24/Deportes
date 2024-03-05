@@ -80,6 +80,10 @@ class Squad(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     squads = models.ManyToManyField(Squad)
+    budget = models.IntegerField(default=100)
+    league = models.CharField(max_length=100, blank=True, null=True)
+    expectations = models.IntegerField(default=1)
+
 
     def __str__(self):
         return self.user.username

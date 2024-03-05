@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const futureScopeForm = document.getElementById('future-scope-form');
     futureScopeForm.addEventListener('submit', function(event) {
         event.preventDefault();
-        transferBudget = document.getElementById('transfer-budget').value;
+        const transferBudget = document.getElementById('transfer-budget').value;
         const selectedLeague = document.getElementById('league-select').value;
         const selectedExpectations = document.getElementById('expectations').value;
         console.log('Submitting form with Transfer Budget:', transferBudget);
@@ -89,6 +89,8 @@ function saveFutureScopeSettings(transferBudget, selectedLeague, selectedExpecta
     .then(data => {
         console.log('Future scope settings saved:', data);
         // Handle success (e.g., display success message to user)
+        window.location.reload(); // Reload the page
+
     })
     .catch(error => {
         console.error('Error saving future scope settings:', error);

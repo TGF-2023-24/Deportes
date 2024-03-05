@@ -2,39 +2,67 @@
 {% load static %}
 {% block title %}FutureScope{% endblock %}
 {% block content %}
-<h1>Future Scope</h1>
-<div class="smartScore-container">
-    <form id="future-scope-form" method="post">
-        {% csrf_token %}
-        <label for="transfer-budget">Transfer Budget:</label>
-        <input type="number" id="transfer-budget" name="transfer-budget" maxlength="4">
-        <label>M€</label><br><br>
-        
-        <select id="country-select">
-            <option value="" selected disabled>Select Country</option>
-            {% for country in countries %}
-                <option value="{{ country }}">{{ country }}</option>
-            {% endfor %}
-        </select><br><br>
-        
-        <select id="league-select" disabled>
-            <option value="" selected disabled>Select League</option>
-            {% for league in leagues %}
-                <option value="{{ league.name }}" data-country="{{ league.country_league }}">{{ league.name }}</option>
-            {% endfor %}
-        </select><br><br>
-        
-        <select id="expectations" name="expectations">
-            <option value="">Select Expectations</option>
-            <option value="0">Short Term Success</option>
-            <option value="1">Balanced Approach</option>
-            <option value="2">Long Term Success</option>
-        </select><br><br>
-        
-        <input type="submit" class="primary-default-btn" value="Save">
-    </form>
-</div>
- 
-<script src="{% static 'js_content/futureScope.js' %}"></script>
+    {% if not selected_league %}
+    <h1>Future Scope</h1>   
+
+    <div class="smartScore-container">
+        <form id="future-scope-form" method="post">
+            {% csrf_token %}
+            <label for="transfer-budget">Transfer Budget:</label>
+            <input type="number" id="transfer-budget" name="transfer-budget" maxlength="4">
+            <label>M€</label><br><br>
+            
+            <select id="country-select">
+                <option value="" selected disabled>Select Country</option>
+                {% for country in countries %}
+                    <option value="{{ country }}">{{ country }}</option>
+                {% endfor %}
+            </select><br><br>
+            
+            <select id="league-select" disabled>
+                <option value="" selected disabled>Select League</option>
+                {% for league in leagues %}
+                    <option value="{{ league.name }}" data-country="{{ league.country_league }}">{{ league.name }}</option>
+                {% endfor %}
+            </select><br><br>
+            
+            <select id="expectations" name="expectations">
+                <option value="">Select Expectations</option>
+                <option value="0">Short Term Success</option>
+                <option value="1">Balanced Approach</option>
+                <option value="2">Long Term Success</option>
+            </select><br><br>
+            
+            <input type="submit" class="primary-default-btn" value="Save">
+        </form>
+    </div>
+    {% else %}
+        <div class="smartScore-results">
+            <h1>My Future Scope</h1>
+            {% if not selected_league %}
+                <p>No future scope has been set</p>
+            {% else %}
+                <p>Budget: {{ budget }}</p>
+                <p>Expectations: 
+                    {% if selected_expectations == 0 %}
+                        Short Term Success
+                    {% elif selected_expectations == 1 %}
+                        Balanced Approach
+                    {% elif selected_expectations == 2 %}
+                        Long Term Success
+                    {% else %}
+                        Not specified
+                    {% endif %}
+                </p>
+                <p>League: {{ selected_league }}</p>
+            {% endif %}
+        </div>
+    {% endif %}
+    
+
+    
+    
+
+    <script src="{% static 'js_content/futureScope.js' %}"></script>
 
 {% endblock %}
