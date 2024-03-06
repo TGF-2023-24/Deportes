@@ -42,7 +42,7 @@
             {% if not selected_league %}
                 <p>No future scope has been set</p>
             {% else %}
-                <p>Budget: {{ budget }}</p>
+                <p>Budget: {{ budget }} M</p>
                 <p>Expectations: 
                     {% if selected_expectations == 0 %}
                         Short Term Success
@@ -55,6 +55,10 @@
                     {% endif %}
                 </p>
                 <p>League: {{ selected_league }}</p>
+                <form action="{% url 'edit_futureScope' %}" method="get">
+                    {% csrf_token %}
+                    <button class ="primary-default-btn" type="submit">Edit</button>
+                </form>
             {% endif %}
         </div>
     {% endif %}

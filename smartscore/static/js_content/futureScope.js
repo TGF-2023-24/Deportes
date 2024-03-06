@@ -65,6 +65,9 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Selected Expectations:', selectedExpectations);
         saveFutureScopeSettings(transferBudget, selectedLeague, selectedExpectations);
     });
+
+    
+
 });
 
 function saveFutureScopeSettings(transferBudget, selectedLeague, selectedExpectations) {
@@ -113,3 +116,5 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+
+

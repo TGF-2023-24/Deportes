@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Q
 from django import forms
-from .forms import CreateUserForm, SquadUpdateForm, SquadCreationForm
+from .forms import CreateUserForm, SquadUpdateForm, SquadCreationForm, editFutureScopeForm
 from django.contrib.auth.decorators import login_required #utilizar este decorador para proteger las rutas que requieren autenticación
 from .utils import get_dot_positions, get_player_stats, get_pos_stats, get_default_stats, get_squad_players, search_players_by_positions, get_squad_stats, get_default_avg_stats, get_better_players
 from django.http import JsonResponse, Http404
@@ -397,4 +397,17 @@ def save_futureScope(request):
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
+
+@login_required(login_url='login')
+def edit_futureScope(request):
+    user_profile = request.user.userprofile
+
+    if request.method == 'POST':
+        form = editFutureScopeForm(request.POST, instance=user_profile)
+        if form.is_valid():
+            form.save()
+            return redirect('futureScope')
+    else:
+        form = editFutureScopeForm(instance=user_profile)
+    return render(request, 'edit_futureScope.html', {'form': form})
 
