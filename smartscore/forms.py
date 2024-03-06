@@ -35,28 +35,6 @@ class SquadCreationForm(forms.ModelForm):
         model = Squad
         fields = ['name', 'players']
 
-class editFutureScopeForm(forms.ModelForm):
-
-     # Define choices for expectations
-    EXPECTATION_CHOICES = [
-        (0, 'Short Term Success'),
-        (1, 'Balanced Approach'),
-        (2, 'Long Term Success')
-    ]
-
-    # Define the field for expectations
-    expectations = forms.ChoiceField(choices=EXPECTATION_CHOICES, widget=forms.Select(attrs={'class': 'form-control'}))
-
-
-     # Retrieve all leagues
-    #Add countries first
-    leagues = League.objects.all().order_by('country_league', 'name')
-
-    league = forms.ModelChoiceField(queryset=leagues, widget=forms.Select(attrs={'class': 'form-control'}))
-
-    class Meta:
-        model = UserProfile
-        fields = ['league', 'budget', 'expectations']
 
 
     

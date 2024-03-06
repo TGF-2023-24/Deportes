@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Q
 from django import forms
-from .forms import CreateUserForm, SquadUpdateForm, SquadCreationForm, editFutureScopeForm
+from .forms import CreateUserForm, SquadUpdateForm, SquadCreationForm
 from django.contrib.auth.decorators import login_required #utilizar este decorador para proteger las rutas que requieren autenticación
 from .utils import get_dot_positions, get_player_stats, get_pos_stats, get_default_stats, get_squad_players, search_players_by_positions, get_squad_stats, get_default_avg_stats, get_better_players
 from django.http import JsonResponse, Http404
@@ -401,14 +401,31 @@ def save_futureScope(request):
 @login_required(login_url='login')
 def edit_futureScope(request):
     user_profile = request.user.userprofile
+    
+    # Retrieve all leagues
+    leagues = League.objects.all().order_by('country_league', 'name')
+    
+    # Extract unique country names from leagues
+    countries = set(league.country_league for league in leagues)
+    
+    initial_league = user_profile.league if user_profile.league else None
+    initial_budget = user_profile.budget if user_profile.budget else None
+    initial_expectations = user_profile.expectations if user_profile.expectations else None
+    initial_country = League.objects.filter(name=initial_league).values_list('country_league', flat=True).first() if initial_league else None
+    print("Initial league is", initial_league, "Initial country is", initial_country, "Initial budget is", initial_budget, "Initial expectations is", initial_expectations)
 
-    if request.method == 'POST':
-        form = editFutureScopeForm(request.POST, instance=user_profile)
-        if form.is_valid():
-            form.save()
-            return redirect('futureScope')
-    else:
-        form = editFutureScopeForm(instance=user_profile)
-    return render(request, 'edit_futureScope.html', {'form': form})
+
+    context = {
+        'leagues': leagues,
+        'countries': countries,
+        'initial_country': initial_country,
+        'initial_league': initial_league,
+        'initial_budget': initial_budget,
+        'initial_expectations': initial_expectations,
+    }
+
+    return render(request, 'edit_futureScope.html', context)
+
+
 
 

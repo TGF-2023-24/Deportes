@@ -2,11 +2,37 @@
 {% load static %}
 {% block title %}Edit Future Scope{% endblock %}
 {% block content %}
-    <h1>Edit Future Scope</h1>
-    <form method="post">
+<h1>Edit Future Scope</h1>
+<div class="smartScore-container">
+    <form id="future-scope-form" method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class=" primary-default-btn">Save Changes</button>
+        <label for="transfer-budget">Transfer Budget:</label>
+        <input type="number" id="transfer-budget" name="transfer-budget" value="{{ initial_budget }}" maxlength="4">
+        <label>M€</label><br><br>
+        
+        <select id="country-select">
+            <option value="" {% if not initial_country %} selected {% endif %} disabled>Select Country</option>
+            {% for country in countries %}
+                <option value="{{ country }}" {% if initial_country == country %} selected {% endif %}>{{ country }}</option>
+            {% endfor %}
+        </select><br><br>
+        
+        <select id="league-select" {% if not initial_country %} disabled {% endif %}>
+            <option value="" {% if not initial_league %} selected {% endif %} disabled>Select League</option>
+            {% for league in leagues %}
+                <option value="{{ league.name }}" data-country="{{ league.country_league }}" {% if initial_league == league.name %} selected {% endif %}>{{ league.name }}</option>
+            {% endfor %}
+        </select><br><br>
+        
+        <select id="expectations" name="expectations">
+            <option value="" {% if not initial_expectations %} selected {% endif %}>Select Expectations</option>
+            <option value="0" {% if initial_expectations == 0 %} selected {% endif %}>Short Term Success</option>
+            <option value="1" {% if initial_expectations == 1 %} selected {% endif %}>Balanced Approach</option>
+            <option value="2" {% if initial_expectations == 2 %} selected {% endif %}>Long Term Success</option>
+        </select><br><br>
+        
+        <input type="submit" class="primary-default-btn" value="Save">
     </form>
-
+</div>
+<script src="{% static 'js_content/edit_futureScope.js' %}"></script>
 {% endblock %}
