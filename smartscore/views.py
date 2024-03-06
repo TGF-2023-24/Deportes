@@ -411,3 +411,4 @@ def edit_futureScope(request):
         form = editFutureScopeForm(instance=user_profile)
     return render(request, 'edit_futureScope.html', {'form': form})
 
+
