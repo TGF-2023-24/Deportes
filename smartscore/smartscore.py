@@ -590,38 +590,49 @@ position_weights = {
 }
 
 
-def smart_score(player, pos, weights, budget, expectations, league):
+def smartScore(player, pos, budget, expectations, league):
     smart_score = 0
 
+    # Get the weights for the player's position
+    weights = position_weights.get(pos)
+
+    # Esto hay que cambiarlo para que en lugar de usar min y max, use los percentiles
+    # Además, cuando esté la base de datos tocha, que filtre por liga si hay
     for attribute, weight in weights.items():
-        max, min = get_max_min_attribute(attribute, player.get(pos))
+        max, min = get_max_min_attribute(attribute, pos)
+        # Get the attribute value from the player's profile
+        value = getattr(player, attribute)
         # Normalize attribute value if necessary
-        normalized_value = normalize(player.get(attribute), min, max)
+        normalized_value = normalize(value, min, max)
+        print ("Attribute: ", attribute, "Normalized value: ", normalized_value, "Weight: ", weight)
         smart_score += normalized_value * weight
+
+    smart_score = round(smart_score, 2)
+    print ("Smart Score after attribute weighting: ", smart_score)
 
     # We want to give a higher score to players with higher potential ability, compared to current ability
     # The greater  the difference between potential ability and current ability, the higher the score (exponential growth)
-    projected_growth = (player.get('Pot_abil') / player.get('CAbil'))
-    smart_score *= pow(projected_growth, 2)
+    projected_growth = (getattr(player, 'Pot_abil') / getattr(player, 'CAbil'))
+    print("Projected growth: ", projected_growth)
+    smart_score *= pow(projected_growth, 3)
         
     # Threshold is 27 years old, the further away from this age, the higher the penalty or bonus (exponential growth)
-    growth_factor = 1
-    #growth_factor = getFutureScope()
-    age_score = calculate_age_score(player.get('Age'), growth_factor)
+    growth_factor = expectations 
+    age_score = calculate_age_score(getattr(player, 'Age'), growth_factor)
     smart_score *= age_score
 
+    print("Smart Score after age and potential ability weighting: ", smart_score)
 
-     # Adjust score based on international match experience
-    #???????????? No entiendo esto
-    int_matches = player.get('Int_match', 0)
-    if int_matches > 300:
-        smart_score *= 0.8  # Decrease score for players with more than 10 international matches
-    elif 150 < int_matches <= 300:
-        smart_score *= 0.9  # Decrease score for players with 6-10 international matches
+     # Adjust score based on international match experience, reward players with more experience
+    int_matches = getattr(player, 'International_match')
+    if 0 < int_matches <= 50:
+        smart_score *= 1.05
     elif 50 < int_matches <= 150:
-        smart_score *= 0.95  # Decrease score for players with 2-5 international matches
+        smart_score *= 1.1
+    elif int_matches > 150:
+        smart_score *= 1.15
 
-
+    print("Smart Score after international match experience weighting: ", smart_score)
     
     #smart_score *= adjust_for_budget(budget) * adjust_for_expectations(short_term, long_term)
 
@@ -630,10 +641,12 @@ def smart_score(player, pos, weights, budget, expectations, league):
 
 def normalize(value, min, max):
     # Normalize value to a range between 0 and 1
-
-    normalized_value = (value - min) / (max - min)
-
-    return normalized_value
+    #If they are different from 0
+    if min != 0 or max != 0:
+        normalized_value = (value - min) / (max - min)
+        return normalized_value
+    
+    return 0
 
 def adjust_for_budget(budget):
     # Adjust score based on budget constraints

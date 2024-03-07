@@ -13,6 +13,7 @@ from .utils import get_dot_positions, get_player_stats, get_pos_stats, get_defau
 from django.http import JsonResponse, Http404
 import json
 from .dictionary import fifa_country_codes  
+from .smartscore import smartScore
 #se usa @login_required(login_url='login') en la vista que se quiere proteger
 
 # Create your views here.
@@ -442,6 +443,8 @@ def player_smartscore_api(request, position, custom_id):
         league = ""
         expectations = 1
         budget = 9999
-    
+    print("League is", league, "Expectations is", expectations, "Budget is", budget)
     # Get the player's smartscore
-    
+    score = smartScore(player, position, budget, expectations, league)
+    print("Score is", score)
+    return JsonResponse({'smartscore': score})
