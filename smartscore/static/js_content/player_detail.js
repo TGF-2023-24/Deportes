@@ -115,6 +115,17 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(error => {
              console.error('Error fetching position stats:', error);
         });
+
+        //Send an AJAX request to fetch player smartscore for the clicked position
+        fetch(`/api/player-smartscore/${position}/${custom_id}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            document.getElementById('smartscore').innerHTML = data[position];
+        })
+        .catch(error => {
+             console.error('Error fetching player smartscore:', error);
+        });
     }
 
     function addDatasetToRadarChart(statsData, position) {

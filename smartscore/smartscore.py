@@ -590,7 +590,7 @@ position_weights = {
 }
 
 
-def smart_score(player, pos, weights, budget, short_term, long_term):
+def smart_score(player, pos, weights, budget, expectations, league):
     smart_score = 0
 
     for attribute, weight in weights.items():

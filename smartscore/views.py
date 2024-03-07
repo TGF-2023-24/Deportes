@@ -51,6 +51,8 @@ def position_stats_api(request, position, custom_id):
     # Return statistics as JSON response
     return JsonResponse(stats)
 
+
+
 def login_user(request):
     if request.user.is_authenticated: #habrá que cambiar el redirect, esto debe ser cutre, pero por el momento nos vale
         return redirect('home') 
@@ -428,4 +430,18 @@ def edit_futureScope(request):
 
 
 
-
+def player_smartscore_api(request, position, custom_id):
+    player = Player.objects.get(custom_id=custom_id)
+    # If user is logged in, retrieve the future scope settings
+    if request.user.is_authenticated:
+        user_profile = request.user.userprofile
+        league = user_profile.league
+        expectations = user_profile.expectations
+        budget = user_profile.budget
+    else:
+        league = ""
+        expectations = 1
+        budget = 9999
+    
+    # Get the player's smartscore
+    
