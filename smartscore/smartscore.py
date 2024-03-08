@@ -592,7 +592,7 @@ position_weights = {
 
 
 def smartScore(player, pos, budget, expectations, league):
-    smart_score = 0
+    smart_score = 0 
     # Get the weights for the player's position
     weights = position_weights.get(pos)
 
@@ -602,7 +602,7 @@ def smartScore(player, pos, budget, expectations, league):
 
         # Get the attribute value from the player's profile
         value = getattr(player, attribute)
-        percentile = get_threshold_attribute(attribute, pos, "", value)
+        percentile = get_threshold_attribute(attribute, pos, league, value)
 
         print("Attribute: ", attribute, "Percentile: ", percentile, "Weight: ", weight)
         
@@ -635,24 +635,29 @@ def smartScore(player, pos, budget, expectations, league):
 
     print("Smart Score after international match experience weighting: ", smart_score)
     
-    #smart_score *= adjust_for_budget(budget) * adjust_for_expectations(short_term, long_term)
+    smart_score *= adjust_for_budget(budget, getattr(player, 'market_value')) 
 
-    #tener en cuenta market_value, LIga, equipo?, Contrato?, salario?, partidos int (negativo para equipo + desgaste?) edad, altura peso? (depende posicion?), (pie))?
     return smart_score
 
-def normalize(value, min, max):
-    # Normalize value to a range between 0 and 1
-    #If they are different from 0
-    if min != 0 or max != 0:
-        normalized_value = (value - min) / (max - min)
-        return normalized_value
-    
-    return 0
-
-def adjust_for_budget(budget):
-    # Adjust score based on budget constraints
-    # Implement adjustment logic heres
-    pass
+def adjust_for_budget(budget, playerValue):
+    print("Player value: ", playerValue, "Budget: ", budget)
+    playerValue = float(playerValue)
+    # Adjust score based on budget
+    if playerValue > budget:
+        return 0.5 #Unaffordable
+    budgetFraction = playerValue / budget
+    if budgetFraction < 0.1:
+        return 1.3 #Cheap signing
+    elif 0.1 <= budgetFraction < 0.25:
+        return 1.2 #Good value
+    elif 0.25 <= budgetFraction < 0.35:
+        return 1.1 #Fair value
+    elif 0.35 <= budgetFraction < 0.5:
+        return 1.05 #Important signing
+    elif 0.5 <= budgetFraction < 0.75:
+        return 1 #Expensive signing
+    else:
+        return 0.9 #Very expensive signing
 
 
 def calculate_age_score(age, growth_factor):
@@ -668,17 +673,17 @@ def calculate_age_score(age, growth_factor):
         # Age is not important
         return score
     elif growth_factor == 1:
-        calculation = pow(age_difference/12, 9/2) #Only players in the extremes will be affected
+        calculation = pow(abs(age_difference)/12, 7/2) #Only players in the extremes will be affected
     elif growth_factor == 2:
-        calculation = pow(age_difference/10, 5/2) #Players in the extremes will be affected, others will be affected less
-
+        calculation = pow(abs(age_difference)/10, 2) #Players in the extremes will be affected, others will be affected less
+        calculation = round(calculation, 2)
     if age_difference < 0:
         # Player is younger than the threshold, give a bonus
         score += calculation
     else:
         # Player is older than the threshold, penalize
         score -= calculation
-    
+
     return score
 
 
