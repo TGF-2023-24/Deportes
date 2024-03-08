@@ -1,4 +1,5 @@
 from .utils import get_threshold_attribute
+import math
 
 position_weights = {
     'GK': { #Total = 50
@@ -608,7 +609,6 @@ def smartScore(player, pos, budget, expectations, league):
         
         smart_score += percentile * weight
 
-    smart_score = round(smart_score, 2)
     print ("Smart Score after attribute weighting: ", smart_score)
 
     # We want to give a higher score to players with higher potential ability, compared to current ability
@@ -635,29 +635,41 @@ def smartScore(player, pos, budget, expectations, league):
 
     print("Smart Score after international match experience weighting: ", smart_score)
     
-    smart_score *= adjust_for_budget(budget, getattr(player, 'market_value')) 
+    if budget != 9999: #If budget is defined
+        smart_score *= adjust_for_budget(budget, getattr(player, 'market_value')) 
+        
+    print("SmartScore final: ", round(smart_score))
+    return round(smart_score) #Round to the nearest whole number
 
-    return smart_score
+
+
+def sigmoid(x, a=1, b=0, c=1):
+    min_val = 0.9
+    """
+    Sigmoid function with parameters a, b, and c:
+    f(x) = c / (1 + exp(-a*(x-b)))
+    """
+    return c - (c / (1 + math.exp(-a * (x - b)))) + min_val
 
 def adjust_for_budget(budget, playerValue):
-    print("Player value: ", playerValue, "Budget: ", budget)
     playerValue = float(playerValue)
-    # Adjust score based on budget
     if playerValue > budget:
         return 0.5 #Unaffordable
     budgetFraction = playerValue / budget
-    if budgetFraction < 0.1:
-        return 1.3 #Cheap signing
-    elif 0.1 <= budgetFraction < 0.25:
-        return 1.2 #Good value
-    elif 0.25 <= budgetFraction < 0.35:
-        return 1.1 #Fair value
-    elif 0.35 <= budgetFraction < 0.5:
-        return 1.05 #Important signing
-    elif 0.5 <= budgetFraction < 0.75:
-        return 1 #Expensive signing
-    else:
-        return 0.9 #Very expensive signing
+    
+    # Parameters for the sigmoid function
+    a = 10  # Controls the steepness of the curve
+    b = 0.2  # Shifts the curve along the x-axis
+    c = 0.75  # Maximum value of the curve
+
+    # Calculate the adjustment factor using the sigmoid function
+    adjustment_factor = sigmoid(budgetFraction, a=a, b=b, c=c)
+
+    #HAY UN GRÁFICO DE LA CURVA EN LA CARPETA DE IMÁGENES
+    print("Budget fraction: ", budgetFraction, "Adjustment factor: ", adjustment_factor)
+    
+    return adjustment_factor
+
 
 
 def calculate_age_score(age, growth_factor):
@@ -687,5 +699,24 @@ def calculate_age_score(age, growth_factor):
     return score
 
 
-
-
+def adjust_for_budget_antiguo(budget, playerValue):
+    print("Player value: ", playerValue, "Budget: ", budget)
+    playerValue = float(playerValue)
+    # Adjust score based on budget
+    if playerValue > budget:
+        return 0.5 #Unaffordable
+    budgetFraction = playerValue / budget
+    if budgetFraction < 0.1:
+        factor = 1.25 #Cheap signing
+    elif 0.1 <= budgetFraction < 0.25:
+        factor = 1.15 #Good value
+    elif 0.25 <= budgetFraction < 0.35:
+        factor = 1.07 #Fair value
+    elif 0.35 <= budgetFraction < 0.5:
+        factor = 1.03 #Important signing
+    elif 0.5 <= budgetFraction < 0.75:
+        factor = 1 #Expensive signing
+    else:
+        return 0.9 #Very expensive signing
+    
+    return pow(factor, 2)
