@@ -1,7 +1,7 @@
-from .utils import get_max_min_attribute
+from .utils import get_threshold_attribute
 
 position_weights = {
-    'GK': {
+    'GK': { #Total = 50
         'International_match': 5,
         'CAbil': 4,
         'Pot_abil': 6,
@@ -14,9 +14,9 @@ position_weights = {
         'Gol_90': 0,
         'Asis_90': 1,
         'Goal_allowed': -7,
-        'Clean_sheet': 7,
-        'Sv_rat': 5,
-        'xSv_rat': 5,
+        'Clean_sheet': 10,
+        'Sv_rat': 6,
+        'xSv_rat': 6,
         'Pen_saved_rat': 5,
         'Faga': 1,
         'Fcomm': -3,
@@ -26,7 +26,7 @@ position_weights = {
         'Key_tck_90': 4,
         'Key_hdr_90': 4,
         'Blocks_90': 3,
-        'Clr_90': 4,
+        'Clr_90': 5,
         'Int_90': 4,
         'Hdr_rat': 2,
         'Tackles_rat': 2,
@@ -43,15 +43,15 @@ position_weights = {
         'Conv_rat': 0
     },
     'DC': {
-        # Define attributes for DC position
-        'International_match': 4,
+        # Define attributes for DC position, total = 50
+        'International_match': 2,
         'CAbil': 4,
         'Pot_abil': 6,
-        'Strater_match': 4,
+        'Strater_match': 3,
         'Res_match': 0,
-        'Min': 4,
+        'Min': 3,
         'Goal': 1,
-        'Asis': 3,
+        'Asis': 2,
         'xG': 1,
         'Gol_90': 1,
         'Asis_90': 3,
@@ -62,9 +62,9 @@ position_weights = {
         'Pen_saved_rat': 0,
         'Faga': 1,
         'Fcomm': -4,
-        'Yel': -4,
-        'Red': -8,
-        'Dist_90': 6,
+        'Yel': -5,
+        'Red': -10,
+        'Dist_90': 4,
         'Key_tck_90': 6,
         'Key_hdr_90': 6,
         'Blocks_90': 5,
@@ -86,16 +86,16 @@ position_weights = {
     },
     'DL': {
         # Define attributes for DL position
-        'International_match': 3,
-        'CAbil': 4,
-        'Pot_abil': 6,
-        'Strater_match': 4,
-        'Res_match': 2,
+        'International_match': 1,
+        'CAbil': 3,
+        'Pot_abil': 5,
+        'Strater_match': 3,
+        'Res_match': 1,
         'Min': 3,
-        'Goal': 2,
+        'Goal': 1,
         'Asis': 5,
-        'xG': 2,
-        'Gol_90': 2,
+        'xG': 1,
+        'Gol_90': 1,
         'Asis_90': 5,
         'Goal_allowed': 0,
         'Clean_sheet': 0,
@@ -104,25 +104,25 @@ position_weights = {
         'Pen_saved_rat': 0,
         'Faga': 2,
         'Fcomm': -5,
-        'Yel': -4,
-        'Red': -8,
+        'Yel': -5,
+        'Red': -10,
         'Dist_90': 5,
-        'Key_tck_90': 5,
-        'Key_hdr_90': 3,
-        'Blocks_90': 5,
-        'Clr_90': 4,
-        'Int_90': 6,
-        'Hdr_rat': 4,
-        'Tackles_rat': 6,
-        'Gl_mistake': -8,
-        'Pass_rat': 4,
-        'Pr_pass_90': 4,
-        'Key_pass_90': 4,
-        'Cr_c_90': 4,
-        'Cr_c_acc': 4,
-        'Ch_c_90': 4,
-        'Drb_90': 3,
-        'Poss_lost_90': -3,
+        'Key_tck_90': 4,
+        'Key_hdr_90': 2,
+        'Blocks_90': 3,
+        'Clr_90': 3,
+        'Int_90': 5,
+        'Hdr_rat': 2,
+        'Tackles_rat': 4,
+        'Gl_mistake': -10,
+        'Pass_rat': 3,
+        'Pr_pass_90': 3,
+        'Key_pass_90': 3,
+        'Cr_c_90': 3,
+        'Cr_c_acc': 3,
+        'Ch_c_90': 3,
+        'Drb_90': 2,
+        'Poss_lost_90': -5,
         'Shot_rat': 1,
         'Conv_rat': 1
     },
@@ -558,11 +558,11 @@ position_weights = {
         'xG': 5,
         'Gol_90': 5,
         'Asis_90': 4,
-        'Goal_allowed': -2,
-        'Clean_sheet': -3,
-        'Sv_rat': -2,
-        'xSv_rat': -2,
-        'Pen_saved_rat': -2,
+        'Goal_allowed': 0,
+        'Clean_sheet': 0,
+        'Sv_rat': 0,
+        'xSv_rat': 0,
+        'Pen_saved_rat': 0,
         'Faga': -3,
         'Fcomm': -3,
         'Yel': -2,
@@ -592,20 +592,20 @@ position_weights = {
 
 def smartScore(player, pos, budget, expectations, league):
     smart_score = 0
-
     # Get the weights for the player's position
     weights = position_weights.get(pos)
 
-    # Esto hay que cambiarlo para que en lugar de usar min y max, use los percentiles
-    # Además, cuando esté la base de datos tocha, que filtre por liga si hay
     for attribute, weight in weights.items():
-        max, min = get_max_min_attribute(attribute, pos)
+        if weight == 0:
+            continue # Skip attributes with no weight
+
         # Get the attribute value from the player's profile
         value = getattr(player, attribute)
-        # Normalize attribute value if necessary
-        normalized_value = normalize(value, min, max)
-        print ("Attribute: ", attribute, "Normalized value: ", normalized_value, "Weight: ", weight)
-        smart_score += normalized_value * weight
+        percentile = get_threshold_attribute(attribute, pos, "", value)
+
+        print("Attribute: ", attribute, "Percentile: ", percentile, "Weight: ", weight)
+        
+        smart_score += percentile * weight
 
     smart_score = round(smart_score, 2)
     print ("Smart Score after attribute weighting: ", smart_score)
@@ -651,13 +651,6 @@ def normalize(value, min, max):
 def adjust_for_budget(budget):
     # Adjust score based on budget constraints
     # Implement adjustment logic heres
-    pass
-
-def adjust_for_expectations():
-    # Adjust score based on short-term and long-term expectations
-    # Implement adjustment logic here
-    # Get the expectations from the user's profile (futureScope)
-    # Si no está definido, se asume que es 1
     pass
 
 
