@@ -239,6 +239,9 @@ footer {
 
 .data-column, .image-column, .chart-column {
     padding: 20px;
+    align-items: center; /* Center items horizontally */
+    display: flex;
+    flex-direction: column;
 }
 
 /*Football field dots style */
@@ -782,4 +785,40 @@ select {
 /* Style for the form */
 form {
     margin-bottom: 20px; /* Add margin at the bottom for spacing */
+}
+
+
+.bubble-container-smartscore {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90px; /* Set width of the bubble container */
+    height: 90px; /* Set height of the bubble container */
+    border-radius: 50%; /* Make it round */
+    background-color: black; /* Black background color */
+    color: black; /* White text color */
+    font-size: 24px; /* Font size */
+    font-weight: bold; /* Bold text */
+    margin-bottom: 20px; /* Add margin at the bottom for spacing */
+    margin-top: 20px; /* Add margin at the top for spacing */
+}
+
+.bubble-smartscore {
+    width: 85px;
+    height: 85px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    font-size: 24px;
+    font-weight: bold;
+    /* Set the background color based on smartscore */
+    background-color: rgba(255, 0, 0, 1); /* Default to red */
+}
+
+
+/* Hover effect for the bubble */
+.bubble-container-smartscore:hover {
+    background-color: darkslategrey; /* Darker blue background on hover */
 }

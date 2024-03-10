@@ -116,16 +116,57 @@ document.addEventListener('DOMContentLoaded', function() {
              console.error('Error fetching position stats:', error);
         });
 
-        //Send an AJAX request to fetch player smartscore for the clicked position
         fetch(`/api/player-smartscore/${position}/${custom_id}`)
         .then(response => response.json())
         .then(data => {
             console.log(data);
-            document.getElementById('smartscore').innerHTML = data[position];
+            const smartScoreDisplay = document.getElementById('smartScoreDisplay');
+            if (data && data.smartscore !== undefined) {
+                const smartscoreBubble = document.getElementById('smartScoreDisplay');
+                smartscoreBubble.setAttribute('data-smartscore', data.smartscore);
+                smartScoreDisplay.textContent = data.smartscore.toFixed();
+                updateBubbleColor(data.smartscore);
+            } else {
+                smartScoreDisplay.textContent = '--';
+                console.error('Invalid data received from the API:', data);
+            }
         })
         .catch(error => {
-             console.error('Error fetching player smartscore:', error);
+            console.error('Error fetching player smartscore:', error);
         });
+    
+    function updateBubbleColor(smartscore) {
+        const smartscoreBubble = document.getElementById('smartScoreDisplay');
+        smartscoreBubble.style.backgroundColor = calculateBubbleColor(smartscore);
+    }
+    
+    function calculateBubbleColor(smartscore) {
+        // Calculate the color based on the smartscore value
+        const red = Math.round((100 - smartscore) / 100 * 255);
+        const green = Math.round(smartscore / 100 * 255);
+    
+        // Adjust for smoother gradient transition
+        const yellowThreshold = 50;
+        const limeThreshold = 75;
+    
+        let redValue, greenValue;
+    
+        if (smartscore < yellowThreshold) {
+            redValue = 255;
+            greenValue = Math.round(smartscore / yellowThreshold * 255);
+        } else if (smartscore < limeThreshold) {
+            redValue = Math.round((limeThreshold - smartscore) / (limeThreshold - yellowThreshold) * 255);
+            greenValue = 255;
+        } else {
+            redValue = 0;
+            greenValue = Math.round((100 - smartscore) / (100 - limeThreshold) * 255);
+        }
+    
+        return `rgb(${redValue}, ${greenValue}, 0)`;
+    }
+    
+    
+    
     }
 
     function addDatasetToRadarChart(statsData, position) {

@@ -59,6 +59,10 @@
         </div>
 
         <div class="chart-column">
+                <div class="bubble-container-smartscore">
+                    <div id="smartScoreDisplay" class="bubble-smartscore">--</div>
+                </div>
+            
                 <canvas id="radarChart" width="400" height="400"></canvas>
                 <h3>{{player.Name}} stats: </h3>
                 <ul>
@@ -66,6 +70,7 @@
                         <li>{{ key }}: {{ value }}</li>
                     {% endfor %}
                 </ul>
+
                 <ul id="avg_stats">
                     <p>Select a position to compare player stats vs average position stats.</p>
                 </ul>
