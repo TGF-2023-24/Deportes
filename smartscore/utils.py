@@ -363,6 +363,7 @@ def filter_recommendations(positions, attributes, foot):
             position_filters |= Q(Pos__name=position)
         players = players.filter(position_filters)
     print ("Players after position filter: ", players)
+
     # Filter players by foot
     if foot:
         foot_players = players.filter(Pref_foot=foot)
@@ -389,8 +390,9 @@ def filter_recommendations(positions, attributes, foot):
             ok_players.append(player)
     
     print ("Players after attribute filter: ", ok_players)
+    players = list(set(ok_players))
     
-    return ok_players
+    return players
 
     
     

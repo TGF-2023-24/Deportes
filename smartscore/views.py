@@ -474,13 +474,28 @@ def get_recommendations(request):
     filtered_players = filter_recommendations(positions, attributes, foot)
     print("Filtered players are", filtered_players)
 
-    #Get smartscore for the filtered players, return the top 15
+    # Get smartscore for the filtered players, return the top 15
+    player_scores = []
+
     for player in filtered_players:
-        #Get average smartScore for each position
-        
+        # Get average smartscore for all of the positions
+        total_score = sum(smartScore(player, pos, budget, expectations, league) for pos in positions)
+        average_score = total_score / len(positions)
+        player_scores.append((player, average_score))
 
+    # Sort players based on their average smartscore
+    sorted_players = sorted(player_scores, key=lambda x: x[1], reverse=True)
 
-    finalPlayers = []
-    return JsonResponse(finalPlayers, safe=False)
+    # Get the top 15 players
+    top_players = sorted_players[:15]
+
+    # Extract only player objects from the tuples
+    final_players = [player for player, _ in top_players]
+
+    # Print or use final_players as needed
+    for player, score in top_players:
+        print(f"Player: {player}, Average Smartscore: {score}")
+
+    return JsonResponse(final_players, safe=False)
 
 
