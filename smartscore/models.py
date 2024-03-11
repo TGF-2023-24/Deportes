@@ -17,7 +17,7 @@ class Player(models.Model):
     Height = models.IntegerField()	
     Weight = models.IntegerField()	
     Salary = models.IntegerField()	
-    End_contract = models.DateField()
+    End_contract = models.DateField(null=True) # Allow null values
     CAbil = models.IntegerField()  #current ability
     Pot_abil = models.IntegerField()	 #potential ability
     Strater_match = models.IntegerField()

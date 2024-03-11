@@ -3,7 +3,7 @@ from smartscore.models import Player, Position, League
 from datetime import datetime
 from .utils import get_player_positions, get_transfermarkt_market_value # Import the function from utils.py
 
-with open('new_short_dataset.csv',  encoding='utf-8') as csvfile:
+with open('new_complete_dataset.csv',  encoding='utf-8') as csvfile:
     readCSV = csv.reader(csvfile, delimiter=',')
     next(readCSV)  
     for row in readCSV:
@@ -11,23 +11,23 @@ with open('new_short_dataset.csv',  encoding='utf-8') as csvfile:
         player.custom_id = int(row[0])
         player.Name = row[2]
         player.Nationality = row[3]
-        player.International_match = int(row[4].replace(',', ''))  # Eliminar comas en números
+        player.International_match = 0 if row[4] == '-' else int(row[4].replace(',', ''))  # Eliminar comas en números
         player.Club = row[6]
         player.League = row[7]
         player.Pref_foot = row[9]
-        player.Age = int(row[10])
-        player.Height = int(row[11].split()[0].replace(',', ''))  # Extraer solo el número de la altura
-        player.Weight = int(row[12].split()[0])  # Extraer solo el número del peso
-        player.Salary = int(row[13].split()[0].replace('.', '').replace('€', ''))  # Eliminar puntos y extraer solo el número
-        player.End_contract = datetime.strptime(row[14], '%d/%m/%Y').date()  # Convertir fecha al formato correcto
-        player.CAbil = int(row[15])
-        player.Pot_abil = int(row[16])
+        player.Age = 0 if row[10] == '-' else int(row[10])
+        player.Height = 0 if row[11] == '-' else int(row[11].split()[0].replace(',', ''))  # Extraer solo el número de la altura
+        player.Weight = 0 if row[12] == '-' else int(row[12].split()[0])  # Extraer solo el número del peso
+        player.Salary = 0 if row[13]  in ('N/A', '-') else int(row[13].split()[0].replace('.', '').replace('€', ''))  # Eliminar puntos y extraer solo el número     
+        player.End_contract = None if row[14] == '-' else datetime.strptime(row[14], '%d/%m/%Y').date()  # Convertir fecha al formato correcto
+        player.CAbil = 0 if row[15] == '-' else int(row[15])
+        player.Pot_abil = 0 if row[16] == '-' else int(row[16])
         player.Strater_match = 0 if row[17] == '-' else int(row[17].split()[0])  # Extraer solo el número de partidos
         player.Res_match = int(row[18])
-        player.Min = 0 if row[17] == '-' else int(row[19].replace('.', ''))  # Eliminar comas en números
-        player.Goal = 0 if row[17] == '-' else int(row[20])
-        player.Asis = 0 if row[17] == '-' else int(row[21])
-        player.xG = 0 if row[17] == '-' else float(row[22].replace(',', '.'))
+        player.Min = 0 if row[19] == '-' else int(row[19].replace('.', ''))  # Eliminar comas en números
+        player.Goal = 0 if row[20] == '-' else int(row[20])
+        player.Asis = 0 if row[21] == '-' else int(row[21])
+        player.xG = 0 if row[22] == '-' else float(row[22].replace(',', '.'))
         player.Gol_90 = 0 if row[23] == '-' else float(row[23].replace(',', '.'))
         player.Asis_90 = 0 if row[24] == '-' else float(row[24].replace(',', '.'))
         player.Goal_allowed = 0 if row[25] == '-' else int(row[25])  # Convertir '-' a 0
@@ -35,11 +35,11 @@ with open('new_short_dataset.csv',  encoding='utf-8') as csvfile:
         player.Sv_rat = 0 if row[27] == '-' else int(row[27].replace('%', ''))
         player.xSv_rat = 0 if row[28] == '-' else int(row[28].replace('%', ''))
         player.Pen_saved_rat = 0 if row[29] == '-' else int(row[29].replace('%', ''))
-        player.Faga = 0 if row[17] == '-' else int(row[30])
-        player.Fcomm = 0 if row[17] == '-' else int(row[31])
-        player.Yel = 0 if row[17] == '-' else int(row[32])
-        player.Red  = 0 if row[17] == '-' else int(row[33])
-        player.Dist_90 = 0 if row[17] == '-' else float(row[34].split()[0].replace(',', '.').replace('km', ''))
+        player.Faga = 0 if row[30] == '-' else int(row[30])
+        player.Fcomm = 0 if row[31] == '-' else int(row[31])
+        player.Yel = 0 if row[32] == '-' else int(row[32])
+        player.Red  = 0 if row[33] == '-' else int(row[33])
+        player.Dist_90 = 0 if row[34] == '-' else float(row[34].split()[0].replace(',', '.').replace('km', ''))
         player.Key_tck_90 = 0 if row[35] == '-' else float(row[35].replace(',', '.').split()[0])
         player.Key_hdr_90 = 0 if row[36] == '-' else float(row[36].replace(',', '.').split()[0])
         player.Blocks_90 = 0 if row[37] == '-' else float(row[37].replace(',', '.').split()[0])
@@ -47,7 +47,7 @@ with open('new_short_dataset.csv',  encoding='utf-8') as csvfile:
         player.Int_90 = 0 if row[39] == '-' else float(row[39].replace(',', '.').split()[0])
         player.Hdr_rat = 0 if row[40] == '-' else int(row[40].replace('%', ''))
         player.Tackles_rat = 0 if row[41] == '-' else int(row[41].replace('%', ''))
-        player.Gl_mistake = 0 if row[17] == '-' else int(row[42])
+        player.Gl_mistake = 0 if row[42] == '-' else int(row[42])
         player.Pass_rat = 0 if row[43] == '-' else int(row[43].replace('%', ''))
         player.Pr_pass_90 = 0 if row[44] == '-' else float(row[44].replace(',', '.'))
         player.Key_pass_90 = 0 if row[45] == '-' else float(row[45].replace(',', '.'))

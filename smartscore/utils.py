@@ -189,7 +189,9 @@ def search_players_by_positions(players, positions):
 import requests
 
 def get_transfermarkt_market_value(player_name):
-    url = f'https://transfermarkt-api.vercel.app/players/search/{player_name}?page_number=1'
+    #url = f'https://transfermarkt-api.vercel.app/players/search/{player_name}?page_number=1'  
+    url = f'http://localhost:8000/players/search/{player_name}?page_number=1'  #when running api on local (no limit on requests)
+
     response = requests.get(url)
     if response.status_code == 200:
         data = response.json()
