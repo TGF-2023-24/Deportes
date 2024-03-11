@@ -636,7 +636,10 @@ def smartScore(player, pos, budget, expectations, league):
     print("Smart Score after international match experience weighting: ", smart_score)
     
     if budget != 9999: #If budget is defined
-        smart_score *= adjust_for_budget(budget, getattr(player, 'market_value')) 
+        value = getattr(player, 'market_value')
+        if value != 'Unknown':
+             smart_score *= adjust_for_budget(budget, value) 
+       
         
     print("SmartScore final: ", round(smart_score))
     return round(smart_score) #Round to the nearest whole number
