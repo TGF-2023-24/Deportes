@@ -448,3 +448,17 @@ def player_smartscore_api(request, position, custom_id):
     score = smartScore(player, position, budget, expectations, league)
     print("Score is", score)
     return JsonResponse({'smartscore': score})
+
+def recommended_signings(request):
+    # If user is logged in, retrieve the future scope settings
+    if request.user.is_authenticated:
+        user_profile = request.user.userprofile
+        league = user_profile.league
+        expectations = user_profile.expectations
+        budget = user_profile.budget
+    else:
+        league = ""
+        expectations = 1
+        budget = 9999
+    
+    return render(request, 'recommended_signings.html')
