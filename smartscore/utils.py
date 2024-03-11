@@ -326,10 +326,6 @@ def get_better_players(playerToReplace, players, position):
     return better_players
 
 
-import numpy as np
-
-import numpy as np
-
 def get_threshold_attribute(attribute_name, pos, league, player_value):
 
     if player_value == 0:
@@ -358,3 +354,47 @@ def get_threshold_attribute(attribute_name, pos, league, player_value):
     print(f"Percentile for {player_value} in {attribute_name} is {percentile}")
     return percentile
 
+def filter_recommendations(positions, attributes, foot):
+    players = Player.objects.all()
+    # Filter players by positions
+    if positions:
+        position_filters = Q()
+        for position in positions:
+            position_filters |= Q(Pos__name=position)
+        players = players.filter(position_filters)
+    print ("Players after position filter: ", players)
+    # Filter players by foot
+    if foot:
+        foot_players = players.filter(Pref_foot=foot)
+    else:
+        foot_players = players
+
+    print ("Players after foot filter: ", foot_players)
+    # For each of the attributes, get its 70th percentile and store it in a dictionary
+    attribute_percentiles = {}
+    for attribute in attributes:
+        values = players.values_list(attribute, flat=True)
+        percentile_70 = np.percentile(values, 70)
+        # Store the 70th percentile in a dictionary
+        attribute_percentiles[attribute] = percentile_70
+
+    # Now, we filter the players
+    ok_players = []
+    for player in foot_players:
+        ok = True
+        for attribute in attributes:
+            if getattr(player, attribute) < attribute_percentiles[attribute]:
+                ok = False
+        if ok:
+            ok_players.append(player)
+    
+    print ("Players after attribute filter: ", ok_players)
+    
+    return ok_players
+
+    
+    
+
+
+
+    

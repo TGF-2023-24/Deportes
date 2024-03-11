@@ -9,7 +9,7 @@ from django.db.models import Q
 from django import forms
 from .forms import CreateUserForm, SquadUpdateForm, SquadCreationForm
 from django.contrib.auth.decorators import login_required #utilizar este decorador para proteger las rutas que requieren autenticación
-from .utils import get_dot_positions, get_player_stats, get_pos_stats, get_default_stats, get_squad_players, search_players_by_positions, get_squad_stats, get_default_avg_stats, get_better_players
+from .utils import get_dot_positions, get_player_stats, get_pos_stats, get_default_stats, get_squad_players, search_players_by_positions, get_squad_stats, get_default_avg_stats, get_better_players, filter_recommendations
 from django.http import JsonResponse, Http404
 import json
 from .dictionary import fifa_country_codes  
@@ -449,8 +449,10 @@ def player_smartscore_api(request, position, custom_id):
     print("Score is", score)
     return JsonResponse({'smartscore': score})
 
-def recommended_signings(request):
-    # If user is logged in, retrieve the future scope settings
+def recommended_signings(request):    
+    return render(request, 'recommended_signings.html')
+
+def get_recommendations(request):
     if request.user.is_authenticated:
         user_profile = request.user.userprofile
         league = user_profile.league
@@ -460,5 +462,25 @@ def recommended_signings(request):
         league = ""
         expectations = 1
         budget = 9999
-    
-    return render(request, 'recommended_signings.html')
+
+    positions = request.GET.get('positions')
+    attributes = request.GET.get('attributes')
+    #Transform the string into a list
+    positions = positions.split(',')
+    attributes = attributes.split(',')
+    foot = request.GET.get('foot')
+    print("Positions are", positions, "Filters are", attributes, "Foot is", foot)
+
+    filtered_players = filter_recommendations(positions, attributes, foot)
+    print("Filtered players are", filtered_players)
+
+    #Get smartscore for the filtered players, return the top 15
+    for player in filtered_players:
+        #Get average smartScore for each position
+        
+
+
+    finalPlayers = []
+    return JsonResponse(finalPlayers, safe=False)
+
+

@@ -29,4 +29,5 @@ urlpatterns = [
     path('futureScope/', views.futureScope, name='futureScope'),
     path('edit_futureScope/', views.edit_futureScope, name='edit_futureScope'),
     path('recommended_signings/', views.recommended_signings, name='recommended_signings'),
+    path('get_recommendations/', views.get_recommendations, name='get_recommendations'),
 ]

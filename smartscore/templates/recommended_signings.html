@@ -19,24 +19,29 @@
         </select>
         <h2 class="section-title">Feet preference:</h2>
         <select id="foot" class="filter-select">
-            <option value="all">Both</option>
-            <option value="left">Left</option>
-            <option value="right">Right</option>
+            <option value="">All</option>
+            <option value="Either">Ambidextrous</option>
+            <option value="Left">Left</option>
+            <option value="Right">Right</option>
         </select>
         <button id="recommend" class="filter-button">Generate Recommendations</button>
     </div>
-    <div class="recommendation-section">
-        <h2 class="section-title">Recommended signings:</h2>
-        <div id="recommendation1" class="recommendations-container">
-            <!-- dynamically populated -->
-        </div>
-        <div id="recommendation2" class="recommendations-container">
-            <!-- dynamically populated -->
-        </div>
-        <div id="recommendation3" class="recommendations-container">
-            <!-- dynamically populated -->
-        </div>
-        <br>
-        <button id="regenerate" class="filter-button">Regenerate</button>
+</div>
+
+<div class="recommendation-section">
+    <h2 class="section-title">Recommended signings:</h2>
+    <div id="recommendation1" class="recommendations-container">
+        <!-- dynamically populated -->
     </div>
+    <div id="recommendation2" class="recommendations-container">
+        <!-- dynamically populated -->
+    </div>
+    <div id="recommendation3" class="recommendations-container">
+        <!-- dynamically populated -->
+    </div>
+    <br>
+    <button id="regenerate" class="filter-button">Regenerate</button>
+</div>
+
+    <script src="{% static 'js_content/recommended_signings.js' %}"></script>
 {% endblock %}

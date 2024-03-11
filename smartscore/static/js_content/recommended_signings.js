@@ -42,10 +42,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const profileSelect = document.getElementById('profile');
     const archetypeSelect = document.getElementById('archetype');
 
-
-
     // Function to populate the archetype selection based on the selected profile
     function populateArchetypes() {
+        console.log('Profile selection changed');
         const selectedProfile = profileSelect.value;
         const archetypes = archetypesByProfile[selectedProfile] || {};
 
@@ -71,4 +70,50 @@ document.addEventListener('DOMContentLoaded', function() {
     function capitalize(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
+
+    const recommendButton = document.getElementById('recommend');
+
+    // Event listener to trigger recommendations when the "recommend" button is clicked
+    recommendButton.addEventListener('click', function() {
+        // Get the select elements
+        const profileSelect = document.getElementById('profile');
+        const archetypeSelect = document.getElementById('archetype');
+        const footSelect = document.getElementById('foot');
+
+        // Get the selected values
+        const selectedProfile = profileSelect.value;
+        const selectedArchetype = archetypeSelect.value;
+        const selectedFoot = footSelect.value;
+
+        // Generate the list of positions based on the selected profile
+        const positions = selectedProfile === 'all' ? [] : positionsByProfile[selectedProfile];
+
+        // Generate the list of attributes based on the selected archetype
+        const attributes = selectedArchetype === 'all' || selectedArchetype === '' ? [] : archetypesByProfile[selectedProfile][selectedArchetype];
+
+        
+
+        // Optional: Print the selected values and generated API URL for debugging
+        console.log('Selected Profile:', selectedProfile);
+        console.log('Selected Archetype:', selectedArchetype);
+        console.log('Selected Foot:', selectedFoot);
+        console.log('Positions:', positions);
+        console.log('Attributes:', attributes);
+
+        // Generate the API request URL
+        const apiUrl = `/get_recommendations/?positions=${positions.join(',')}&attributes=${attributes.join(',')}&foot=${selectedFoot}`;
+        console.log('API URL:', apiUrl);
+
+        // Send the API request
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Recommendations:', data);
+                // Handle the received recommendations (e.g., display them on the page)
+            })
+            .catch(error => {
+                console.error('Error fetching recommendations:', error);
+                // Handle errors (e.g., display an error message)
+            });
+    });
 });
