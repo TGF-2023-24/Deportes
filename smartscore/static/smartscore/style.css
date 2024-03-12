@@ -822,3 +822,16 @@ form {
 .bubble-container-smartscore:hover {
     background-color: darkslategrey; /* Darker blue background on hover */
 }
+
+.recommendation-section {
+    width: 100%;
+    margin: 20px auto;
+    text-align: center;
+}
+
+.recommendations-container {
+    display: inline-block;
+    width: 30%; /* Adjust width according to your layout */
+    margin-right: 2%; /* Adjust margin between recommendation containers */
+    vertical-align: top;
+}

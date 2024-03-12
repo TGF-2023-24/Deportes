@@ -477,7 +477,7 @@ def get_recommendations(request):
     # Get smartscore for the filtered players, return the top 15
     player_scores = []
 
-    for player in filtered_players:
+    for player in filtered_players[:500]:
         # Get average smartscore for all of the positions
         total_score = sum(smartScore(player, pos, budget, expectations, league) for pos in positions)
         average_score = total_score / len(positions)
@@ -489,12 +489,21 @@ def get_recommendations(request):
     # Get the top 15 players
     top_players = sorted_players[:15]
 
-    # Extract only player objects from the tuples
-    final_players = [player for player, _ in top_players]
+     # Extract player name, score, and dorsal from the tuples
+    final_players = []
+    for player, score in top_players:
+        player_info = {
+            'name': player.Name,
+            'score': score,
+            'dorsal': player.Dorsal,
+        }
+        final_players.append(player_info)
 
     # Print or use final_players as needed
-    for player, score in top_players:
-        print(f"Player: {player}, Average Smartscore: {score}")
+    for player_info in final_players:
+        print(f"Player: {player_info['name']}, Score: {player_info['score']}, Dorsal: {player_info['dorsal']}")
+
+    print("Top players are", [player_info['name'] for player_info in final_players])
 
     return JsonResponse(final_players, safe=False)
 

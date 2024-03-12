@@ -3,45 +3,51 @@
 {% block title %}Recomended signings{% endblock %}
 {% block content %}
 
-<div class="search-container">
-    <div class="filter-section">
-        <h2 class="section-title">Select profile:</h2>
-        <select id="profile" class="filter-select">
-            <option value="all">All</option>
-            <option value="attacker">Attacker</option>
-            <option value="midfielder">Midfielder</option>
-            <option value="defender">Defender</option>
-            <option value="goalkeeper">Goalkeeper</option>
-        </select>
-        <h2 class="section-title">Select archetype:</h2>
-        <select id="archetype" class="filter-select">
-            <!-- dynamically populated -->
-        </select>
-        <h2 class="section-title">Feet preference:</h2>
-        <select id="foot" class="filter-select">
-            <option value="">All</option>
-            <option value="Either">Ambidextrous</option>
-            <option value="Left">Left</option>
-            <option value="Right">Right</option>
-        </select>
-        <button id="recommend" class="filter-button">Generate Recommendations</button>
+    <div class="search-container">
+        <div class="filter-section">
+            <h2 class="section-title">Select profile:</h2>
+            <select id="profile" class="filter-select">
+                <option value="all">All</option>
+                <option value="attacker">Attacker</option>
+                <option value="midfielder">Midfielder</option>
+                <option value="defender">Defender</option>
+                <option value="goalkeeper">Goalkeeper</option>
+            </select>
+            <h2 class="section-title">Select archetype:</h2>
+            <select id="archetype" class="filter-select">
+                <!-- dynamically populated -->
+            </select>
+            <h2 class="section-title">Feet preference:</h2>
+            <select id="foot" class="filter-select">
+                <option value="">All</option>
+                <option value="Either">Ambidextrous</option>
+                <option value="Left">Left</option>
+                <option value="Right">Right</option>
+            </select>
+            <button id="recommend" class="primary-default-btn">Generate Recommendations</button>
+        </div>
     </div>
-</div>
 
-<div class="recommendation-section">
-    <h2 class="section-title">Recommended signings:</h2>
-    <div id="recommendation1" class="recommendations-container">
-        <!-- dynamically populated -->
+    <div class="recommendation-section">
+        <h2 class="section-title">Recommended signings:</h2>
+        <div id="recommendation1" class="recommendations-container">
+            <!-- dynamically populated -->
+        </div>
+        <div id="recommendation2" class="recommendations-container">
+            <!-- dynamically populated -->
+        </div>
+        <div id="recommendation3" class="recommendations-container">
+            <!-- dynamically populated -->
+        </div>
+        <br>
+        <button id="regenerate" class="primary-default-btn">Regenerate</button>
     </div>
-    <div id="recommendation2" class="recommendations-container">
-        <!-- dynamically populated -->
-    </div>
-    <div id="recommendation3" class="recommendations-container">
-        <!-- dynamically populated -->
-    </div>
-    <br>
-    <button id="regenerate" class="filter-button">Regenerate</button>
-</div>
+
+    <script>
+        var shirt_img = "{% static 'smartscore/images/shirt.png' %}";
+    </script>
 
     <script src="{% static 'js_content/recommended_signings.js' %}"></script>
+
+
 {% endblock %}

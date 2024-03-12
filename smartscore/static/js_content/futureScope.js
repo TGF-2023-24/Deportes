@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Future Scope page loaded');
     const countrySelect = document.getElementById('country-select');
+    console.log('Country Select:', countrySelect);
     const leagueSelect = document.getElementById('league-select');
     console.log('Country Select:', countrySelect);
     console.log('League Select:', leagueSelect);

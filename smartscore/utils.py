@@ -330,6 +330,11 @@ def get_better_players(playerToReplace, players, position):
 
 def get_threshold_attribute(attribute_name, pos, league, player_value):
 
+    print(f"Attribute name is {attribute_name}")
+    print(f"Position is {pos}")
+    print(f"League is {league}")
+    print(f"Player value is {player_value}")
+
     if player_value == 0:
         return 0
     
@@ -345,12 +350,20 @@ def get_threshold_attribute(attribute_name, pos, league, player_value):
     
     # Get the attribute values of all players
     attribute_values = players.values_list(attribute_name, flat=True)
+
+    if not attribute_values:
+        attribute_values = [0]
     
     # Convert queryset to numpy array
     attribute_values = np.array(list(attribute_values))
+
+    print(f"Attribute values for {attribute_name} are {attribute_values}")
+    print (f"Player value for {attribute_name} is {player_value}")
     
     # Calculate the percentile rank of the player's value
     percentile_rank = np.sum(attribute_values <= player_value) / len(attribute_values) * 100
+
+    print(f"Percentile rank for {player_value} in {attribute_name} is {percentile_rank}")
 
     percentile = round(percentile_rank/100, 2)
     print(f"Percentile for {player_value} in {attribute_name} is {percentile}")
