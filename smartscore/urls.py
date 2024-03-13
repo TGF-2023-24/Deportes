@@ -30,4 +30,7 @@ urlpatterns = [
     path('edit_futureScope/', views.edit_futureScope, name='edit_futureScope'),
     path('recommended_signings/', views.recommended_signings, name='recommended_signings'),
     path('get_recommendations/', views.get_recommendations, name='get_recommendations'),
+    path('api/save-recommendations/', views.save_recommendations, name='save_recommendations'),
+    path('shortlist/', views.shortlist, name='shortlist'),
+    path('remove_from_shortlist/<int:shortlist_id>/<int:player_id>/', views.remove_from_shortlist, name='remove_from_shortlist'),
 ]

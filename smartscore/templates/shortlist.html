@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}My shortlists{% endblock %}
+{% block content %}
+
+    <h1>My Shortlists</h1>
+
+    {% if shortlists %}
+
+
+        {% for shortlist in shortlists %}
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2>{{ shortlist.name }}</h2>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Player: </th>
+                                            <th>Wage: </th>
+                                            <th>Value</th>
+                                            <th>End of Contract</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for player in shortlist.players.all %}
+                                            <tr>
+                                                <td>{{ player.Name }}</td>
+                                                <td>{{ player.Salary }}</td>
+                                                <td>{{ player.market_value }} M</td>
+                                                <td>{{ player.End_contract }}</td>
+                                                <td>
+                                                    <a href="{% url 'player_detail' player.custom_id %}" class="btn btn-primary" target="_blank">View</a>
+                                                    <a href="{% url 'remove_from_shortlist' shortlist.id player.custom_id %}" class="btn btn-danger"  onclick="return confirm('Are you sure you want to remove this player from the shortlist?')">Remove</a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+    <p>You don't have any shortlists yet.</p>
+    {% endif %}
+{% endblock %}

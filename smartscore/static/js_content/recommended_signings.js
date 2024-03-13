@@ -48,7 +48,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Global variable to keep track of the current index
     let currentIndex = 0;
 
-    // Event listener for regenerate button
 
     // Define data variable in the scope accessible to both the event listener and displayRecommendations function
     let newData = [];
@@ -122,17 +121,58 @@ document.addEventListener('DOMContentLoaded', function() {
                 newData = data;
                 // Display the recommendations
                 if (data.length > 0) {
+                    currentIndex = 0; // Reset currentIndex to 0 when new recommendations are fetched
 
                     displayRecommendations(data);
+
+                   // Add save button
+                    const recommendationSection = document.querySelector('.recommendation-section');
+                    const saveButton = document.createElement('button');
+                    saveButton.id = 'save';
+                    saveButton.textContent = 'Save';
+                    saveButton.classList.add('primary-default-btn');
+
+                    // Append the save button next to the regenerate button
+                    const regenerateButton = recommendationSection.querySelector('#regenerate');
+                    regenerateButton.parentNode.insertBefore(saveButton, regenerateButton.nextSibling);
+
+                    const requestData = {
+                        position: selectedProfile,
+                        archetype: selectedArchetype,
+                        foot: selectedFoot,
+                        data: data  // Include the recommendations data
+                    };
+
+                    console.log('Data:', requestData);
+
+                    saveButton.addEventListener('click', function() {
+                        fetch('/api/save-recommendations/', {
+                            method: 'POST',  
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': getCookie('csrftoken')
+                            },        
+                            body: JSON.stringify(requestData)
+                            
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log('Success:', data);
+                                alert('Recommendations saved successfully');
+                            })
+                            .catch(error => {
+                                console.error('Error saving recommendations:', error);
+                                alert('An error occurred while saving recommendations');
+                            });
+                    });
                 }
                 else {
                     alert('No recommendations found');
                 }
-
             })
             .catch(error => {
                 console.error('Error fetching recommendations:', error);
-                // Handle errors (e.g., display an error message)
+                alert('An error occurred while fetching recommendations');
             });
     });
 
@@ -144,9 +184,7 @@ document.addEventListener('DOMContentLoaded', function() {
         displayRecommendations(newData);
     });
     
-
     function displayRecommendations(data) {
-        console.log('Recommendations:', data);
     
         // Select recommendation containers
         const recommendationContainers = [
@@ -162,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
         // Slice the data array starting from currentIndex to display the next set of players
         const slicedData = data.slice(currentIndex, currentIndex + 3);
-
+    
         // Populate recommendation containers
         slicedData.forEach((recommendation, index) => {
             const container = recommendationContainers[index];
@@ -204,21 +242,37 @@ document.addEventListener('DOMContentLoaded', function() {
            // Create smart score container
             const smartScoreContainer = document.createElement('div');
             smartScoreContainer.classList.add('bubble-container-smartscore');
-
+    
             // Create smart score display element
             const smartScoreDisplay = document.createElement('div');
             smartScoreDisplay.id = 'smartScoreDisplay'; // Set the ID
             smartScoreDisplay.classList.add('bubble-smartscore'); // Add class
-
+    
             // Set smart score value
             smartScoreDisplay.textContent = recommendation.score;
-
+    
             // Append smart score display to smart score container
             smartScoreContainer.appendChild(smartScoreDisplay);
-
+    
             // Append smart score container to recommendation container
             container.appendChild(smartScoreContainer);
         });
     }
-
 });
+
+// Function to get CSRF token
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+

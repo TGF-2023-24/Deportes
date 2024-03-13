@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-from .models import Player, Position, Squad, UserProfile, League
+from .models import Player, Position, Squad, UserProfile, League, Shortlist
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -507,4 +507,61 @@ def get_recommendations(request):
 
     return JsonResponse(final_players, safe=False)
 
+@login_required(login_url='login')
+def save_recommendations(request):
+    if request.method == 'POST':
+        # Parse the JSON data from the request body
+        request_data = json.loads(request.body)
 
+        # Extract position, archetype, foot, and data from the request data
+        position = request_data.get('position')
+        archetype = request_data.get('archetype')
+        foot = request_data.get('foot')
+        recommendations_data = request_data.get('data')
+
+        print("Archeotipe is", archetype, "Position is", position, "Foot is", foot)
+        print("Data is", recommendations_data)
+
+        name = 'Recommendations for ' + archetype + ' ' + position + ' players with ' + foot + ' foot'
+
+        # Create a new recommendation object with the given name
+        shortlist = Shortlist.objects.create(name=name)
+
+         # Iterate through recommendations data, find corresponding player objects, and add them to the shortlist
+        for player_info in recommendations_data:
+            player_name = player_info['name']         
+
+            # Find player object by name (assuming 'name' is a unique field in your Player model)
+            try:
+                player = Player.objects.get(Name=player_name)
+                # Add player to the shortlist
+                shortlist.players.add(player)
+            except Player.DoesNotExist:
+                print(f"Player '{player_name}' not found in the database.")
+
+        request.user.userprofile.shortlist.add(shortlist)
+
+        # Save the recommendations to the database
+        return JsonResponse({'message': 'Recommendations saved successfully'})
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+@login_required(login_url='login')
+def shortlist(request):
+
+    user = request.user
+    shortlists = user.userprofile.shortlist.all()
+    print("Shortlist is", shortlists)
+    
+    return render(request, 'shortlist.html', {'shortlists': shortlists})
+
+
+def remove_from_shortlist(request, shortlist_id, player_id):
+    shortlist = get_object_or_404(Shortlist, id=shortlist_id)
+    player = get_object_or_404(Player, custom_id=player_id)
+    
+    # Remove the player from the shortlist
+    shortlist.players.remove(player)
+    
+    # Redirect to the shortlist page or any other appropriate page
+    return redirect('shortlist')

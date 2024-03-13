@@ -77,13 +77,21 @@ class Squad(models.Model):
     def __str__(self):
         return self.name
     
+    
+class Shortlist(models.Model):
+    name = models.CharField(max_length=100)
+    players = models.ManyToManyField(Player)
+
+    def __str__(self):
+        return self.name
+    
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     squads = models.ManyToManyField(Squad)
     budget = models.IntegerField(default=100)
     league = models.CharField(max_length=100, blank=True, null=True)
     expectations = models.IntegerField(default=1)
-
+    shortlist = models.ManyToManyField(Shortlist)
 
     def __str__(self):
         return self.user.username
@@ -94,3 +102,4 @@ class League(models.Model):
 
     def __str__(self):
         return self.name
+    
