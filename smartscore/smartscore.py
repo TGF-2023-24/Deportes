@@ -676,7 +676,7 @@ def smartScore(player, pos, budget, expectations, league):
     projected_growth = (getattr(player, 'Pot_abil') / getattr(player, 'CAbil'))
     print("Projected growth: ", projected_growth)
     projected_growth = min(1.8, projected_growth) # Cap the growth at 1.8
-    smart_score *= pow(projected_growth, 0.5 + expectations/2)
+    smart_score *= pow(projected_growth, 0.75 + expectations/2)
         
     # Threshold is 27 years old, the further away from this age, the higher the penalty or bonus (exponential growth)
     growth_factor = expectations 
