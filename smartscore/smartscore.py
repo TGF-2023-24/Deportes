@@ -1,4 +1,4 @@
-from .utils import get_threshold_attribute
+from .utils import smartscore_attributes
 import math
 
 position_weights = {
@@ -10,10 +10,10 @@ position_weights = {
         'Res_match': 0,
         'Min': 0,
         'Goal': 0,
-        'Asis': 1,
+        'Asis': 0,
         'xG': 0,
         'Gol_90': 0,
-        'Asis_90': 1,
+        'Asis_90': 0,
         'Goal_allowed': -7,
         'Clean_sheet': 10,
         'Sv_rat': 6,
@@ -25,14 +25,14 @@ position_weights = {
         'Red': -8,
         'Dist_90': 0,
         'Key_tck_90': 4,
-        'Key_hdr_90': 4,
-        'Blocks_90': 3,
-        'Clr_90': 5,
+        'Key_hdr_90': 3,
+        'Blocks_90': 0,
+        'Clr_90': 10,
         'Int_90': 4,
         'Hdr_rat': 2,
         'Tackles_rat': 2,
         'Gl_mistake': -9,
-        'Pass_rat': 5,
+        'Pass_rat': 10,
         'Pr_pass_90': 2,
         'Key_pass_90': 2,
         'Cr_c_90': 0,
@@ -591,31 +591,82 @@ position_weights = {
     }
 }
 
+league_tiers = {
+    "Premier League": 1,
+    "LALIGA EA SPORTS": 1,
+    "Ligue 1 Uber Eats": 2,
+    "LALIGA HYPERMOTION": 3,
+    "Meiji Yasuda J1 League": 3,
+    "Sky Bet Championship": 3,
+    "Jupiler Pro League": 3,
+    "Campeonato AFP PlanVital": 4,
+    "Tinkoff Russian Premier League": 3,
+    "Ping An Chinese Football Association Super League": 4,
+    "Liga MX": 4,
+    "Eredivisie": 2,
+    "Liga Profesional de Fútbol": 3,
+    "QNB Stars League": 4,
+    "Brasileirão Assaí Série A": 3,
+    "Liga Portugal Betclic": 2,
+    "Spor Toto Süper Lig": 2,
+    "Serie A TIM": 1,
+    "Roshn Saudi League": 4,
+    "Bundesliga": 1,
+    "Major League Soccer": 3,
+    "2. Bundesliga": 4,
+    "Meiji Yasuda J2 League": 5,
+    "Liga Portugal 2 SABSEG": 4,
+    "Liga BetPlay Dimayor": 5,
+    "Raiffeisen Super League": 4,
+    "FavBet Liha": 4,
+    "Allsvenskan": 4,
+    "Priemjer Ligasy": 4,
+    "Yelo League": 4,
+    "Ligat ONE ZERO": 4,
+    "Hana 1Q K League 1": 4,
+    "PKO Ekstraklasa": 4,
+    "Fortuna Liga": 4,
+    "Campeonato Juegaenlinea.com": 5,
+    "Brasileirão Serie B Chevrolet": 5,
+    "Ligue 2 BKT": 4,
+    "Liga 1 Movistar": 5,
+    "Mozzart Bet SuperLiga": 5,
+    "Iran Pro League": 5,
+    "Admiral Bundesliga": 3,
+    "Serie BKT": 4,
+    "SuperSport Hrvatska nogometna liga": 5,
+    "Eliteserien": 4,
+    "The WE League": 5,
+    "Stoiximan Super League": 4,
+    "ADNOC Pro League": 5,
+    "DSTV Premiership": 5,
+    "3F Superliga": 3,
+    "cinch Premiership": 3
+}
+
+# Define a dictionary mapping league tiers to their corresponding multipliers
+league_multipliers = {
+    1: 1.12,    # Tier 1 leagues
+    2: 1.06,    # Tier 2 leagues
+    3: 1,       # Tier 3 leagues
+    4: 0.95,    # Tier 4 leagues and below
+    5: 0.9      # Tier 5 leagues
+}
 
 def smartScore(player, pos, budget, expectations, league):
-    smart_score = 0 
     # Get the weights for the player's position
     weights = position_weights.get(pos)
 
-    for attribute, weight in weights.items():
-        if weight == 0:
-            continue # Skip attributes with no weight
+    smart_score = smartscore_attributes(player, pos, league, weights)
 
-        # Get the attribute value from the player's profile
-        value = getattr(player, attribute)
-        percentile = get_threshold_attribute(attribute, pos, league, value)
-
-        print("Attribute: ", attribute, "Percentile: ", percentile, "Weight: ", weight)
-        
-        smart_score += percentile * weight
-
-    print ("Smart Score after attribute weighting: ", smart_score)
+    print ("Smart Score after attribute weighting: ", smart_score) #62
 
     # We want to give a higher score to players with higher potential ability, compared to current ability
     # The greater  the difference between potential ability and current ability, the higher the score (exponential growth)
     projected_growth = (getattr(player, 'Pot_abil') / getattr(player, 'CAbil'))
     print("Projected growth: ", projected_growth)
-    smart_score *= pow(projected_growth, 3)
+    projected_growth = min(1.8, projected_growth) # Cap the growth at 1.8
+    smart_score *= pow(projected_growth, 1.5 + expectations/2)
         
     # Threshold is 27 years old, the further away from this age, the higher the penalty or bonus (exponential growth)
     growth_factor = expectations 
@@ -640,7 +691,15 @@ def smartScore(player, pos, budget, expectations, league):
         if value != 'Unknown':
              smart_score *= adjust_for_budget(budget, value) 
        
-        
+    
+    # Adjust score based on player's league
+    if getattr(player, 'League'):
+        league_multiplier = calculate_league_multiplier(getattr(player, 'League'))
+        smart_score *= league_multiplier
+    else:
+        smart_score *= 0.85  # Penalize players with no league information
+    
+
     print("SmartScore final: ", round(smart_score))
     return round(smart_score) #Round to the nearest whole number
 
@@ -702,24 +761,11 @@ def calculate_age_score(age, growth_factor):
     return score
 
 
-def adjust_for_budget_antiguo(budget, playerValue):
-    print("Player value: ", playerValue, "Budget: ", budget)
-    playerValue = float(playerValue)
-    # Adjust score based on budget
-    if playerValue > budget:
-        return 0.5 #Unaffordable
-    budgetFraction = playerValue / budget
-    if budgetFraction < 0.1:
-        factor = 1.25 #Cheap signing
-    elif 0.1 <= budgetFraction < 0.25:
-        factor = 1.15 #Good value
-    elif 0.25 <= budgetFraction < 0.35:
-        factor = 1.07 #Fair value
-    elif 0.35 <= budgetFraction < 0.5:
-        factor = 1.03 #Important signing
-    elif 0.5 <= budgetFraction < 0.75:
-        factor = 1 #Expensive signing
-    else:
-        return 0.9 #Very expensive signing
+def calculate_league_multiplier(league):
+    # Get the league tier
+    league_tier = league_tiers.get(league, 5)  # Default to Tier 5 if league not found
     
-    return pow(factor, 2)
+    # Get the multiplier for the league tier
+    multiplier = league_multipliers.get(league_tier, 0.85)  # If tier not found, default to 0.85
+    print("League tier: ", league_tier, "Multiplier: ", multiplier)
+    return multiplier

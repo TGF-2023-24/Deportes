@@ -477,17 +477,20 @@ def get_recommendations(request):
     # Get smartscore for the filtered players, return the top 15
     player_scores = []
 
-    for player in filtered_players[:500]:
+    for player in filtered_players:
         # Get average smartscore for all of the positions
-        total_score = sum(smartScore(player, pos, budget, expectations, league) for pos in positions)
-        average_score = total_score / len(positions)
+        #total_score = sum(smartScore(player, pos, budget, expectations, league) for pos in positions)
+        #average_score = total_score / len(positions)
+        # Get smartscore for the primary position of the player
+        primary_position = player.Pos.all()[0].name
+        average_score = smartScore(player, primary_position, budget, expectations, league)
         player_scores.append((player, average_score))
 
     # Sort players based on their average smartscore
     sorted_players = sorted(player_scores, key=lambda x: x[1], reverse=True)
 
-    # Get the top 15 players
-    top_players = sorted_players[:15]
+    # Get the top 30 players
+    top_players = sorted_players[:30]
 
      # Extract player name, score, and dorsal from the tuples
     final_players = []

@@ -328,16 +328,7 @@ def get_better_players(playerToReplace, players, position):
     return better_players
 
 
-def get_threshold_attribute(attribute_name, pos, league, player_value):
-
-    print(f"Attribute name is {attribute_name}")
-    print(f"Position is {pos}")
-    print(f"League is {league}")
-    print(f"Player value is {player_value}")
-
-    if player_value == 0:
-        return 0
-    
+def smartscore_attributes(player, pos, league, position_weights):
     # Get the position object
     position = Position.objects.get(name=pos)
     
@@ -348,6 +339,33 @@ def get_threshold_attribute(attribute_name, pos, league, player_value):
     if league:
         players = players.filter(League=league)
     
+    # Initialize smart score
+    smart_score = 0
+
+    print(position_weights)
+    
+    # Iterate over attribute weights
+    for attribute, weight in position_weights.items():
+        # Skip attributes with no weight
+        if weight == 0:
+            continue
+        
+        # Get the attribute value from the player's profile
+        value = getattr(player, attribute)
+        
+        # Calculate percentile for the attribute
+        percentile = get_threshold_attribute(attribute, value, players)
+        
+        # Calculate attribute weighted score
+        smart_score += percentile * weight
+
+    return smart_score
+
+
+def get_threshold_attribute(attribute_name, player_value, players):
+    #If player value not greater than 0, return 0
+    if player_value == 0:
+        return 0
     # Get the attribute values of all players
     attribute_values = players.values_list(attribute_name, flat=True)
 
@@ -356,18 +374,16 @@ def get_threshold_attribute(attribute_name, pos, league, player_value):
     
     # Convert queryset to numpy array
     attribute_values = np.array(list(attribute_values))
-
-    print(f"Attribute values for {attribute_name} are {attribute_values}")
-    print (f"Player value for {attribute_name} is {player_value}")
     
     # Calculate the percentile rank of the player's value
     percentile_rank = np.sum(attribute_values <= player_value) / len(attribute_values) * 100
+    
+    percentile = round(percentile_rank / 100, 2)
 
-    print(f"Percentile rank for {player_value} in {attribute_name} is {percentile_rank}")
-
-    percentile = round(percentile_rank/100, 2)
-    print(f"Percentile for {player_value} in {attribute_name} is {percentile}")
+    print(f"Percentile for {attribute_name} with value {player_value} is {percentile}")
     return percentile
+
+
 
 def filter_recommendations(positions, attributes, foot):
     players = Player.objects.all()
@@ -387,23 +403,29 @@ def filter_recommendations(positions, attributes, foot):
 
     print ("Players after foot filter: ", foot_players)
     # For each of the attributes, get its 70th percentile and store it in a dictionary
-    attribute_percentiles = {}
-    for attribute in attributes:
-        values = players.values_list(attribute, flat=True)
-        percentile_70 = np.percentile(values, 70)
-        # Store the 70th percentile in a dictionary
-        attribute_percentiles[attribute] = percentile_70
+    print ("Attributes: ", attributes)
+    if len(attributes) > 0 and attributes[0] != '':
+        attribute_percentiles = {}
+        print("We are here")
+        for attribute in attributes:
+            values = players.values_list(attribute, flat=True)
+            percentile_70 = np.percentile(values, 70)
+            # Store the 70th percentile in a dictionary
+            attribute_percentiles[attribute] = percentile_70
+
+        ok_players = []
+        for player in foot_players:
+            ok = True
+            for attribute in attributes:
+                if getattr(player, attribute) < attribute_percentiles[attribute]:
+                    ok = False
+            if ok:
+                ok_players.append(player)
+    else:
+        ok_players = foot_players
 
     # Now, we filter the players
-    ok_players = []
-    for player in foot_players:
-        ok = True
-        for attribute in attributes:
-            if getattr(player, attribute) < attribute_percentiles[attribute]:
-                ok = False
-        if ok:
-            ok_players.append(player)
-    
+
     print ("Players after attribute filter: ", ok_players)
     players = list(set(ok_players))
     

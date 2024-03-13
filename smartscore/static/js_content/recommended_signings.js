@@ -1,12 +1,15 @@
 // Define a mapping of profiles to archetypes and their corresponding attributes
 const archetypesByProfile = {
-    'attacker': {
+    'forward': {
         'All': [],
         'Striker': ['Hdr_rat', 'Conv_rat', 'Gol_90'],
         'Target-man': ['Hdr_rat', 'Key_hdr_90', 'Ch_c_90'],
-        'False-nine': ['Ch_c_90', 'Key_pass_90', 'Pr_pass_90'],
+        'False-nine': ['Ch_c_90', 'Key_pass_90', 'Pr_pass_90']
+    },
+    'winger': {
+        'All': [],
         'Wide-winger': ['Drb_90', 'Ch_c_90', 'Cr_c_90'],
-        'Inverted-winger': ['Drb_90', 'Shot_rat', 'Gol_90'],
+        'Inverted-winger': ['Drb_90', 'Shot_rat', 'Gol_90']
     },
     'midfielder': {
         'All': [],
@@ -30,8 +33,9 @@ const archetypesByProfile = {
 
 // Define a mapping of profiles to positions
 const positionsByProfile = {
-    'attacker': ['STC', 'AML', 'AMR'],
-    'midfielder': ['MC', 'DM', 'AMC', 'ML', 'MR'],
+    'striker': ['STC'],
+    'winger': ['AML', 'AMR', 'ML', 'MR'], 
+    'midfielder': ['MC', 'DM', 'AMC'],
     'defender': ['DC', 'DL', 'DR', 'WBL', 'WBR'],
     'goalkeeper': ['GK']
 };
