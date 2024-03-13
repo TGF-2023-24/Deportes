@@ -1,31 +1,26 @@
 // Define a mapping of profiles to archetypes and their corresponding attributes
 const archetypesByProfile = {
     'forward': {
-        'All': [],
         'Striker': ['Hdr_rat', 'Conv_rat', 'Gol_90'],
         'Target-man': ['Hdr_rat', 'Key_hdr_90', 'Ch_c_90'],
         'False-nine': ['Ch_c_90', 'Key_pass_90', 'Pr_pass_90']
     },
     'winger': {
-        'All': [],
         'Wide-winger': ['Drb_90', 'Ch_c_90', 'Cr_c_90'],
         'Inverted-winger': ['Drb_90', 'Shot_rat', 'Gol_90']
     },
     'midfielder': {
-        'All': [],
         'Regista': ['Pass_rat', 'Pr_pass_90', 'Cr_c_90'],
         'Play-maker': ['Pr_pass_90', 'Key_pass_90', 'Ch_c_90'],
         'Box-to-box': ['Int_90', 'Dist_90', 'Tackles_rat']
     },
     'defender': {
-        'All': [],
         'Ball-playing': ['Pass_rat', 'Pr_pass_90', 'Blocks_90'],
         'Stopper': ['Tackles_rat', 'Int_90', 'Hdr_rat'],
         'Full-back': ['Blocks_90', 'Tackles_rat', 'Dist_90'],
         'Wing-back': ['Cr_c_90', 'Drb_90', 'Dist_90']
     },
     'goalkeeper': {
-        'All': [],
         'Ball-playing': ['Pass_rat', 'Pr_pass_90'],
         'Penalty-specialist': ['Pen_saved_rat']
     }
@@ -33,7 +28,7 @@ const archetypesByProfile = {
 
 // Define a mapping of profiles to positions
 const positionsByProfile = {
-    'striker': ['STC'],
+    'forward': ['STC'],
     'winger': ['AML', 'AMR', 'ML', 'MR'], 
     'midfielder': ['MC', 'DM', 'AMC'],
     'defender': ['DC', 'DL', 'DR', 'WBL', 'WBR'],

@@ -8,7 +8,7 @@ position_weights = {
         'Pot_abil': 6,
         'Strater_match': 5,
         'Res_match': 0,
-        'Min': 0,
+        'Min': 10,
         'Goal': 0,
         'Asis': 0,
         'xG': 0,
@@ -19,7 +19,7 @@ position_weights = {
         'Sv_rat': 6,
         'xSv_rat': 6,
         'Pen_saved_rat': 5,
-        'Faga': 1,
+        'Faga': 5,
         'Fcomm': -3,
         'Yel': -3,
         'Red': -8,
@@ -28,18 +28,18 @@ position_weights = {
         'Key_hdr_90': 3,
         'Blocks_90': 0,
         'Clr_90': 10,
-        'Int_90': 4,
-        'Hdr_rat': 2,
-        'Tackles_rat': 2,
-        'Gl_mistake': -9,
+        'Int_90': 0,
+        'Hdr_rat': 0,
+        'Tackles_rat': 0,
+        'Gl_mistake': -10,
         'Pass_rat': 10,
-        'Pr_pass_90': 2,
-        'Key_pass_90': 2,
+        'Pr_pass_90': 0,
+        'Key_pass_90': 0,
         'Cr_c_90': 0,
         'Cr_c_acc': 0,
         'Ch_c_90': 0,
         'Drb_90': 0,
-        'Poss_lost_90': -3,
+        'Poss_lost_90': -5,
         'Shot_rat': 0,
         'Conv_rat': 0
     },
@@ -646,11 +646,12 @@ league_tiers = {
 
 # Define a dictionary mapping league tiers to their corresponding multipliers
 league_multipliers = {
-    1: 1.12,    # Tier 1 leagues
-    2: 1.06,    # Tier 2 leagues
-    3: 1,       # Tier 3 leagues
+    1: 1.10,    # Tier 1 leagues
+    2: 1.05,    # Tier 2 leagues
+    3: 0.1,     # Tier 3 leagues
     4: 0.95,    # Tier 4 leagues and below
-    5: 0.9      # Tier 5 leagues
+    5: 0.90,    # Tier 5 leagues
+    6: 0.85     # Default value for leagues not found
 }
 
 def smartScore(player, pos, budget, expectations, league):
@@ -658,15 +659,24 @@ def smartScore(player, pos, budget, expectations, league):
     weights = position_weights.get(pos)
 
     smart_score = smartscore_attributes(player, pos, league, weights)
+    #Penalize players with few minutes played
+    if getattr(player, 'Min') < 500:
+        smart_score *= 0.8
+    elif getattr(player, 'Min') < 750:
+        smart_score *= 0.85
+    elif getattr(player, 'Min') < 1000:
+        smart_score *= 0.9
+    elif getattr(player, 'Min') < 1500:
+        smart_score *= 0.95
 
-    print ("Smart Score after attribute weighting: ", smart_score) #62
+    print ("Smart Score after attribute weighting: ", smart_score) 
 
     # We want to give a higher score to players with higher potential ability, compared to current ability
     # The greater  the difference between potential ability and current ability, the higher the score (exponential growth)
     projected_growth = (getattr(player, 'Pot_abil') / getattr(player, 'CAbil'))
     print("Projected growth: ", projected_growth)
     projected_growth = min(1.8, projected_growth) # Cap the growth at 1.8
-    smart_score *= pow(projected_growth, 1.5 + expectations/2)
+    smart_score *= pow(projected_growth, 0.5 + expectations/2)
         
     # Threshold is 27 years old, the further away from this age, the higher the penalty or bonus (exponential growth)
     growth_factor = expectations 
@@ -701,6 +711,8 @@ def smartScore(player, pos, budget, expectations, league):
     
 
     print("SmartScore final: ", round(smart_score))
+    if smart_score > 99:
+        return 99
     return round(smart_score) #Round to the nearest whole number
 
 
@@ -722,7 +734,7 @@ def adjust_for_budget(budget, playerValue):
     # Parameters for the sigmoid function
     a = 10  # Controls the steepness of the curve
     b = 0.2  # Shifts the curve along the x-axis
-    c = 0.75  # Maximum value of the curve
+    c = 0.65  # Maximum value of the curve
 
     # Calculate the adjustment factor using the sigmoid function
     adjustment_factor = sigmoid(budgetFraction, a=a, b=b, c=c)
@@ -757,13 +769,13 @@ def calculate_age_score(age, growth_factor):
     else:
         # Player is older than the threshold, penalize
         score -= calculation
-
+    print ("Age score: ", score)
     return score
 
 
 def calculate_league_multiplier(league):
     # Get the league tier
-    league_tier = league_tiers.get(league, 5)  # Default to Tier 5 if league not found
+    league_tier = league_tiers.get(league, 6)  # Default to Tier 5 if league not found
     
     # Get the multiplier for the league tier
     multiplier = league_multipliers.get(league_tier, 0.85)  # If tier not found, default to 0.85
