@@ -1,9 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const openListIcon = document.getElementById('openListIcon');
-    const catSubMenu = document.querySelector('.cat-sub-menu');
+    // Get the button and list elements
+    const button = document.getElementById('openListIcon1');
+    const list = document.getElementById('list1');
 
-    openListIcon.addEventListener('click', function() {
-        catSubMenu.classList.toggle('show');
-        console.log('clicked');
+    // Add click event listener to the button
+    button.addEventListener('click', function() {
+        // Toggle the visibility of the list
+        list.classList.toggle('show');
     });
 });

@@ -860,3 +860,15 @@ form {
     height: 40px;
     animation: spinner 0.8s linear infinite;
 }
+
+.show {
+    display: block !important;
+}
+
+#cat-sub-menu {
+    display: none;
+}
+
+#cat-sub-menu.show {
+    display: block;
+}

@@ -36,42 +36,37 @@
             </div>
 
             <div class="sidebar-body">
-
                 <div class="sidebar-body-menu">
-                   
                     <a class="active" href="{% url 'home' %}">
                         <i class="bi bi-house-fill"></i>Home
                     </a>
-                
+            
                     <a class="show-cat-btn" href="##">
                         <i class="bi bi-grid-1x2-fill"></i>Tools
-                        <i id="openListIcon" class="bi bi-caret-down"></i>
-                        
+                        <i id="openListIcon1" class="bi bi-caret-down"></i>
                     </a>
-                    <ul class="cat-sub-menu">
-                        
+                    <ul id="list1" class="cat-sub-menu"> 
                         <a href="{% url 'advanced_search' %}"><i class="bi bi-search"></i>Advanced Search</a>
                         <a href="{% url 'squad_builder' %}"><i class="bi bi-tools" aria-hidden="true"></i>Squad Builder</a>
                         <a href="{% url 'futureScope' %}"><i class="bi bi-compass"></i>FutureScope</a>
                         <a href="{% url 'recommended_signings' %}"><i class="bi bi-clipboard-plus"></i>Recommended Signings</a>
                     </ul>
-
+            
                     <a class="show-cat-btn" href="##">
                         <i class="bi bi-bookshelf"></i>Library
-                        <i id="openListIcon" class="bi bi-caret-down"></i>
+                        <i id="openListIcon2" class="bi bi-caret-down"></i>
                     </a>
-
                     <ul class="cat-sub-menu">
                         <a href="{% url 'my_squads' %}"><i class="bi bi-people-fill"></i>My Squads</a>
                         <a href="{% url 'shortlist' %}"><i class="bi bi-star-fill"></i>Shortlist</a>
                     </ul>
-                
+            
                     <a href="{% url 'about' %}"><i class="bi bi-info-circle-fill"></i></span>About</a>
-                
+            
                     <a href="##"><i class="bi bi-gear-fill"></i></span>Settings</a>
-                
                 </div>
             </div>
+            
         </div>
         
     </div>
