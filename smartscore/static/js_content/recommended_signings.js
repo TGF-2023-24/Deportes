@@ -42,8 +42,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const profileSelect = document.getElementById('profile');
     const archetypeSelect = document.getElementById('archetype');
 
-    // Get the regenerate button
-    const regenerateButton = document.getElementById('regenerate');
+    const recommendationSection = document.querySelector('.recommendation-section');
+
+    const titleElement = document.getElementById('recommend-title');
+    
+    titleElement.style.display = 'none';
+
 
     // Global variable to keep track of the current index
     let currentIndex = 0;
@@ -85,6 +89,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Event listener to trigger recommendations when the "recommend" button is clicked
     recommendButton.addEventListener('click', function() {
+
+        // Get the spinner container element
+        const spinnerContainer = document.querySelector('.spinner-container');
+
+        // Create the loading spinner element
+        const loadingSpinner = document.createElement('div');
+        loadingSpinner.classList.add('spinner'); // Apply the spinner CSS class
+
+        // Append the loading spinner to the spinner container
+        spinnerContainer.appendChild(loadingSpinner);
+
         // Get the select elements
         const profileSelect = document.getElementById('profile');
         const archetypeSelect = document.getElementById('archetype');
@@ -122,19 +137,39 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Display the recommendations
                 if (data.length > 0) {
                     currentIndex = 0; // Reset currentIndex to 0 when new recommendations are fetched
+                    spinnerContainer.removeChild(loadingSpinner); // Remove the loading spinner
+                    titleElement.style.display = 'block';
+                    
+                    //create regenerate button  
+                    const regenerateButton = document.createElement('button');
+                    regenerateButton.id = 'regenerate';
+                    regenerateButton.textContent = 'Regenerate';
+                    regenerateButton.classList.add('primary-default-btn');
+                    
+                    regenerateButton.addEventListener('click', function() {
+                        // Increment currentIndex to shift the recommendations to the next set
+                        currentIndex = (currentIndex + 3) % newData.length; // Wrap around to the beginning if currentIndex exceeds data length
+                    
+                        // Display recommendations based on the updated currentIndex
+                        displayRecommendations(newData);
+                    });
+
+                    // Append the regenerate button to the recommendation section
+                    recommendationSection.appendChild(regenerateButton);
 
                     displayRecommendations(data);
 
                    // Add save button
-                    const recommendationSection = document.querySelector('.recommendation-section');
                     const saveButton = document.createElement('button');
                     saveButton.id = 'save';
                     saveButton.textContent = 'Save';
                     saveButton.classList.add('primary-default-btn');
 
-                    // Append the save button next to the regenerate button
-                    const regenerateButton = recommendationSection.querySelector('#regenerate');
-                    regenerateButton.parentNode.insertBefore(saveButton, regenerateButton.nextSibling);
+                    // Add some separation to the save button
+                    saveButton.style.marginLeft = '10px'; // Adjust the margin as needed
+
+                    // Append the save button to the recommendation section
+                    recommendationSection.appendChild(saveButton);
 
                     const requestData = {
                         position: selectedProfile,
@@ -176,13 +211,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     });
 
-    regenerateButton.addEventListener('click', function() {
-        // Increment currentIndex to shift the recommendations to the next set
-        currentIndex = (currentIndex + 3) % newData.length; // Wrap around to the beginning if currentIndex exceeds data length
     
-        // Display recommendations based on the updated currentIndex
-        displayRecommendations(newData);
-    });
     
     function displayRecommendations(data) {
     
