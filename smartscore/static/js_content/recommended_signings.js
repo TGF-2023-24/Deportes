@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         //currentIndex = (currentIndex - 3 + newData.length) % newData.length; // Ensure positive value
 
                         // Display recommendations based on the updated currentIndex
-                        displayRecommendations(newData);
+                        displayRecommendations(newData, selectedProfile, selectedArchetype, selectedFoot);
                     });
 
                     recommendationSection.appendChild(previousButton);
@@ -186,7 +186,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             currentIndex += 3;
                         }
                         // Display recommendations based on the updated currentIndex
-                        displayRecommendations(newData);
+                        displayRecommendations(newData, selectedProfile, selectedArchetype, selectedFoot);
                     });
 
                     nextButton.style.marginLeft = '10px'; // Adjust the margin as needed
@@ -213,49 +213,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     recommendationSection.appendChild(separationElement);
 
                     recommendationSection.appendChild(infoText);
-                    displayRecommendations(data);
-
-                   // Add save button
-                    const saveButton = document.createElement('button');
-                    saveButton.id = 'save';
-                    saveButton.textContent = 'Save';
-                    saveButton.classList.add('primary-default-btn');
-
-                    // Add some separation to the save button
-                    saveButton.style.marginLeft = '10px'; // Adjust the margin as needed
-
-                    // Append the save button to the recommendation section
-                    recommendationSection.appendChild(saveButton);
-
-                    const requestData = {
-                        position: selectedProfile,
-                        archetype: selectedArchetype,
-                        foot: selectedFoot,
-                        data: data  // Include the recommendations data
-                    };
-
-                    console.log('Data:', requestData);
-
-                    saveButton.addEventListener('click', function() {
-                        fetch('/api/save-recommendations/', {
-                            method: 'POST',  
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRFToken': getCookie('csrftoken')
-                            },        
-                            body: JSON.stringify(requestData)
-                            
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                console.log('Success:', data);
-                                alert('Recommendations saved successfully');
-                            })
-                            .catch(error => {
-                                console.error('Error saving recommendations:', error);
-                                alert('An error occurred while saving recommendations');
-                            });
-                    });
+                    displayRecommendations(data, selectedProfile, selectedArchetype, selectedFoot);
+              
                 }
                 else {
                     alert('No recommendations found');
@@ -269,7 +228,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     
     
-    function displayRecommendations(data) {
+    function displayRecommendations(data, selectedProfile, selectedArchetype, selectedFoot) {
     
         // Select recommendation containers
         const recommendationContainers = [
@@ -323,6 +282,11 @@ document.addEventListener('DOMContentLoaded', function() {
     
             // Append player element to recommendation container
             container.appendChild(playerElement);
+
+            // Create container for smart score display and save button
+            const smartScoreAndButtonContainer = document.createElement('div');
+            smartScoreAndButtonContainer.style.display = 'inline-block'; // Set display property
+
     
            // Create smart score container
             const smartScoreContainer = document.createElement('div');
@@ -337,9 +301,51 @@ document.addEventListener('DOMContentLoaded', function() {
     
             // Append smart score display to smart score container
             smartScoreContainer.appendChild(smartScoreDisplay);
+
+            // Add save button
+            const saveButton = document.createElement('button');
+            saveButton.id = 'save';
+            saveButton.textContent = 'Save';
+            saveButton.classList.add('primary-default-btn');
+
+            // Add some separation to the save button
+            saveButton.style.marginBottom = '10px'; // Adjust the margin as needed
+
+            // Append the save button to the recommendation section
+            
+
+            const requestData = {
+                position: selectedProfile,
+                archetype: selectedArchetype,
+                foot: selectedFoot,
+                recommendation: recommendation  // Include the recommendations data
+            };
+
+            console.log('Data:', requestData);
+
+            saveButton.addEventListener('click', function() {
+                fetch('/api/save-recommendations/', {
+                    method: 'POST',  
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },        
+                    body: JSON.stringify(requestData)                    
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Success:', data);
+                        alert(data.message);
+                    })
+                    .catch(error => {
+                        console.error('Error saving recommendations:', error);
+                        alert('An error occurred while saving recommendations');
+                    });
+            });
     
-            // Append smart score container to recommendation container
-            container.appendChild(smartScoreContainer);
+            smartScoreAndButtonContainer.appendChild(smartScoreContainer);
+            smartScoreAndButtonContainer.appendChild(saveButton);
+            container.appendChild(smartScoreAndButtonContainer);
 
             updateBubbleColor(recommendation.score, smartScoreDisplay);
         });

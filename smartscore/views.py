@@ -520,34 +520,39 @@ def save_recommendations(request):
         position = request_data.get('position')
         archetype = request_data.get('archetype')
         foot = request_data.get('foot')
-        recommendations_data = request_data.get('data')
+        recommendations_data = request_data.get('recommendation')
 
         print("Archeotipe is", archetype, "Position is", position, "Foot is", foot)
         print("Data is", recommendations_data)
 
         name = 'Recommendations for ' + archetype + ' ' + position + ' players with ' + foot + ' foot'
 
-        # Create a new recommendation object with the given name
-        shortlist = Shortlist.objects.create(name=name)
+        # if shorlist doesn't exist, create it
+        if not Shortlist.objects.filter(name=name).exists():
+            shortlist = Shortlist.objects.create(name=name)
+        else:
+            shortlist = Shortlist.objects.get(name=name)
+        
+        player_name = recommendations_data['name']         
 
-         # Iterate through recommendations data, find corresponding player objects, and add them to the shortlist
-        for player_info in recommendations_data:
-            player_name = player_info['name']         
-
-            # Find player object by name (assuming 'name' is a unique field in your Player model)
-            try:
-                player = Player.objects.get(Name=player_name)
-                # Add player to the shortlist
+        # Find player object by name (assuming 'name' is a unique field in your Player model)
+        try:
+            player = Player.objects.get(Name=player_name)
+            # Add player to the shortlist if not already in it 
+            if player not in shortlist.players.all():
                 shortlist.players.add(player)
-            except Player.DoesNotExist:
-                print(f"Player '{player_name}' not found in the database.")
+                message = "Player " + player_name + " saved successfully."
+            else:
+                message = "Player " + player_name + " is already in the shortlist."
+        except Player.DoesNotExist:
+            message = "Player " + player_name + " not found in the database."
 
         request.user.userprofile.shortlist.add(shortlist)
 
         # Save the recommendations to the database
-        return JsonResponse({'message': 'Recommendations saved successfully'})
+        return JsonResponse({'message': message})
     else:
-        return JsonResponse({'error': 'Invalid request method'}, status=400)
+        return JsonResponse({'error': message}, status=400)
 
 @login_required(login_url='login')
 def shortlist(request):
