@@ -138,24 +138,81 @@ document.addEventListener('DOMContentLoaded', function() {
                     currentIndex = 0; // Reset currentIndex to 0 when new recommendations are fetched
                     spinnerContainer.removeChild(loadingSpinner); // Remove the loading spinner
                     titleElement.style.display = 'block';
+
+                    //remove any button if they exist  
+                    const ispreviousButton = document.getElementById('previousButton');
+                    if (ispreviousButton) {
+                        recommendationSection.removeChild(ispreviousButton);
+                    }
                     
-                    //create regenerate button  
-                    const regenerateButton = document.createElement('button');
-                    regenerateButton.id = 'regenerate';
-                    regenerateButton.textContent = 'Regenerate';
-                    regenerateButton.classList.add('primary-default-btn');
+                    const isnextButton = document.getElementById('nextButton');
+                    if (isnextButton) {
+                        recommendationSection.removeChild(isnextButton);
+                    }
+
+                    const issaveButton = document.getElementById('save');
+                    if (issaveButton) {
+                        recommendationSection.removeChild(issaveButton);
+                    }
+                 
                     
-                    regenerateButton.addEventListener('click', function() {
-                        // Increment currentIndex to shift the recommendations to the next set
-                        currentIndex = (currentIndex + 3) % newData.length; // Wrap around to the beginning if currentIndex exceeds data length
-                    
+                    const previousButton = document.createElement('button');
+                    previousButton.textContent = 'Previous';
+                    previousButton.classList.add('primary-default-btn');
+                    previousButton.id = 'previousButton';
+
+                    previousButton.addEventListener('click', function() {
+                        // Decrement currentIndex to move to the previous set of recommendations
+                        if (currentIndex - 3 >= 0) {
+                            currentIndex -= 3;
+                        }
+
+                        //currentIndex = (currentIndex - 3 + newData.length) % newData.length; // Ensure positive value
+
                         // Display recommendations based on the updated currentIndex
                         displayRecommendations(newData);
                     });
 
-                    // Append the regenerate button to the recommendation section
-                    recommendationSection.appendChild(regenerateButton);
+                    recommendationSection.appendChild(previousButton);
 
+                    const nextButton = document.createElement('button');
+                    nextButton.textContent = 'Next';
+                    nextButton.classList.add('primary-default-btn');
+                    nextButton.id = 'nextButton';
+
+                    nextButton.addEventListener('click', function() {
+                        // Increment currentIndex to move to the next set of recommendations
+                        if (currentIndex + 3 < newData.length) {
+                            currentIndex += 3;
+                        }
+                        // Display recommendations based on the updated currentIndex
+                        displayRecommendations(newData);
+                    });
+
+                    nextButton.style.marginLeft = '10px'; // Adjust the margin as needed
+
+                    recommendationSection.appendChild(nextButton);
+
+                    
+                    // Create info text element
+                    const infoText = document.createElement('span');
+                    infoText.id = 'infoText';
+
+                    // Function to update info text
+                    function updateInfoText() {
+                        const currentPage = Math.floor(currentIndex / 3) + 1; // Current page number
+                        const totalPages = Math.ceil(newData.length / 3); // Total number of pages
+                        infoText.textContent = `Page ${currentPage} of ${totalPages}`; // Display page information
+                    }
+
+                    updateInfoText(); // Initial update
+
+                    // Add separation between buttons and info text
+                    const separationElement = document.createElement('div');
+                    separationElement.style.marginTop = '10px'; // Adjust margin as needed
+                    recommendationSection.appendChild(separationElement);
+
+                    recommendationSection.appendChild(infoText);
                     displayRecommendations(data);
 
                    // Add save button
@@ -290,7 +347,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updateBubbleColor(smartscore, smartScoreDisplay) {
         if (smartScoreDisplay) {
-            console.log(smartscore);
             smartScoreDisplay.style.backgroundColor = testColorGradient(smartscore);
         }      
     }

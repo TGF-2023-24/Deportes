@@ -648,7 +648,7 @@ league_tiers = {
 league_multipliers = {
     1: 1.10,    # Tier 1 leagues
     2: 1.05,    # Tier 2 leagues
-    3: 0.1,     # Tier 3 leagues
+    3: 1,     # Tier 3 leagues
     4: 0.95,    # Tier 4 leagues and below
     5: 0.90,    # Tier 5 leagues
     6: 0.85     # Default value for leagues not found
