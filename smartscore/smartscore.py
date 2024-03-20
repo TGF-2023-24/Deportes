@@ -681,6 +681,7 @@ def smartScore(player, pos, budget, expectations, league):
     # Threshold is 27 years old, the further away from this age, the higher the penalty or bonus (exponential growth)
     growth_factor = expectations 
     age_score = calculate_age_score(getattr(player, 'Age'), growth_factor)
+    print("Age score is ", age_score)
     smart_score *= age_score
 
     print("Smart Score after age and potential ability weighting: ", smart_score)

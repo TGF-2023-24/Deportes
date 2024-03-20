@@ -502,6 +502,7 @@ def get_recommendations(request):
             'name': player.Name,
             'score': score,
             'dorsal': player.Dorsal,
+            'id': player.custom_id,
         }
         final_players.append(player_info)
 

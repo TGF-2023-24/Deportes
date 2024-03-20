@@ -13,7 +13,9 @@
             <div class="main-nav-body">
                 <!-- Player image -->
                 <div class="player-image-container">
-                    <img src="{% static 'smartscore/images/faces/' %}{{ player.custom_id|stringformat:"s" }}.png" alt="{{ player.custom_id }}" class="player-image">
+                    <img src="{% static 'smartscore/images/faces/' %}{{ player.custom_id|stringformat:"s" }}.png"
+                        onerror="this.onerror=null; this.src='{% static 'smartscore/images/faces/unknown.png' %}'"
+                        alt="{{ player.custom_id }}" class="player-image">
                 </div>
 
                 <!--Shirt image with number-->

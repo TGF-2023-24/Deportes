@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     currentIndex = 0; // Reset currentIndex to 0 when new recommendations are fetched
                     spinnerContainer.removeChild(loadingSpinner); // Remove the loading spinner
                     titleElement.style.display = 'block';
-
+                    // Clear previous recommendations
                     //remove any button if they exist  
                     const ispreviousButton = document.getElementById('previousButton');
                     if (ispreviousButton) {
@@ -150,10 +150,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         recommendationSection.removeChild(isnextButton);
                     }
 
-                    const issaveButton = document.getElementById('save');
-                    if (issaveButton) {
-                        recommendationSection.removeChild(issaveButton);
-                    }
+                    
                  
                     
                     const previousButton = document.createElement('button');
@@ -171,6 +168,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                         // Display recommendations based on the updated currentIndex
                         displayRecommendations(newData, selectedProfile, selectedArchetype, selectedFoot);
+                        updateInfoText(); // Update the info text
                     });
 
                     recommendationSection.appendChild(previousButton);
@@ -187,6 +185,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                         // Display recommendations based on the updated currentIndex
                         displayRecommendations(newData, selectedProfile, selectedArchetype, selectedFoot);
+                        updateInfoText(); // Update the info text
                     });
 
                     nextButton.style.marginLeft = '10px'; // Adjust the margin as needed
@@ -248,6 +247,38 @@ document.addEventListener('DOMContentLoaded', function() {
         // Populate recommendation containers
         slicedData.forEach((recommendation, index) => {
             const container = recommendationContainers[index];
+
+            // Assuming recommendation object contains an 'id' property
+            const playerId = recommendation.id;
+
+            // Create a link (anchor) element
+            const playerLink = document.createElement('a');
+            const playerLinkImage = document.createElement('a');
+
+            // Set the href attribute to the URL of the player_detail page for the specific player
+            const playerDetailUrl = `/player/${playerId}`; // Replace playerId with the actual player ID
+            playerLink.href = playerDetailUrl;
+            playerLinkImage.href = playerDetailUrl;
+            playerLink.target = '_blank';
+            playerLinkImage.target = '_blank';
+
+            const playerImageFilename = `${playerId}.png`; // or whatever extension your images have
+            const playerImageUrl = `/static/smartscore/images/faces/${playerImageFilename}`;
+
+            // Now playerImageUrl contains the URL for the player image
+            const playerImageElement = document.createElement('img');
+            playerImageElement.src = playerImageUrl; // Use the URL
+            playerImageElement.alt = 'Player Image';
+            playerImageElement.classList.add('player-image'); // Add class for player image
+
+            playerImageElement.addEventListener('error', function() {
+                // If the image fails to load, use a placeholder image
+                playerImageElement.src = '/static/smartscore/images/faces/unknown.png';
+            });
+
+            // Append the shirt image element to the player link
+            playerLinkImage.appendChild(playerImageElement);
+            container.appendChild(playerLinkImage);
             
             // Create player element
             const playerElement = document.createElement('div');
@@ -257,7 +288,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const shirtImageElement = document.createElement('img');
             shirtImageElement.src = shirt_img; // Use the variable defined in your HTML
             shirtImageElement.alt = 'Shirt';
-    
+            shirtImageElement.classList.add('shirt-image'); // Add class for shirt image
             // Create player details container
             const playerDetailsElement = document.createElement('div');
             playerDetailsElement.classList.add('player-details');
@@ -265,7 +296,9 @@ document.addEventListener('DOMContentLoaded', function() {
             // Create player name element
             const playerNameElement = document.createElement('p');
             playerNameElement.classList.add('player-name');
-            playerNameElement.textContent = recommendation.name;
+            nameParts = recommendation.name.split(' ');
+            lastName = nameParts[nameParts.length - 1];
+            playerNameElement.textContent = lastName;
     
             // Create player number element
             const playerNumberElement = document.createElement('p');
@@ -279,10 +312,10 @@ document.addEventListener('DOMContentLoaded', function() {
             // Append shirt image and player details container to player element
             playerElement.appendChild(shirtImageElement);
             playerElement.appendChild(playerDetailsElement);
-    
+            playerLink.appendChild(playerElement);
             // Append player element to recommendation container
-            container.appendChild(playerElement);
-
+            //container.appendChild(playerElement);
+            container.appendChild(playerLink);
             // Create container for smart score display and save button
             const smartScoreAndButtonContainer = document.createElement('div');
             smartScoreAndButtonContainer.style.display = 'inline-block'; // Set display property
