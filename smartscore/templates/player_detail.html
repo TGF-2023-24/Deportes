@@ -7,11 +7,15 @@
         <div class="data-column">
 
             <div class="main-nav-header">
-                <h1>{{ player.Name }}</h1>
+                <h1>{{ player.Name }}                 </h1>
             </div>
 
             <div class="main-nav-body">
-                
+                <!-- Player image -->
+                <div class="player-image-container">
+                    <img src="{% static 'smartscore/images/faces/' %}{{ player.custom_id|stringformat:"s" }}.png" alt="{{ player.custom_id }}" class="player-image">
+                </div>
+
                 <!--Shirt image with number-->
                 <div class="shirt-container">
                     <!-- Use player's name and number to customize the shirt -->
@@ -27,42 +31,31 @@
                 {% else %}
                     <h3>Club: {{ player.Club }}</h3>
                 {% endif %}
-                <h3>Country: {{ player.Nationality }} </h3>
-                <img src="{% static 'smartscore/images/flags/normal/'|add:flag_number|add:'.png' %}" alt="{{ player.Nationality }}" class="flag-icon">
+                <h3>Country:  
+                <img src="{% static 'smartscore/images/flags/normal/'|add:flag_number|add:'.png' %}" alt="{{ player.Nationality }}" class="flag-icon"> </h3>
 
                 {% if player.market_value == 'Unknown' %}
-                    <h3>Transfermarkt Estimated Value: Not available</h3>
+                    <h4>Transfermarkt Estimated Value: Not available</h4>
                 {% else %}
-                    <h3>Transfermarkt Estimated Value: €{{ player.market_value }} M</h3>
+                    <h4>Transfermarkt Estimated Value: €{{ player.market_value }} M</h4>
                 {% endif %}
 
                 {% if player.League == '#VALUE!' %} 
-                    <h3>Player Pro Estimated Value: Not available</h3>
-                    <h3>League: Not available</h3>
-                    <h3>League Country: Not available</h3>
+                    <h4>Player Pro Estimated Value: Not available</h4>
+                    <h4>League: Not available</h4>
                 {% else %}
-                    <h3>Player Pro Estimated Value: €{{ transfer_value }} M</h3>
-                    <h3>League: {{ player.League }}</h3>
-                    <h3>League Country: {{ player.Country_league }}</h3>
+                    <h4>Player Pro Estimated Value: €{{ transfer_value }} M</h4>
+                    <h4>League: {{ player.League }}</h4>
                 {% endif %}
 
 
-                
-                <h3>Contract Due: {{ player.End_contract }}</h3>
-                <h3>Wage: {{ player.Salary }} $</h3>
+                <h4>Age: {{ player.Age }}</h4>
+                <h4>Contract Due: {{ player.End_contract }}</h4>
+                <h4>Yearly Wage: {{ player.Salary }} €</h4>
                 <br>
-                <h3>Positions:</h3>
-                    <ul>
-                        {% for position in player.Pos.all %}
-                            <li>{{ position }}</li>
-                        {% endfor %}
-                    </ul>    
-                <h3>Leg: {{ player.Pref_foot}} </h3>
-                <h3>Age: {{ player.Age }}</h3>
-                
-            
-                <h3>Height: {{ player.Height }} cm</h3>
-                <h3>Weight: {{ player.Weight }} kg</h3><br>
+                <h4>Leg: {{ player.Pref_foot}} </h4>
+                <h4>Height: {{ player.Height }} cm</h4>
+                <h4>Weight: {{ player.Weight }} kg</h4><br>
 
             </div>
         </div>

@@ -416,7 +416,18 @@ footer {
 }
 
 .shirt-image {
-    width: 200px; /* Adjust size as needed */
+    width: 150px; /* Adjust size as needed */
+    height: auto;
+}
+
+/* In order to display the player's face */
+.player-image-container {
+    position: relative;
+    display: inline-block;
+}
+
+.player-image {
+    width: 150px; /* Adjust size as needed */
     height: auto;
 }
 
@@ -429,7 +440,7 @@ footer {
 }
 
 .player-name {
-    font-size: 16px; /* Adjust font size as needed */
+    font-size: 15px; /* Adjust font size as needed */
     font-weight: bold;
     color: white; /* Adjust text color as needed */
     text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5); /* Add shadow for better visibility */
@@ -437,7 +448,7 @@ footer {
 }
 
 .player-number {
-    font-size: 60px; /* Adjust font size as needed */
+    font-size: 50px; /* Adjust font size as needed */
     font-weight: bold;
     color: white; /* Adjust text color as needed */
     text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5); /* Add shadow for better visibility */
