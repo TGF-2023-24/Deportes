@@ -339,6 +339,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     })
                     .catch(error => {
                         console.error('Error saving recommendations:', error);
+                        spinnerContainer.removeChild(loadingSpinner); // Remove the loading spinner
                         alert('An error occurred while saving recommendations');
                     });
             });

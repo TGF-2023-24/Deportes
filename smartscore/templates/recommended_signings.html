@@ -4,27 +4,33 @@
 {% block content %}
 
     <div class="search-container">
-        <div class="filter-section">
-            <h2 class="section-title">Select profile:</h2>
-            <select id="profile" class="filter-select">
-                <option value="all">All</option>
-                <option value="forward">Forward</option>
-                <option value="winger">Winger</option>
-                <option value="midfielder">Midfielder</option>
-                <option value="defender">Defender</option>
-                <option value="goalkeeper">Goalkeeper</option>
-            </select>
-            <h2 class="section-title">Select archetype:</h2>
-            <select id="archetype" class="filter-select">
-                <!-- dynamically populated -->
-            </select>
-            <h2 class="section-title">Feet preference:</h2>
-            <select id="foot" class="filter-select">
-                <option value="">All</option>
-                <option value="Either">Ambidextrous</option>
-                <option value="Left">Left</option>
-                <option value="Right">Right</option>
-            </select>
+        <div class="filter-section-recommendations">
+            <div class="recommendation-container">
+                <h2 class="section-title-r">Select profile:</h2>
+                <select id="profile" class="filter-select">
+                    <option value="all">All</option>
+                    <option value="forward">Forward</option>
+                    <option value="winger">Winger</option>
+                    <option value="midfielder">Midfielder</option>
+                    <option value="defender">Defender</option>
+                    <option value="goalkeeper">Goalkeeper</option>
+                </select>
+            </div>
+            <div class="recommendation-container">
+                <h2 class="section-title-r">Select archetype:</h2>
+                <select id="archetype" class="filter-select">
+                    <!-- dynamically populated -->
+                </select>
+            </div>
+            <div class="recommendation-container">
+                <h2 class="section-title-r">Feet preference:</h2>
+                <select id="foot" class="filter-select">
+                    <option value="">All</option>
+                    <option value="Either">Ambidextrous</option>
+                    <option value="Left">Left</option>
+                    <option value="Right">Right</option>
+                </select>
+            </div>
             <button id="recommend" class="primary-default-btn">Generate Recommendations</button>
         </div>
     </div>

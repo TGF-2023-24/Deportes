@@ -34,40 +34,39 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+      
+    if(countrySelect) {
+        // Add event listener to the country selection dropdown
+        countrySelect.addEventListener('change', function() {
+            console.log('Country selected:', this.value);
+            const selectedCountry = this.value;
+            populateLeagues(selectedCountry);
+        });
+        // Populate leagues initially (in case there is a pre-selected country)
+        populateLeagues(countrySelect.value);
+  
+        const transferBudget = document.getElementById('transfer-budget');
+        transferBudget.addEventListener('input', function() {
+            if (this.value.length > 4) {
+                this.value = this.value.slice(0, 4); // Limit input to four digits
+            }
+        });
+        
 
+        // Add event listener to the form submission
+        const futureScopeForm = document.getElementById('future-scope-form');
+        futureScopeForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const transferBudget = document.getElementById('transfer-budget').value;
+            const selectedLeague = document.getElementById('league-select').value;
+            const selectedExpectations = document.getElementById('expectations').value;
+            console.log('Submitting form with Transfer Budget:', transferBudget);
+            console.log('Selected League:', selectedLeague);
+            console.log('Selected Expectations:', selectedExpectations);
+            saveFutureScopeSettings(transferBudget, selectedLeague, selectedExpectations);
+        });
 
-    // Add event listener to the country selection dropdown
-    countrySelect.addEventListener('change', function() {
-        console.log('Country selected:', this.value);
-        const selectedCountry = this.value;
-        populateLeagues(selectedCountry);
-    });
-
-    // Populate leagues initially (in case there is a pre-selected country)
-    populateLeagues(countrySelect.value);
-
-    const transferBudget = document.getElementById('transfer-budget');
-    transferBudget.addEventListener('input', function() {
-        if (this.value.length > 4) {
-            this.value = this.value.slice(0, 4); // Limit input to four digits
-        }
-    });
-    
-
-    // Add event listener to the form submission
-    const futureScopeForm = document.getElementById('future-scope-form');
-    futureScopeForm.addEventListener('submit', function(event) {
-        event.preventDefault();
-        const transferBudget = document.getElementById('transfer-budget').value;
-        const selectedLeague = document.getElementById('league-select').value;
-        const selectedExpectations = document.getElementById('expectations').value;
-        console.log('Submitting form with Transfer Budget:', transferBudget);
-        console.log('Selected League:', selectedLeague);
-        console.log('Selected Expectations:', selectedExpectations);
-        saveFutureScopeSettings(transferBudget, selectedLeague, selectedExpectations);
-    });
-
-    
+    }
 
 });
 

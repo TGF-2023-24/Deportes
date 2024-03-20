@@ -101,7 +101,7 @@ function saveFutureScopeSettings(transferBudget, selectedLeague, selectedExpecta
     .then(data => {
         console.log('Future scope settings saved:', data);
         // Handle success (e.g., display success message to user)
-        window.location.reload(); // Reload the page
+        window.location.href = '/futureScope'; // Redirect to the futurescope page
     })
     .catch(error => {
         console.error('Error saving future scope settings:', error);

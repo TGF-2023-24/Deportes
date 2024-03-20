@@ -872,3 +872,29 @@ form {
 #cat-sub-menu.show {
     display: block;
 }
+
+
+.filter-section-recommendations {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start; /* Align items to the start of the container */
+}
+
+.recommendation-container {
+    flex: 0 0 50%; /* Set the width of the container to 50% */
+    margin-bottom: 10px; /* Add space below each container */
+}
+
+.section-title {
+    margin-bottom: 5px; /* Add space below section titles */
+}
+
+.filter-select {
+    margin-bottom: 5px; /* Add space below select elements */
+    width: 100%; /* Make select elements fill the entire width of the container */
+}
+
+#recommend {
+    flex: 0 0 100%; /* Set the width of the button to 100% */
+    margin-top: 10px; /* Add space above the button */
+}
