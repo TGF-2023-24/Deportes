@@ -22,12 +22,32 @@
                     </div>
                 </div>
                 <br>
-                <h3>Club: {{ player.Club }}</h3>
+                {% if player.Club == '#VALUE!' %}
+                    <h3>Club: Not available</h3>
+                {% else %}
+                    <h3>Club: {{ player.Club }}</h3>
+                {% endif %}
                 <h3>Country: {{ player.Nationality }} </h3>
                 <img src="{% static 'smartscore/images/flags/normal/'|add:flag_number|add:'.png' %}" alt="{{ player.Nationality }}" class="flag-icon">
-                <h3>Transfermarkt Estimated Value: €{{player.market_value}}M</h3>
-                <h3>League: {{ player.League }}</h3>
-                <h3>League Country: {{ player.Country_league }}</h3>
+
+                {% if player.market_value == 'Unknown' %}
+                    <h3>Transfermarkt Estimated Value: Not available</h3>
+                {% else %}
+                    <h3>Transfermarkt Estimated Value: €{{ player.market_value }} M</h3>
+                {% endif %}
+
+                {% if player.League == '#VALUE!' %} 
+                    <h3>Player Pro Estimated Value: Not available</h3>
+                    <h3>League: Not available</h3>
+                    <h3>League Country: Not available</h3>
+                {% else %}
+                    <h3>Player Pro Estimated Value: €{{ transfer_value }} M</h3>
+                    <h3>League: {{ player.League }}</h3>
+                    <h3>League Country: {{ player.Country_league }}</h3>
+                {% endif %}
+
+
+                
                 <h3>Contract Due: {{ player.End_contract }}</h3>
                 <h3>Wage: {{ player.Salary }} $</h3>
                 <br>

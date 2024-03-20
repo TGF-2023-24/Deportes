@@ -9,7 +9,7 @@ from django.db.models import Q
 from django import forms
 from .forms import CreateUserForm, SquadUpdateForm, SquadCreationForm
 from django.contrib.auth.decorators import login_required #utilizar este decorador para proteger las rutas que requieren autenticación
-from .utils import get_dot_positions, get_player_stats, get_pos_stats, get_default_stats, get_squad_players, search_players_by_positions, get_squad_stats, get_default_avg_stats, get_better_players, filter_recommendations
+from .utils import get_dot_positions, get_player_stats, get_pos_stats, get_default_stats, get_squad_players, search_players_by_positions, get_squad_stats, get_default_avg_stats, get_better_players, filter_recommendations, estimate_transfer_value
 from django.http import JsonResponse, Http404
 import json
 from .dictionary import fifa_country_codes  
@@ -31,6 +31,7 @@ def player_detail(request, custom_id):
     dot_positions = get_dot_positions(player.Pos)
     squads = None
     stats = get_default_stats(player)
+
     # Check if the player's nationality code exists in the FIFA country codes
     flag_number = None
     if player.Nationality in fifa_country_codes:
@@ -38,7 +39,10 @@ def player_detail(request, custom_id):
     if request.user.is_authenticated:
         user = request.user
         squads = user.userprofile.squads.all()
-    return render(request, 'player_detail.html', {'player': player, 'dot_positions': dot_positions, 'stats': stats, 'squads': squads, 'flag_number': flag_number})
+
+    transfer_value = estimate_transfer_value(player)
+
+    return render(request, 'player_detail.html', {'player': player, 'dot_positions': dot_positions, 'stats': stats, 'squads': squads, 'flag_number': flag_number, 'transfer_value': transfer_value})
 
 def position_stats_api(request, position, custom_id):
     # Retrieve statistics for the given position
@@ -443,7 +447,6 @@ def player_smartscore_api(request, position, custom_id):
         league = ""
         expectations = 1
         budget = 9999
-    print("League is", league, "Expectations is", expectations, "Budget is", budget)
     # Get the player's smartscore
     score = smartScore(player, position, budget, expectations, league)
     print("Score is", score)

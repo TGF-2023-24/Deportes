@@ -3,6 +3,7 @@ from .models import Player, Position, Squad
 from .dictionary import stats_position_dictionary
 import requests
 import numpy as np
+import math
 
 def get_dot_positions(player_pos):
     position_mapping = {
@@ -433,7 +434,70 @@ def filter_recommendations(positions, attributes, foot):
 
     
     
+def estimate_transfer_value(player):
+  # Fetch players from the same league and position
+    similar_players = Player.objects.filter(League=player.League, Pos__in=player.Pos.all())
 
+    # Exclude the current player from the similar players
+    similar_players = similar_players.exclude(custom_id=player.custom_id)
 
+    # Extract market values of similar players
+    market_values = []
+    for similar_player in similar_players:
+        try:
+            market_value = float(similar_player.market_value)
+            market_values.append(market_value)
+        except ValueError:
+            pass  # Handle cases where market_value is not a valid float
 
+    # Calculate the average market value
+    if market_values:
+        average_market_value = sum(market_values) / len(market_values)
+    else:
+        # If no similar players have valid market values, return None
+        return None
     
+    print(f"Average market value of similar players: {average_market_value}")   
+
+    if player.market_value == 'Unknown':
+        return estimate_transfer_value
+    else:
+        # Calculate the difference between the player's market value and the average market value
+        difference = float(player.market_value) - average_market_value
+
+        print(f"Difference between player's market value and average market value: {difference}")
+
+        # Define threshold for difference being too big
+        threshold = 4.0  # You can adjust this threshold based on your specific criteria
+
+        if abs(difference) > threshold:
+            # If the difference is too big, return the player's market value with a slight adjustment
+            if difference > 0:
+                estimated_transfer_value = round(float(player.market_value) * 1.03, 2)  # Adjust positively by 5%
+            else:
+                estimated_transfer_value = round(float(player.market_value) * 0.98, 2)  # Adjust negatively by 5%
+        else:
+            # Apply regular adjustment factor calculation
+            if float(player.market_value) < 1.0:
+                if difference > 0:
+                    adjustment_factor = 1.5
+                else:
+                    adjustment_factor = 0.5
+            elif float(player.market_value) < 5.0:
+                if difference > 0:
+                    adjustment_factor = 1.3
+                else:
+                    adjustment_factor = 0.7
+            else:
+                if difference > 0:
+                    adjustment_factor = 1.2
+                else:
+                    adjustment_factor = 0.8
+
+            print(f"Adjustment factor: {adjustment_factor}")
+
+            # Return the adjusted estimated transfer value
+            estimated_transfer_value = round(average_market_value * adjustment_factor, 2)
+
+        # Return the estimated transfer value
+        return estimated_transfer_value
