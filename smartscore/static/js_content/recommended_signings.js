@@ -150,8 +150,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         recommendationSection.removeChild(isnextButton);
                     }
 
-                    
-                 
+                    const isinfoText = document.getElementById('infoText');
+                    if (isinfoText) {
+                        recommendationSection.removeChild(isinfoText);
+                    }
+
                     
                     const previousButton = document.createElement('button');
                     previousButton.textContent = 'Previous';
