@@ -204,29 +204,32 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
+    // Initialize an array to store player position containers for each position
+    const playerPositionContainers = {};
+
     function addPlayerImage(position, playerName) {
         console.log('Adding player image:', playerName, 'at position:', position);
-        const fieldContainer = document.querySelector('.football-field-container-squad-builder'); 
+        const fieldContainer = document.querySelector('.football-field-container-squad-builder');
         console.log(fieldContainer);
         const containerWidth = fieldContainer.offsetWidth;
         const containerHeight = fieldContainer.offsetHeight;
-    
+
         // Initialize player count for this position if it doesn't exist
         if (!playerCounts[position]) {
             playerCounts[position] = 0;
         }
-    
+
         // Get the number of players already present at this position
         const numPlayers = playerCounts[position];
-    
+
         console.log('Number of players at position:', position, 'is:', numPlayers);
-        
+
         playerPositionMapping[playerName] = position;
         const playerPosition = document.createElement('div');
         playerPosition.className = 'player-position';
         playerPosition.id = `player-position-${playerName}`; // Add unique id for the player position
         playerPosition.style.position = 'absolute'; // Position absolutely
-    
+
         //Get player ID from the name
         fetch('/get-id-from-playerName/' + playerName)
             .then(response => {
@@ -250,19 +253,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 playerImage.style.height = '55px'; // Adjust height as needed
 
                 // Calculate the position of the image based on container dimensions
-                const left = parseFloat(positionMapping[position].left) / 500 * containerWidth + numPlayers * 48; // Normalize left position
+                const left = parseFloat(positionMapping[position].left) / 500 * containerWidth; // Normalize left position
                 const top = parseFloat(positionMapping[position].top) / 800 * containerHeight; // Normalize top position
+
                 playerPosition.style.left = left + 'px';
                 playerPosition.style.top = top + 'px';
                 fieldContainer.appendChild(playerPosition);
                 console.log('Player image added:', playerName, 'at position:', left, top);
-            
+
                 // Append the player image to the player position container
                 playerPosition.appendChild(playerImage);
-            
+
                 // Increment the player count for this position
                 playerCounts[position]++;
-            
+
+                console.log('Player position containers:', playerPositionContainers);
+                // Add the player position container to the array for this position
+                if (!playerPositionContainers[position]) {
+                    playerPositionContainers[position] = [];
+                }
+                playerPositionContainers[position].push(playerPosition);
+
                 // Add the remove button
                 const removeButton = document.createElement('button');
                 removeButton.textContent = 'X';
@@ -272,7 +283,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 removeButton.style.top = -10 + 'px'; // Adjust the position of the button
                 removeButton.style.left = 32 + 'px'; // Adjust the position of the button
                 console.log('Remove button added:', playerName, 'at position:', left + 20, top - 20);
-            
+
                 // Add click event listener to remove the player
                 removeButton.addEventListener('click', function () {
                     playerPosition.remove();
@@ -290,23 +301,38 @@ document.addEventListener('DOMContentLoaded', function() {
                     playerButtons.forEach(button => {
                         if (button.textContent == removedPlayerName) {
                             button.style.textDecoration = 'none';
-                            button.classList.remove('active'); 
+                            button.classList.remove('active');
                             button.classList.remove('clicked');
-                        
+
                         }
                     });
                 });
                 // Append the remove button to the player position container
                 playerPosition.appendChild(removeButton);
+
+                if (playerCounts[position] > 1) {
+                // Adjust position of players based on the number of players at the position
+                    for (let i = 0; i < playerPositionContainers[position].length; i++) {
+                        let playerPositionContainer = playerPositionContainers[position][i];
+                        console.log('Adjusting position of container:', playerPositionContainer);
+                        // Adjust left position, first one to the left, second one to the right, and third one to the center
+                        if (playerCounts[position] === 2) {
+                            playerPositionContainer.style.left = (left + (i === 0 ? -24 : 24)) + 'px';
+                        } else if (playerCounts[position] === 3) {
+                            playerPositionContainer.style.left = (left + (i === 0 ? -48 : (i === 1 ? 48 : 0))) + 'px';
+                        }
+                    }
+                }
             })
-                    
-            
+
+
             .catch(error => {
                 console.error('Error fetching player ID:', error);
-            });        
-        
+            });
 
     }
+
+    
     
 
     // Function to add player name under selected position
