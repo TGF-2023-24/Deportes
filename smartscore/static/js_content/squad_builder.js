@@ -16,6 +16,24 @@ const positionMapping = {
     'STC': { top: '125px', left: '250px' }
 };
 
+const positionLimits = {
+    'GK': 1, // Limit for Goalkeeper
+    'DC': 3, // Limit for Defender Center
+    'DL': 1, // Limit for Defender Left
+    'DR': 1, // Limit for Defender Right
+    'DM': 2, // Limit for Defensive Midfielder
+    'WBL': 1, // Limit for Wing Back Left
+    'WBR': 1, // Limit for Wing Back Right
+    'MC': 3, // Limit for Midfielder Center
+    'ML': 1, // Limit for Midfielder Left
+    'MR': 1, // Limit for Midfielder Right
+    'AMC': 2, // Limit for Attacking Midfielder Center
+    'AML': 1, // Limit for Attacking Midfielder Left
+    'AMR': 1, // Limit for Attacking Midfielder Right
+    'STC': 2 // Limit for Striker Center
+};
+
+
 addedPlayerCount = 0;
 
 // Define a function to handle the selection of a squad
@@ -217,6 +235,11 @@ document.addEventListener('DOMContentLoaded', function() {
         // Initialize player count for this position if it doesn't exist
         if (!playerCounts[position]) {
             playerCounts[position] = 0;
+        }
+        // Check if the position limit has been reached
+        if (playerCounts[position] >= positionLimits[position]) {
+            alert(`Cannot add player to ${position}. Maximum limit reached.`);
+            return -1; // Exit the function if the limit is reached
         }
 
         // Get the number of players already present at this position
@@ -453,7 +476,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const playerName = activePlayerButton.textContent; // Retrieve active player name
             addedPlayerCount++;
             //addPlayerName(selectedPosition, playerName);
-            addPlayerImage(selectedPosition, playerName);
+            if (addPlayerImage(selectedPosition, playerName) == -1) {
+                return;
+            }
             // Block the player
             blockedPlayers.add(playerName);
             console.log('Player blocked:', playerName);
