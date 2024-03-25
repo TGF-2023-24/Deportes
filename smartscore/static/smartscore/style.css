@@ -482,6 +482,23 @@ footer {
     transform: translate(-50%, -50%); /* Center the dot's position */
 }
 
+.player-position-name {
+    /* Additional styles */
+    position: absolute;
+    top: 50%; /* Center the element vertically */
+    left: 50%; /* Center the element horizontally */
+    transform: translate(-50%, -50%); /* Center the element precisely */
+    background-color: #f17676; /* Set background color */
+    border: 1px solid #ff0000; /* Add a border */
+    border-radius: 5px; /* Add border radius */
+    max-width: 57px; /* Set maximum width equal to image width */
+    font-size: 0.8em; /* Set the default font size */
+    white-space: nowrap; /* Prevent text wrapping */
+    overflow: hidden; /* Hide any overflow text */
+    text-overflow: ellipsis; /* Display ellipsis if text overflows *
+}
+
+
 #example-btn {
     display: none; /* Initially hide the button */
 }
