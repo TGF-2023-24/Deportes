@@ -1,3 +1,4 @@
+
 const positionMapping = {
     'GK': { top: '750px', left: '250px' },
     'DC': { top: '650px', left: '250px' },
@@ -55,7 +56,6 @@ function displaySquadPlayers(players) {
     players.forEach(playerName => {
         const playerItem = document.createElement('li');
         playerItem.textContent = playerName;
-
         playerList.appendChild(playerItem);
     });
 }
@@ -204,6 +204,110 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
+    function addPlayerImage(position, playerName) {
+        console.log('Adding player image:', playerName, 'at position:', position);
+        const fieldContainer = document.querySelector('.football-field-container-squad-builder'); 
+        console.log(fieldContainer);
+        const containerWidth = fieldContainer.offsetWidth;
+        const containerHeight = fieldContainer.offsetHeight;
+    
+        // Initialize player count for this position if it doesn't exist
+        if (!playerCounts[position]) {
+            playerCounts[position] = 0;
+        }
+    
+        // Get the number of players already present at this position
+        const numPlayers = playerCounts[position];
+    
+        console.log('Number of players at position:', position, 'is:', numPlayers);
+        
+        playerPositionMapping[playerName] = position;
+        const playerPosition = document.createElement('div');
+        playerPosition.className = 'player-position';
+        playerPosition.id = `player-position-${playerName}`; // Add unique id for the player position
+        playerPosition.style.position = 'absolute'; // Position absolutely
+    
+        //Get player ID from the name
+        fetch('/get-id-from-playerName/' + playerName)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch player ID');
+                }
+                return response.json();
+            })
+            .then(data => {
+                playerID = data.id;
+                //Convert player ID to string
+                playerID = playerID.toString();
+                console.log('Player ID (string):', playerID);
+
+                // Create an img element for the player's image
+                const playerImage = document.createElement('img');
+                playerImage.src = `/static/smartscore/images/faces/${playerID}.png`; // Replace with the correct path to your player images
+                console.log(playerImage.src);
+                playerImage.alt = playerName; // Set alt text to player's name
+                playerImage.style.width = '45px'; // Adjust width as needed
+                playerImage.style.height = '55px'; // Adjust height as needed
+
+                // Calculate the position of the image based on container dimensions
+                const left = parseFloat(positionMapping[position].left) / 500 * containerWidth + numPlayers * 48; // Normalize left position
+                const top = parseFloat(positionMapping[position].top) / 800 * containerHeight; // Normalize top position
+                playerPosition.style.left = left + 'px';
+                playerPosition.style.top = top + 'px';
+                fieldContainer.appendChild(playerPosition);
+                console.log('Player image added:', playerName, 'at position:', left, top);
+            
+                // Append the player image to the player position container
+                playerPosition.appendChild(playerImage);
+            
+                // Increment the player count for this position
+                playerCounts[position]++;
+            
+                // Add the remove button
+                const removeButton = document.createElement('button');
+                removeButton.textContent = 'X';
+                removeButton.classList.add('remove-button');
+                removeButton.id = `remove-button-${playerName}`; // Add unique id for the remove button
+                removeButton.style.position = 'absolute';
+                removeButton.style.top = -10 + 'px'; // Adjust the position of the button
+                removeButton.style.left = 32 + 'px'; // Adjust the position of the button
+                console.log('Remove button added:', playerName, 'at position:', left + 20, top - 20);
+            
+                // Add click event listener to remove the player
+                removeButton.addEventListener('click', function () {
+                    playerPosition.remove();
+                    removeButton.remove();
+                    // Update player counts and position mapping
+                    const removedPlayerName = playerName.trim();
+                    delete playerPositionMapping[removedPlayerName];
+                    addedPlayerCount--;
+                    playerCounts[position]--;
+                    //remove the player from the blocked players
+                    blockedPlayers.delete(removedPlayerName);
+                    console.log('Player removed:', removedPlayerName);
+                    // remove linethrough style from the button
+                    const playerButtons = document.querySelectorAll('.player-button');
+                    playerButtons.forEach(button => {
+                        if (button.textContent == removedPlayerName) {
+                            button.style.textDecoration = 'none';
+                            button.classList.remove('active'); 
+                            button.classList.remove('clicked');
+                        
+                        }
+                    });
+                });
+                // Append the remove button to the player position container
+                playerPosition.appendChild(removeButton);
+            })
+                    
+            
+            .catch(error => {
+                console.error('Error fetching player ID:', error);
+            });        
+        
+
+    }
+    
 
     // Function to add player name under selected position
     function addPlayerName(position, playerName) {
@@ -321,9 +425,9 @@ document.addEventListener('DOMContentLoaded', function() {
         if (activePlayerButton) {
             const selectedPosition = document.querySelector('.player-position-dot.activated').position;
             const playerName = activePlayerButton.textContent; // Retrieve active player name
-
             addedPlayerCount++;
-            addPlayerName(selectedPosition, playerName);
+            //addPlayerName(selectedPosition, playerName);
+            addPlayerImage(selectedPosition, playerName);
             // Block the player
             blockedPlayers.add(playerName);
             console.log('Player blocked:', playerName);
@@ -596,7 +700,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Update the player count for the position
                     playerCounts[position]--;
                     //Add new player to squad
-                    addPlayerName(position, currentPlayer);
+                    //addPlayerName(position, currentPlayer);
+                    addPlayerImage(position, currentPlayer);
                     // Update the blocked players
                     blockedPlayers.delete(playerName);
                     blockedPlayers.add(currentPlayer);

@@ -501,3 +501,4 @@ def estimate_transfer_value(player):
 
         # Return the estimated transfer value
         return estimated_transfer_value
+    

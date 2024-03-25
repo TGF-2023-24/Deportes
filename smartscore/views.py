@@ -577,3 +577,9 @@ def remove_from_shortlist(request, shortlist_id, player_id):
     
     # Redirect to the shortlist page or any other appropriate page
     return redirect('shortlist')
+
+
+def get_id_from_playerName(request, playerName):
+    print("Player name is", playerName)
+    player = Player.objects.get(Name=playerName)
+    return JsonResponse({'id': player.custom_id})
