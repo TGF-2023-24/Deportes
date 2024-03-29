@@ -1,28 +1,27 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Get the button and list elements
-    const button = document.getElementById('openListIcon1');
-    const list = document.getElementById('list1');
-    let listVisible = false;
+    // Get the anchor and list elements
+    const anchorTools = document.getElementById('tools');
+    const list1 = document.getElementById('list1');
+    let list1Visible = false;
 
-    const button2 = document.getElementById('openListIcon2');
+    const anchorLibrary = document.getElementById('library');
     const list2 = document.getElementById('list2');
     let list2Visible = false;
 
-    console.log('Button:', button);
-    console.log('List:', list);
-
-    // Add click event listener to the button
-    button.addEventListener('click', function() {
+    // Add click event listener to the anchor elements
+    anchorTools.addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent default link behavior
         // Toggle the visibility of the list
-        listVisible = !listVisible;
-        if (listVisible) {
-            list.classList.add('show');
+        list1Visible = !list1Visible;
+        if (list1Visible) {
+            list1.classList.add('show');
         } else {
-            list.classList.remove('show');
+            list1.classList.remove('show');
         }
     });
 
-    button2.addEventListener('click', function() {
+    anchorLibrary.addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent default link behavior
         // Toggle the visibility of the list
         list2Visible = !list2Visible;
         if (list2Visible) {

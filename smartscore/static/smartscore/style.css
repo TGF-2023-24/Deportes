@@ -512,7 +512,7 @@ footer {
 }
 
 .football-field-container-squad-builder {
-    width: 25%; /* Adjust width as needed */
+    width: 40%; /* Adjust width as needed */
     position: relative; /* Position relative for absolutely positioned children */
 }
 
@@ -893,11 +893,11 @@ form {
     display: block !important;
 }
 
-#cat-sub-menu {
+.cat-sub-menu {
     display: none;
 }
 
-#cat-sub-menu.show {
+.cat-sub-menu.show {
     display: block;
 }
 
@@ -925,4 +925,103 @@ form {
 #recommend {
     flex: 0 0 100%; /* Set the width of the button to 100% */
     margin-top: 10px; /* Add space above the button */
+}
+
+.about-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.about-heading {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.about-content {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.about-feature-list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.about-feature-list li {
+    margin-bottom: 10px;
+}
+
+.about-feature-list li::before {
+    content: "\2022"; /* Bullet point */
+    color: #007bff; /* Blue color */
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+}
+
+.about-feature-list li {
+    margin-left: 1em;
+}
+
+/* Links */
+.about-content a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.about-content a:hover {
+    text-decoration: underline;
+}
+
+
+
+/* Style for the user settings section */
+.user-settings {
+    margin-bottom: 20px;
+}
+
+/* Style for the password change section */
+.password-change {
+    margin-top: 20px;
+}
+
+/* Style for form inputs and buttons */
+form {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button[type="submit"] {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+h1, h2 {
+    color: #333;
 }

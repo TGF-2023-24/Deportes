@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django import forms
-from .models import Squad, Player, UserProfile, League
+from .models import Squad, Player
 
 class CreateUserForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -27,14 +27,15 @@ class SquadUpdateForm(forms.ModelForm):
         fields = ['name', 'players']
 
 
-class SquadCreationForm(forms.ModelForm):
-    name = forms.CharField(max_length=100)
-    players = forms.ModelMultipleChoiceField(queryset=Player.objects.all(), widget=forms.CheckboxSelectMultiple)
-
-    class Meta:
-        model = Squad
-        fields = ['name', 'players']
-
-
-
+class CustomUserChangeForm(UserChangeForm):
+    class Meta(UserChangeForm.Meta):
+        fields = ['username', 'email']
+        labels = {
+            'username': 'Username',
+            'email': 'Email address',
+        }
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Exclude password fields
+        self.fields.pop('password')
     

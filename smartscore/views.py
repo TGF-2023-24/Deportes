@@ -3,11 +3,9 @@ from django.urls import reverse
 from .models import Player, Position, Squad, UserProfile, League, Shortlist
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import PasswordChangeForm
 from django.db.models import Q
-from django import forms
-from .forms import CreateUserForm, SquadUpdateForm, SquadCreationForm
+from .forms import CreateUserForm, SquadUpdateForm, CustomUserChangeForm
 from django.contrib.auth.decorators import login_required #utilizar este decorador para proteger las rutas que requieren autenticación
 from .utils import get_dot_positions, get_player_stats, get_pos_stats, get_default_stats, get_squad_players, search_players_by_positions, get_squad_stats, get_default_avg_stats, get_better_players, filter_recommendations, estimate_transfer_value
 from django.http import JsonResponse, Http404
@@ -583,3 +581,21 @@ def get_id_from_playerName(request, playerName):
     print("Player name is", playerName)
     player = Player.objects.get(Name=playerName)
     return JsonResponse({'id': player.custom_id})
+
+
+def settings(request):
+    user = request.user
+    if request.method == 'POST':
+        user_form = CustomUserChangeForm(request.POST, instance=user)
+        password_form = PasswordChangeForm(user, request.POST)
+        if user_form.is_valid():
+            user_form.save()
+            messages.success(request, 'User settings updated successfully!')
+        if password_form.is_valid():
+            password_form.save()
+            messages.success(request, 'Password updated successfully!')
+            return redirect('settings')  # Redirect to the same page after saving
+    else:
+        user_form = CustomUserChangeForm(instance=user)
+        password_form = PasswordChangeForm(user)
+    return render(request, 'settings.html', {'user_form': user_form, 'password_form': password_form}) 

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Settings{% endblock %}
+{% block content %}
+
+<div class="settings-container">
+
+  <h1>Settings</h1>
+  
+  <div class="user-settings">
+      <h2>User Account Settings</h2>
+      <form method="POST" class="user-form">
+          {% csrf_token %}
+          {{ user_form.as_p }}
+          <button type="submit">Save Account</button>
+      </form>
+  </div>
+  
+  <div class="password-change">
+      <h2>Change Password</h2>
+      <form method="POST" class="password-form">
+          {% csrf_token %}
+          {{ password_form.as_p }}
+          <button type="submit">Change Password</button>
+      </form>
+  </div>
+  
+</div>
+
+{% endblock %}

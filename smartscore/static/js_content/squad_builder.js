@@ -274,8 +274,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     playerImage.src = '/static/smartscore/images/faces/unknown.png'; // Replace with the default image path
                 });
                 playerImage.alt = playerName; // Set alt text to player's name
-                playerImage.style.width = '45px'; // Adjust width as needed
-                playerImage.style.height = '55px'; // Adjust height as needed
+                playerImage.style.width = '90px'; // Adjust width as needed
+                playerImage.style.height = '100px'; // Adjust height as needed
 
                 // Calculate the position of the image based on container dimensions
                 const left = parseFloat(positionMapping[position].left) / 500 * containerWidth; // Normalize left position
@@ -306,7 +306,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 removeButton.id = `remove-button-${playerName}`; // Add unique id for the remove button
                 removeButton.style.position = 'absolute';
                 removeButton.style.top = -10 + 'px'; // Adjust the position of the button
-                removeButton.style.left = 32 + 'px'; // Adjust the position of the button
+                removeButton.style.left = 78 + 'px'; // Adjust the position of the button
                 console.log('Remove button added:', playerName, 'at position:', left + 20, top - 20);
 
                 // Add click event listener to remove the player
@@ -351,7 +351,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 playerNameElement.textContent = printedName;
                 //playerNameElement.style.position = 'absolute';
-                playerNameElement.style.top = 60 + 'px'; // Adjust the position of the player name
+                playerNameElement.style.top = 100 + 'px'; // Adjust the position of the player name
                 //playerNameElement.style.left = 25 + 'px'; // Adjust the position of the player name
                 playerPosition.appendChild(playerNameElement);
 
@@ -362,9 +362,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         console.log('Adjusting position of container:', playerPositionContainer);
                         // Adjust left position, first one to the left, second one to the right, and third one to the center
                         if (playerCounts[position] === 2) {
-                            playerPositionContainer.style.left = (left + (i === 0 ? -24 : 24)) + 'px';
+                            playerPositionContainer.style.left = (left + (i === 0 ? -48 : 48)) + 'px';
                         } else if (playerCounts[position] === 3) {
-                            playerPositionContainer.style.left = (left + (i === 0 ? -48 : (i === 1 ? 48 : 0))) + 'px';
+                            playerPositionContainer.style.left = (left + (i === 0 ? -88 : (i === 1 ? 88 : 0))) + 'px';
                         }
                     }
                 }
