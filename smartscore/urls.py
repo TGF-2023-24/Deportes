@@ -33,6 +33,6 @@ urlpatterns = [
     path('api/save-recommendations/', views.save_recommendations, name='save_recommendations'),
     path('shortlist/', views.shortlist, name='shortlist'),
     path('remove_from_shortlist/<int:shortlist_id>/<int:player_id>/', views.remove_from_shortlist, name='remove_from_shortlist'),
-    path('get-id-from-playerName/<str:playerName>', views.get_id_from_playerName, name='get_id_from_playerName'),
+    path('get-id-from-playerName/<str:playerName>/<str:position>/', views.get_id_from_playerName, name='get_id_from_playerName'),
     path('settings/', views.settings, name='settings'),
 ]

@@ -166,15 +166,16 @@ document.addEventListener('DOMContentLoaded', function() {
         players.forEach(player => {
             const playerBut = document.createElement('button');
             playerBut.textContent = player;
-            playerBut.classList.add('player-button'); // Add a class for styling    
+            playerBut.classList.add('player-button'); // Add a class for styling 
+            
+            if (blockedPlayers.has(player)) {
+                playerBut.style.textDecoration = 'line-through';
+                playerBut.classList.add('clicked');
+            }
 
             // Check if the player is blocked
             playerBut.addEventListener('click', function () {
-                handlePlayerButtonClick(playerBut);
-                // Apply style if player is blocked
-                if (blockedPlayers.has(player)) {
-                    playerBut.style.textDecoration = 'line-through';
-                }
+                handlePlayerButtonClick(playerBut);   
             });
 
             playerList.appendChild(playerBut);
@@ -188,7 +189,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function handlePlayerButtonClick(playerBut) {
         // Check if the player is already blocked
         if (blockedPlayers.has(playerBut.textContent)) {
-            alert('This player is already selected.');
+            alert('This player is already selected.');          
             return;
         }
 
@@ -254,7 +255,7 @@ document.addEventListener('DOMContentLoaded', function() {
         playerPosition.style.position = 'absolute'; // Position absolutely
 
         //Get player ID from the name
-        fetch('/get-id-from-playerName/' + playerName)
+        fetch('/get-id-from-playerName/' + playerName + '/' + position)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Failed to fetch player ID');
@@ -266,6 +267,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 //Convert player ID to string
                 playerID = playerID.toString();
                 console.log('Player ID (string):', playerID);
+
+                // Create a hidden input field to store the player ID
+                const playerIdInput = document.createElement('input');
+                playerIdInput.type = 'hidden';
+                playerIdInput.name = playerName; // Set the name attribute if you are submitting a form
+                playerIdInput.value = playerID; // Set the value to the player ID
+                playerPosition.appendChild(playerIdInput);
+
 
                 // Create an img element for the player's image
                 const playerImage = document.createElement('img');
@@ -451,10 +460,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to handle the analyze squad button click
     document.getElementById('analyze-squad-btn').addEventListener('click', function() {
         // Check if there are 11 players added to the field
-        if (addedPlayerCount < 11) {
+        /*if (addedPlayerCount < 11) {
             alert('Please add 11 players to analyze the squad.');
             return;
-        }
+        }*/
             document.getElementById('standout-stats').innerHTML = '';
             console.log('Analyzing squad...');
             const squadPlayers = {}; // Object to store players by position
@@ -603,6 +612,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const playerNameElement = document.createElement('p');
         playerNameElement.innerHTML = `<h3>${currentPlayer} (${position})</h3>`;
+
+        const hiddenInputs = document.getElementsByName(playerName);
+        if (hiddenInputs.length > 0) {
+            const playerId = hiddenInputs[0].value;
+            console.log("Player ID:", playerId);
+        } else {
+            console.log("Hidden input field for player not found.");
+        }
+        
         fetch (`/api/compare-players/${currentPlayer}/${playerName}/${position}`) 
             .then(response => {
                 if (!response.ok) {
@@ -614,6 +632,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log('Player stats:', data);
                 radar = displayRadarChart(data, position);
             })
+
+        const infoElement = document.createElement('p');
+        infoElement.innerHTML = `Player ${currentPlayerIndex + 1} of ${replacementPlayers.length}`;
+        infoElement.classList.add('info-element');
 
         const nextButton = document.createElement('button');
         nextButton.textContent = 'Next';
@@ -636,8 +658,35 @@ document.addEventListener('DOMContentLoaded', function() {
                     console.log('Player stats:', data);
                     radar = displayRadarChart(data, position);
                 })
-            
+                infoElement.innerHTML = `Player ${currentPlayerIndex + 1} of ${replacementPlayers.length}`;
         });
+
+        const previousButton = document.createElement('button');
+        previousButton.textContent = 'Previous';
+        previousButton.classList.add('previous-button'); // Add the previous-button class
+        previousButton.addEventListener('click', () => {
+            // Update currentPlayerIndex to display the previous player
+            radar.remove();
+            currentPlayerIndex = (currentPlayerIndex - 1 + replacementPlayers.length) % replacementPlayers.length;
+            const previousPlayer = replacementPlayers[currentPlayerIndex];
+            currentPlayer = previousPlayer;
+            playerNameElement.innerHTML = `<h3>${previousPlayer} (${position})</h3>`;
+            fetch (`/api/compare-players/${previousPlayer}/${playerName}/${position}`)
+
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Failed to fetch stats for ${previousPlayer}`);
+                    }   
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Player stats:', data);
+                    radar = displayRadarChart(data, position);
+                })
+                infoElement.innerHTML = `Player ${currentPlayerIndex + 1} of ${replacementPlayers.length}`;
+        });
+
+
 
         
         const replaceButton = document.createElement('button');
@@ -724,8 +773,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         
         replacementPlayerContainer.appendChild(playerNameElement);
+        replacementPlayerContainer.appendChild(previousButton);
         replacementPlayerContainer.appendChild(nextButton);
         replacementPlayerContainer.appendChild(replaceButton);
+        replacementPlayerContainer.appendChild(infoElement);
     }
 
 

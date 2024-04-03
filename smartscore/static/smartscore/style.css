@@ -115,7 +115,7 @@ footer {
 .primary-default-btn, .player-button, .squad-create-button {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #007bff;
+    background-color: #d77330;
     color: #fff;
     text-decoration: none;
     border-radius: 5px;
@@ -124,7 +124,7 @@ footer {
 }
 
 .primary-default-btn:hover, .player-button:hover, .squad-create-button:hover {
-    background-color: #0056b3;
+    background-color: #c9602d;
 }
 
 .primary-search-btn {
@@ -382,12 +382,12 @@ footer {
 }
 
 .primary-default-btn {
-    background-color: #007bff;
+    background-color: #d77330;
     color: #fff;
 }
 
 .primary-default-btn:hover {
-    background-color: #0056b3;
+    background-color: #c9602d;
 }
 
 .secondary-search-btn {
@@ -631,8 +631,8 @@ footer {
 }
 
 
-.next-button {
-    background-color: #6ea2f7; 
+.next-button, .previous-button {
+    background-color: #d77330; 
     color: #333; /* Dark text color */
     padding: 10px 20px; /* Adjust padding as needed */
     border: none;
@@ -642,8 +642,8 @@ footer {
     margin: 0 10px; /* Add margin between buttons */
 }
 
-.next-button:hover {
-    background-color: #4a82fb; 
+.next-button:hover, .prev-button:hover {
+    background-color: #c9602d; 
 }
 
 .replace2-button {
@@ -662,7 +662,7 @@ footer {
 }
 
 .compare-button {
-    background-color: #ff8800; 
+    background-color: #3030d7; 
     color: #fff; /* White text color */
     padding: 10px 20px; /* Adjust padding as needed */
     border: none;
@@ -673,7 +673,7 @@ footer {
 }
 
 .compare-button:hover {
-    background-color: #ff6a00; 
+    background-color: #242494; 
 }
 
 
@@ -1011,7 +1011,7 @@ input[type="password"] {
 
 button[type="submit"] {
     padding: 10px 20px;
-    background-color: #007bff;
+    background-color: #d77330;
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -1019,9 +1019,22 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-    background-color: #0056b3;
+    background-color: #c9602d;
 }
 
 h1, h2 {
     color: #333;
+}
+
+.info-element {
+    /* Define your styles here */
+    background-color: #f0f0f0; /* Example background color */
+    color: #333; /* Example text color */
+    padding: 10px; /* Example padding */
+    border-radius: 5px; /* Example border radius */
+    /* Add any other styles you want */
+}
+
+#add-player-btn {
+    background-color : #000000;
 }

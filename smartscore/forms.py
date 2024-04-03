@@ -38,4 +38,11 @@ class CustomUserChangeForm(UserChangeForm):
         super().__init__(*args, **kwargs)
         # Exclude password fields
         self.fields.pop('password')
-    
+
+class SquadCreationForm(forms.ModelForm):
+    name = forms.CharField(max_length=100)
+    #players = forms.ModelMultipleChoiceField(queryset=Player.objects.all(), widget=forms.CheckboxSelectMultiple)
+
+    class Meta:
+        model = Squad
+        fields = ['name']  

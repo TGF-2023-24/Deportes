@@ -5,13 +5,15 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.forms import PasswordChangeForm
 from django.db.models import Q
-from .forms import CreateUserForm, SquadUpdateForm, CustomUserChangeForm
-from django.contrib.auth.decorators import login_required #utilizar este decorador para proteger las rutas que requieren autenticación
+from .forms import CreateUserForm, SquadUpdateForm, CustomUserChangeForm, SquadCreationForm
+from django.contrib.auth.decorators import login_required 
 from .utils import get_dot_positions, get_player_stats, get_pos_stats, get_default_stats, get_squad_players, search_players_by_positions, get_squad_stats, get_default_avg_stats, get_better_players, filter_recommendations, estimate_transfer_value
 from django.http import JsonResponse, Http404
 import json
 from .dictionary import fifa_country_codes  
 from .smartscore import smartScore
+from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
+
 #se usa @login_required(login_url='login') en la vista que se quiere proteger
 
 # Create your views here.
@@ -255,9 +257,9 @@ def players_by_position(request, squad_id, position):
 @login_required(login_url='login')
 def create_squad(request):
     if request.method == 'POST':
-        form = SquadCreationForm(request.POST)
+        form =  SquadCreationForm(request.POST)
         if form.is_valid():
-            squad = form.save(commit=False)
+            #squad = form.save(commit=False)
             squad = form.save()
             # Add the current user to the squad
             request.user.userprofile.squads.add(squad)
@@ -338,11 +340,24 @@ def get_replacement_players(request, position, player, squad_id):
     player_names = [player.Name for player in replacement_players if player not in current_players]
     return JsonResponse(player_names, safe=False)
 
+
 def compare_players(request, player1, player2, position):
     stats = {}
-    stats[player1] = get_player_stats(Player.objects.get(Name=player1), position)
-    stats[player2] = get_player_stats(Player.objects.get(Name=player2), position)
+
+    try:
+        player1_instance = Player.objects.get(Name=player1, Pos__name=position)
+        stats[player1] = get_player_stats(player1_instance, position)
+    except (MultipleObjectsReturned, ObjectDoesNotExist):
+        stats[player1] = {'error': 'Multiple players found or player does not exist'}
+
+    try:
+        player2_instance = Player.objects.get(Name=player2, Pos__name=position)
+        stats[player2] = get_player_stats(player2_instance, position)
+    except (MultipleObjectsReturned, ObjectDoesNotExist):
+        stats[player2] = {'error': 'Multiple players found or player does not exist'}
+
     stats['avg'] = get_pos_stats(position)
+
     # Return the player statistics as a JSON response
     return JsonResponse(stats, safe=False)
 
@@ -577,12 +592,12 @@ def remove_from_shortlist(request, shortlist_id, player_id):
     return redirect('shortlist')
 
 
-def get_id_from_playerName(request, playerName):
-    print("Player name is", playerName)
-    player = Player.objects.get(Name=playerName)
+def get_id_from_playerName(request, playerName, position):
+    print("Player name is", playerName, "Position is", position)
+    player = Player.objects.get(Name=playerName, Pos__name=position)
     return JsonResponse({'id': player.custom_id})
 
-
+@login_required(login_url='login')
 def settings(request):
     user = request.user
     if request.method == 'POST':
