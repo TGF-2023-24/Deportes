@@ -714,6 +714,8 @@ def smartScore(player, pos, budget, expectations, league):
     print("SmartScore final: ", round(smart_score))
     if smart_score > 99:
         return 99
+    if smart_score < 1:
+        return 1
     return round(smart_score) #Round to the nearest whole number
 
 
