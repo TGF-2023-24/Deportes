@@ -35,7 +35,7 @@ Once the server is running, open your web browser and navigate to http://127.0.0
 
 ## Imports
 
-To male an import, you need to install django extensions
+To make an import, you need to install django extensions
 
 pip install django-extensions
 
