@@ -13,6 +13,7 @@ import json
 from .dictionary import fifa_country_codes  
 from .smartscore import smartScore
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
+from django.http import HttpResponseNotFound
 
 #se usa @login_required(login_url='login') en la vista que se quiere proteger
 
@@ -26,8 +27,10 @@ def about(request):
     return render(request, 'about.html', {})
 
 def player_detail(request, custom_id):
-    player = Player.objects.get(custom_id=custom_id)
-    # Call the get_dot_positions function to calculate dot positions
+    try:
+        player = Player.objects.get(custom_id=custom_id)
+    except Player.DoesNotExist:
+        return HttpResponseNotFound('Player not found')    # Call the get_dot_positions function to calculate dot positions
     dot_positions = get_dot_positions(player.Pos)
     squads = None
     stats = get_default_stats(player)

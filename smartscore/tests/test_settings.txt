@@ -1,0 +1,43 @@
+import pytest
+from django.contrib.auth.models import User
+from django.test import Client
+from django.urls import reverse
+
+@pytest.mark.django_db
+def test_settings_view_authenticated_user(client):
+
+    user = User.objects.create_user(username='testuser', email='test@example.com', password='testpassword')
+    client.login(username='testuser', password='testpassword')
+
+    # Test User Account Settings Update
+    response = client.post(reverse('settings'), {'username': 'newusername', 'email': 'newemail@example.com'})
+
+    # Check if form submission redirects
+    #assert response.status_code == 302  
+
+    # Follow the redirect and assert the content of the redirected page
+    redirected_response = client.get(response.url)
+    assert redirected_response.status_code == 200
+
+    # Add assertions to verify the content of the redirected page
+    assert 'User settings updated successfully!' in redirected_response.content.decode('utf-8')
+
+
+    user.refresh_from_db()
+    assert user.username == 'newusername'  # Check if username updated
+    assert user.email == 'newemail@example.com'  # Check if email updated
+
+    # Test Password Change
+    response = client.post(reverse('settings'), {'new_password1': 'newpassword', 'new_password2': 'newpassword'})
+    assert response.status_code == 302  # Check if form submission redirects
+
+    # Add assertions to check if password changed successfully
+
+    # Test GET request to settings page
+    response = client.get(reverse('settings'))
+    assert response.status_code == 200  # Check if settings page is accessible
+
+    assert 'user_form' in response.context  # Check if user form is in context
+
+    # Add more assertions to check form instances and other context variables
+

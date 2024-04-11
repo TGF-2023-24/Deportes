@@ -50,4 +50,10 @@ Always makemigration and migrate
 py manage.py makemigrations
 py manage.py migrate
 
+## For testing
+
+pip install pytest
+
+python -m pytest
+
 

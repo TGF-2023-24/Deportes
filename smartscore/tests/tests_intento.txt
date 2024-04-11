@@ -1,0 +1,190 @@
+from django.test import TestCase, Client
+from django.urls import reverse
+from ..models import Player, Position, Squad, Shortlist, UserProfile, League
+from django.contrib.auth.models import User
+
+class ViewsTestCase(TestCase):
+    def setUp(self):
+        # Create a Position instance
+        self.position = Position.objects.create(name="Forward")
+
+        # Create a Player instance with required fields
+        self.player = Player.objects.create(
+            Name="Test Player",
+            Club="Test Club",
+            Nationality="Test Nationality",
+            International_match=0 , # Provide a value for International_match field
+            League="Test League",
+            Pref_foot="Left",
+            Age=25,
+            Height=180,
+            Weight=75,
+            Salary=50000,
+            CAbil=80,
+            Pot_abil=90,
+            Strater_match=20,
+            Res_match=10,
+            Min=1800,
+            Goal=5,
+            Asis=3,
+            xG=4.5,
+            Gol_90=0.25,
+            Asis_90=0.15,
+            Goal_allowed=10,
+            Clean_sheet=3,
+            Sv_rat=80,
+            xSv_rat=75,
+            Pen_saved_rat=70,
+            Faga=20,
+            Fcomm=15,
+            Yel=2,
+            Red=0,
+            Dist_90=9.5,
+            Key_tck_90=1.2,
+            Key_hdr_90=0.8,
+            Blocks_90=2.5,
+            Clr_90=3.0,
+            Int_90=1.8,
+            Hdr_rat=85,
+            Tackles_rat=75,
+            Gl_mistake=1,
+            Pass_rat=90,
+            Pr_pass_90=85,
+            Key_pass_90=2.0,
+            Cr_c_90=3.5,
+            Cr_c_acc=80,
+            Ch_c_90=2.2,
+            Drb_90=1.5,
+            Poss_lost_90=8.5,
+            Shot_rat=80,
+            Conv_rat=15,
+            Dorsal=10,
+            Country_league="Test Country",
+            market_value="10M"
+        )
+
+        # Create a Squad instance
+        self.squad = Squad.objects.create(name="Test Squad")
+
+        # Create a Shortlist instance
+        self.shortlist = Shortlist.objects.create(name="Test Shortlist")
+
+        # Create a User instance
+        self.user = User.objects.create(username="testuser")
+
+        # Create a UserProfile instance
+        self.user_profile = UserProfile.objects.create(user=self.user)
+
+        # Create a League instance
+        self.league = League.objects.create(name="Test League")
+
+    def test_home_view(self):
+        client = Client()
+        response = client.get(reverse('home'))
+        
+        # Check if the view returns a 200 OK status code
+        self.assertEqual(response.status_code, 200)
+        
+        # Check if the correct template is rendered
+        self.assertTemplateUsed(response, 'home.html')
+        
+        # Check if all players are present in the context
+        self.assertTrue('all' in response.context)
+        self.assertEqual(len(response.context['all']), 1)  
+        
+class PlayerModelTestCase(TestCase):
+    def test_create_player(self):
+        player = Player.objects.create(
+            custom_id=1,
+            Name="Test Player",
+            Nationality="Test Nationality",
+            International_match=10,
+            Club="Test Club",
+            League="Test League",
+            Pref_foot="Left",
+            Age=25,
+            Height=180,
+            Weight=75,
+            Salary=50000,
+            CAbil=80,
+            Pot_abil=90,
+            Strater_match=20,
+            Res_match=10,
+            Min=1800,
+            Goal=5,
+            Asis=3,
+            xG=4.5,
+            Gol_90=0.25,
+            Asis_90=0.15,
+            Goal_allowed=10,
+            Clean_sheet=3,
+            Sv_rat=80,
+            xSv_rat=75,
+            Pen_saved_rat=70,
+            Faga=20,
+            Fcomm=15,
+            Yel=2,
+            Red=0,
+            Dist_90=9.5,
+            Key_tck_90=1.2,
+            Key_hdr_90=0.8,
+            Blocks_90=2.5,
+            Clr_90=3.0,
+            Int_90=1.8,
+            Hdr_rat=85,
+            Tackles_rat=75,
+            Gl_mistake=1,
+            Pass_rat=90,
+            Pr_pass_90=85,
+            Key_pass_90=2.0,
+            Cr_c_90=3.5,
+            Cr_c_acc=80,
+            Ch_c_90=2.2,
+            Drb_90=1.5,
+            Poss_lost_90=8.5,
+            Shot_rat=80,
+            Conv_rat=15,
+            Dorsal=10,
+            Country_league="Test Country",
+            market_value="10M"
+        )
+        self.assertEqual(Player.objects.count(), 1) 
+        self.assertEqual(player.__str__(), "Test Player")
+
+class PositionModelTestCase(TestCase):
+    def test_create_position(self):
+        position = Position.objects.create(name="Forward")
+        self.assertEqual(Position.objects.count(), 1)
+        self.assertEqual(position.__str__(), "Forward")
+
+class SquadModelTestCase(TestCase):
+    def test_create_squad(self):
+        squad = Squad.objects.create(name="Test Squad")
+        self.assertEqual(Squad.objects.count(), 1)
+        self.assertEqual(squad.__str__(), "Test Squad")
+
+class ShortlistModelTestCase(TestCase):
+    def test_create_shortlist(self):
+        shortlist = Shortlist.objects.create(name="Test Shortlist")
+        self.assertEqual(Shortlist.objects.count(), 1)
+        self.assertEqual(shortlist.__str__(), "Test Shortlist")
+
+class UserProfileTestCase(TestCase):
+    def test_create_user_profile(self):
+        user = User.objects.create(username="testuser")
+        user_profile = UserProfile.objects.create(user=user)
+        self.assertEqual(UserProfile.objects.count(), 1)
+        self.assertEqual(user_profile.__str__(), "testuser")
+
+class LeagueModelTestCase(TestCase):
+    def test_create_league(self):
+        league = League.objects.create(name="Test League")
+        self.assertEqual(League.objects.count(), 1)
+        self.assertEqual(league.__str__(), "Test League")
+
+
+        
+
+
+
+
