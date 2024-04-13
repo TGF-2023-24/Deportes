@@ -503,7 +503,8 @@ def get_recommendations(request):
         # Get smartscore for the primary position of the player
         primary_position = player.Pos.all()[0].name
         average_score = smartScore(player, primary_position, budget, expectations, league)
-        player_scores.append((player, average_score))
+        if average_score >= 50: # Only include players with a smartscore of 50 or higher
+            player_scores.append((player, average_score))
 
     # Sort players based on their average smartscore
     sorted_players = sorted(player_scores, key=lambda x: x[1], reverse=True)

@@ -389,7 +389,7 @@ def get_threshold_attribute(attribute_name, player_value, players):
 def filter_recommendations(positions, attributes, foot):
     players = Player.objects.all()
     # Filter players by positions
-    if positions:
+    if any(positions) and any(pos.strip() for pos in positions):
         position_filters = Q()
         for position in positions:
             position_filters |= Q(Pos__name=position)
@@ -398,7 +398,10 @@ def filter_recommendations(positions, attributes, foot):
 
     # Filter players by foot
     if foot:
-        foot_players = players.filter(Pref_foot=foot)
+        if foot in ["Left", "Right"]: #Include ambidextrous players for right/left searches
+            foot_players = players.filter(Q(Pref_foot="Either") | Q(Pref_foot=foot)) 
+        else: 
+            foot_players = players.filter(Pref_foot=foot)
     else:
         foot_players = players
 
@@ -407,7 +410,6 @@ def filter_recommendations(positions, attributes, foot):
     print ("Attributes: ", attributes)
     if len(attributes) > 0 and attributes[0] != '':
         attribute_percentiles = {}
-        print("We are here")
         for attribute in attributes:
             values = players.values_list(attribute, flat=True)
             percentile_70 = np.percentile(values, 70)

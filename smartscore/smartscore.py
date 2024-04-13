@@ -685,7 +685,7 @@ def smartScore(player, pos, budget, expectations, league):
     print("Age score is ", age_score)
     if age_score > 0:
         smart_score *= age_score
-    else:
+    elif age_score < 0:
         smart_score *= 1/abs(age_score) 
 
     print("Smart Score after age and potential ability weighting: ", smart_score)
