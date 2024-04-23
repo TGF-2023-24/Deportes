@@ -14,6 +14,7 @@ from .dictionary import fifa_country_codes
 from .smartscore import smartScore
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from django.http import HttpResponseNotFound
+from json import JSONDecodeError
 
 #se usa @login_required(login_url='login') en la vista que se quiere proteger
 
@@ -142,8 +143,9 @@ def advanced_search(request):
                 return redirect(url)
             else:
                 return render(request, 'advanced_search.html', {})
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=500)
+        except JSONDecodeError as e:
+            raise e  # Allow the JSONDecodeError to propagate
+    
 
 def search_results(request):
     # Retrieve positions and filters from query parameters
@@ -539,6 +541,7 @@ def save_recommendations(request):
 
         # Extract position, archetype, foot, and data from the request data
         position = request_data.get('position')
+        print("Position is", position)
         archetype = request_data.get('archetype')
         foot = request_data.get('foot')
         recommendations_data = request_data.get('recommendation')

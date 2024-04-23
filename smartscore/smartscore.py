@@ -656,8 +656,9 @@ league_multipliers = {
 
 def smartScore(player, pos, budget, expectations, league):
     # Get the weights for the player's position
+    print("Player: ", player.Name, "Position: ", pos)
     weights = position_weights.get(pos)
-
+    
     smart_score = smartscore_attributes(player, pos, league, weights)
     #Penalize players with few minutes played
     if getattr(player, 'Min') < 500:
@@ -673,7 +674,10 @@ def smartScore(player, pos, budget, expectations, league):
 
     # We want to give a higher score to players with higher potential ability, compared to current ability
     # The greater  the difference between potential ability and current ability, the higher the score (exponential growth)
-    projected_growth = (getattr(player, 'Pot_abil') / getattr(player, 'CAbil'))
+    if getattr(player, 'Pot_abil') == 0:
+        projected_growth = 0
+    else:
+        projected_growth = (getattr(player, 'Pot_abil') / getattr(player, 'CAbil'))
     print("Projected growth: ", projected_growth)
     projected_growth = min(1.8, projected_growth) # Cap the growth at 1.8
     if getattr(player, 'Age') < 34: #Players older than 34 are not expected to grow

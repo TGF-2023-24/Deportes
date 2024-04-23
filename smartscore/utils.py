@@ -112,6 +112,7 @@ def get_default_avg_stats(position_name):
 
     return stats
 
+
 def get_pos_stats(position_name):
     stats = {}
     
@@ -130,13 +131,20 @@ def get_pos_stats(position_name):
         max_value = players.aggregate(Max(attribute_name))[f"{attribute_name}__max"] or 0
         min_value = players.aggregate(Min(attribute_name))[f"{attribute_name}__min"] or 0
 
-        # Calculating 70th and 30th percentiles for each attribute
+        # Calculating percentiles for each attribute
         values = players.values_list(attribute_name, flat=True)
-        percentile_70 = np.percentile(values, 70)
-        percentile_30 = np.percentile(values, 30)
-        percentile_95 = np.percentile(values, 95)
-        percentile_5 = np.percentile(values, 5)
         
+        if values:
+            percentile_70 = np.percentile(values, 70)
+            percentile_30 = np.percentile(values, 30)
+            percentile_95 = np.percentile(values, 95)
+            percentile_5 = np.percentile(values, 5)
+        else:
+            percentile_70 = np.nan
+            percentile_30 = np.nan
+            percentile_95 = np.nan
+            percentile_5 = np.nan
+
         rounded_avg_value = round(avg_value, 2)
         rounded_max_value = round(max_value, 2)
         rounded_min_value = round(min_value, 2)
@@ -412,10 +420,10 @@ def filter_recommendations(positions, attributes, foot):
         attribute_percentiles = {}
         for attribute in attributes:
             values = players.values_list(attribute, flat=True)
-            percentile_70 = np.percentile(values, 70)
-            # Store the 70th percentile in a dictionary
-            attribute_percentiles[attribute] = percentile_70
-
+            if values:
+                percentile_70 = np.percentile(values, 70)
+                # Store the 70th percentile in a dictionary
+                attribute_percentiles[attribute] = percentile_70
         ok_players = []
         for player in foot_players:
             ok = True

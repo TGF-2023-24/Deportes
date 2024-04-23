@@ -1,21 +1,27 @@
-{%extends "base.html"%}
-{%block title%}Search{%endblock%}
-{%block content%}
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Search results{% endblock %}
+{% block content %}
+
+<body>
     <div class="results-container">
         <h1>You searched: {{searched}}</h1>
         <br>
+        <!-- Display search results -->
+        {% if players %}
         <div class="results-grid">
             <div class="column">
                 <h3>Player Name</h3>
                 <ul class="results-list">
                     {% for player in players %}
-                        <li><a href="/player/{{ player.custom_id }}">{{ player.Name }}</a></li>
+                    <li><a href="/player/{{player.custom_id}}">{{player.Name}}</a></li>
+                    <!-- Add more player details as needed -->
                     {% endfor %}
                 </ul>
             </div>
             <div class="column">
                 <h3>Club</h3>
-                <ul class="results-list2">
+                <ul class="results-list2"> 
                     {% for player in players %}
                         <li>{{ player.Club }}</li>
                     {% endfor %}
@@ -29,7 +35,12 @@
                     {% endfor %}
                 </ul>
             </div>
-        </div>
+        </div>  
+        {% else %}
+        <p>No players found.</p>
+        {% endif %}
     </div>
-    
-{%endblock%}
+</body>
+</html>
+
+{% endblock %}

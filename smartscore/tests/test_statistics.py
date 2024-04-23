@@ -322,8 +322,6 @@ def test_player_detail_view_nationality_code_exists():
 
     assert '776' in response.content.decode('utf-8')
 
-    print(response.content.decode('utf-8'))
-
 @pytest.mark.django_db
 def test_player_detail_view_nationality_code_missing():
 
@@ -401,3 +399,4 @@ def test_player_detail_view_player_not_found():
 
     assert response.status_code == 404
     assert isinstance(response, HttpResponseNotFound)
+

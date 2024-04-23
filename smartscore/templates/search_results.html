@@ -7,34 +7,44 @@
     <div class="results-container">
         <h1>Search Results</h1>
         <br>
-        <!-- Display search results -->
-        <div class="results-grid">
-            <div class="column">
-                <h3>Player Name</h3>
-                <ul class="results-list">
-                    {% for player in results %}
-                    <li><a href="/player/{{player.custom_id}}">{{player.Name}}</a></li>
-                    <!-- Add more player details as needed -->
-                    {% endfor %}
-                </ul>
+        <!-- Check if there are any search results -->
+        {% if results %}
+            <!-- Display search results -->
+            <div class="results-grid">
+                <div class="column">
+                    <h3>Player Name</h3>
+                    <ul class="results-list">
+                        {% for player in results %}
+                            <li><a href="/player/{{player.custom_id}}">{{player.Name}}</a></li>
+                            <!-- Add more player details as needed -->
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Positions</h3>
+                    <ul class="results-list2"> 
+                        {% for player in results %}
+                            <li class="positions">
+                                {% for position in player.Pos.all %}
+                                    {{ position.name }}{% if not forloop.last %}, {% endif %}
+                                {% endfor %}
+                            </li>           
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Club</h3>
+                    <ul class="results-list2">
+                        {% for player in results %}
+                            <li>{{ player.Club }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
-            <div class="column">
-                <h3>Positions</h3>
-                <ul class="results-list2"> 
-                    {% for player in results %}
-                    <li class="positions">{% for position in player.Pos.all %}{{ position.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</li>           
-                    {% endfor %}
-                </ul>
-            </div>
-            <div class="column">
-                <h3>Club</h3>
-                <ul class="results-list2">
-                    {% for player in results %}
-                        <li>{{ player.Club }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>  
+        {% else %}
+            <!-- Display message when no players are found -->
+            <p>No players found.</p>
+        {% endif %}
     </div>
 </body>
 </html>
