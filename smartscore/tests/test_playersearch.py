@@ -2,7 +2,7 @@ import pytest
 from django.test import Client
 from django.contrib.auth.models import User
 from ..models import Player, Position
-from ..views import advanced_search
+from ..views import advanced_search, perform_search
 from django.http import JsonResponse
 from django.test import RequestFactory
 from json.decoder import JSONDecodeError
@@ -12,10 +12,9 @@ from json.decoder import JSONDecodeError
 def client():
     return Client()
 
-@pytest.mark.django_db
-def test_search_player(client):
-    # Create some players for testing
-    messi = Player.objects.create(
+@pytest.fixture
+def messi():
+    return Player.objects.create(
         Name="Lionel Messi",
         Club="Paris Saint-Germain",
         League="Ligue 1",
@@ -69,13 +68,16 @@ def test_search_player(client):
         Country_league="Test Country",
         market_value="10M"
     )
-    cr7 = Player.objects.create(
+
+@pytest.fixture
+def cr7():
+    return Player.objects.create(
         Name="Cristiano Ronaldo",
         Club="Manchester United",
         League="Premier League",
         Nationality="Portugal",
         Pref_foot="Right",
-        Age=37,
+        Age=25,
         Height=187,
         Weight=83,
         custom_id=2,
@@ -124,6 +126,9 @@ def test_search_player(client):
         market_value="15M"
     )
 
+@pytest.mark.django_db
+def test_search_player(client, messi, cr7):
+
     # Create positions
     dc = Position.objects.create(name="DC")
     dm = Position.objects.create(name="DM")
@@ -148,17 +153,22 @@ def test_search_player(client):
     assert 'No players found' in response.content.decode('utf-8')
 
 @pytest.mark.django_db
-def test_advanced_search(client):
+def test_advanced_search(client, cr7):
     # Test sending a GET request to advanced_search without parameters
+    pos = Position.objects.create(name='STC')
+    cr7.Pos.add(pos)
     response = client.get('/advanced_search/')
     assert response.status_code == 200
 
     # Test sending a valid advanced search request
-    response = client.get('/advanced_search/', {'selectedPositions': ['Forward'], 'filters': '[{"property": "Age", "type": "greater", "value": 35}]'})
+    response = client.get('/advanced_search/', {'selectedPositions': ['STC'], 'filters': '[{"property": "Age", "type": "less", "value": 35}]'})
     assert response.status_code == 302
 
     # Test sending an invalid advanced search request
     response = client.get('/advanced_search/', {'filters': '[{"property": "Age", "type": "greater", "value": 50}]'})
+    assert response.status_code == 200
+
+    response = client.get('/advanced_search/', {'selectedPositions': ['Nope']})
     assert response.status_code == 200
 
 #test search player when method is not post
@@ -180,3 +190,63 @@ def test_advanced_search_exceptions():
     # Test sending a request that triggers other exceptions
     request_other_exception = factory.get('/advanced_search/')
     response_other_exception = advanced_search(request_other_exception)
+
+@pytest.mark.django_db
+def test_perform_search_less(cr7):
+    # Create some players and positions for testing
+    position = Position.objects.create(name='ST')
+    cr7.Pos.add(position)
+
+    # Define the filter for less than
+    filters = [{'property': 'Age', 'type': 'less', 'value': 90}]
+
+    # Perform the search
+    result = perform_search(['ST'], filters)
+
+    # Check if the result contains the expected player
+    assert cr7 in result
+
+@pytest.mark.django_db
+def test_perform_search_greater(cr7):
+    # Create some players and positions for testing
+    position = Position.objects.create(name='ST')
+    cr7.Pos.add(position)
+
+    # Define the filter for greater than
+    filters = [{'property': 'Age', 'type': 'greater', 'value': 10}]
+
+    # Perform the search
+    result = perform_search(['ST'], filters)
+
+    # Check if the result contains the expected player
+    assert cr7 in result
+
+@pytest.mark.django_db
+def test_perform_search_equal(cr7):
+    # Create some players and positions for testing
+    position = Position.objects.create(name='ST')
+    cr7.Pos.add(position)
+
+    # Define the filter for equal to
+    filters = [{'property': 'Age', 'type': 'equal', 'value': 25}]
+
+    # Perform the search
+    result = perform_search(['ST'], filters)
+
+    # Check if the result contains the expected player
+    assert cr7 in result
+
+@pytest.mark.django_db
+def test_perform_search_contains(cr7):
+    # Create some players and positions for testing
+    position = Position.objects.create(name='ST')
+    cr7.Pos.add(position)
+
+    # Define the filter for contains
+    filters = [{'property': 'Nationality', 'type': 'contains', 'value': 'Portugal'}]
+
+    # Perform the search
+    result = perform_search(['ST'], filters)
+
+    # Check if the result contains the expected player
+    assert cr7 in result

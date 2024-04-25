@@ -108,12 +108,14 @@ def test_players_by_position_view(rf, squad, player):
     # get squad id and create a position for testing, also add player to squad
     squad_id = squad.id
     position = Position.objects.create(name='ST')
+    pos_2 = Position.objects.create(name='LW')
     player.Pos.add(position)
+    player.Pos.add(pos_2)
 
     squad.players.add(player)
 
     #pass possition as a list
-    position_list = ['ST', 'LW']
+    position_list = (['ST'], ['LW'])
 
     # Create a request with no parameters
     request = rf.get(reverse('players_by_position', kwargs={'squad_id': squad_id, 'position': position_list}))

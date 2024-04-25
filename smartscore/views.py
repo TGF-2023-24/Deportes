@@ -7,7 +7,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.db.models import Q
 from .forms import CreateUserForm, SquadUpdateForm, CustomUserChangeForm, SquadCreationForm
 from django.contrib.auth.decorators import login_required 
-from .utils import get_dot_positions, get_player_stats, get_pos_stats, get_default_stats, get_squad_players, search_players_by_positions, get_squad_stats, get_default_avg_stats, get_better_players, filter_recommendations, estimate_transfer_value
+from .utils import get_dot_positions, get_player_stats, get_pos_stats, get_default_stats, get_squad_players, search_players_by_positions, get_squad_stats, get_better_players, filter_recommendations, estimate_transfer_value
 from django.http import JsonResponse, Http404
 import json
 from .dictionary import fifa_country_codes  
@@ -21,8 +21,7 @@ from json import JSONDecodeError
 # Create your views here.
 
 def home(request):
-    all_players = Player.objects.all()
-    return render(request, 'home.html', {'all': all_players})
+    return render(request, 'home.html', {})
 
 def about(request):
     return render(request, 'about.html', {})
@@ -161,7 +160,9 @@ def search_results(request):
 
     try:
         # Perform search based on positions and filters
+        print("Positions are", positions, "Filters are", filters)
         results = perform_search(positions, filters)
+        print("Results are", results)
 
         if not results:
             raise Http404("No results found.")
@@ -190,6 +191,7 @@ def perform_search(positions, filters):
             filter_type = filter_dict.get('type')
             filter_value = filter_dict.get('value')
 
+            print(property_name, filter_type, filter_value)
             # Construct the filter query based on the filter type
             if filter_type == "less":
                 players = players.filter(**{f"{property_name}__lt": filter_value})
@@ -247,11 +249,7 @@ def squad_players(request, squad_id):
     player_names = [player.Name for player in players]
     return JsonResponse(player_names, safe=False)
 
-def players_by_position(request, squad_id, position):
-    # Convert position to string if it's passed as a list
-    if isinstance(position, list) and len(position) == 1:
-        position = position[0]
-    
+def players_by_position(request, squad_id, position):   
     # Retrieve players by position for the specified squad
     players = get_squad_players(squad_id)
     filtered_players = search_players_by_positions(players, position)
@@ -292,8 +290,9 @@ def delete_squad(request, squad_id):
     if request.method == 'POST':
         squad.delete()
         return redirect('my_squads')
-    return render(request, 'delete_squad.html', {'squad': squad})
-
+    else:
+        raise Http404("Page not found")
+    
 
 @login_required(login_url='login')
 def add_to_squad(request, custom_id):
@@ -321,10 +320,9 @@ def squad_stats_api(request, position, players):
     players = Player.objects.filter(Name__in=players_list)
 
     avg_stats = get_pos_stats(position)
-    avg_defaulf_stats = get_default_avg_stats(position)
 
     # Retrieve statistics for the given position and players
-    stats = get_squad_stats(avg_stats, avg_defaulf_stats, position, players)
+    stats = get_squad_stats(avg_stats, position, players)
 
     # Return statistics as JSON response
     return JsonResponse(stats, safe=False)
@@ -393,11 +391,13 @@ def futureScope(request):
     }
 
     user_profile = request.user.userprofile
-    
+    print( "League ?" + user_profile.league)
     if user_profile.league:
         context['budget'] = user_profile.budget
         context['selected_league'] = user_profile.league
         context['selected_expectations'] = user_profile.expectations
+
+    print("Context is", context)
     
     return render(request, 'futureScope.html', context)
 
@@ -551,6 +551,8 @@ def save_recommendations(request):
 
         name = 'Recommendations for ' + archetype + ' ' + position + ' players with ' + foot + ' foot'
 
+        print(name)
+
         # if shorlist doesn't exist, create it
         if not Shortlist.objects.filter(name=name).exists():
             shortlist = Shortlist.objects.create(name=name)
@@ -576,6 +578,7 @@ def save_recommendations(request):
         # Save the recommendations to the database
         return JsonResponse({'message': message})
     else:
+        message = "Invalid method. This endpoint only accepts POST requests."
         return JsonResponse({'error': message}, status=400)
 
 @login_required(login_url='login')

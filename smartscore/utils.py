@@ -80,38 +80,6 @@ def get_default_stats(player):
 
     return stats
 
-def get_default_avg_stats(position_name):
-    stats = {}
-    
-    position = Position.objects.get(name=position_name)
-    players = Player.objects.filter(Pos=position)
-
-    stats['DEFAULT'] = {}
-
-    # Iterating over the attributes defined in the dictionary
-    for attribute_list in stats_position_dictionary['DEFAULT']:
-        attribute_display_name = attribute_list['displayName']
-        attribute_name = attribute_list['attributeName']
-        
-        # Calculating average, maximum, and minimum for each attribute
-        avg_value = players.aggregate(Avg(attribute_name))[f"{attribute_name}__avg"] or 0
-        max_value = players.aggregate(Max(attribute_name))[f"{attribute_name}__max"] or 0
-        min_value = players.aggregate(Min(attribute_name))[f"{attribute_name}__min"] or 0
-        
-        rounded_avg_value = round(avg_value, 2)
-        rounded_max_value = round(max_value, 2)
-        rounded_min_value = round(min_value, 2)
-        
-        # Storing avg, max, and min values in the stats dictionary
-        stats['DEFAULT'][attribute_display_name] = {
-            'avg': rounded_avg_value,
-            'max': rounded_max_value,
-            'min': rounded_min_value,
-            'attribute_name': attribute_name  # Add attribute name to the dictionary
-        }
-
-    return stats
-
 
 def get_pos_stats(position_name):
     stats = {}
@@ -222,11 +190,10 @@ def parse_market_value(market_value):
     else:
         return 'Unknown'
 
-def get_squad_stats(avg_stats, avg_default_stats, position, players):
+def get_squad_stats(avg_stats, position, players):
     # Dictionary to store statistics and comparisons
     stats = {}
     stats[position] = {}
-    stats['DEFAULT'] = {}  # Initialize the 'DEFAULT' key
 
     # Iterate over each player
     for player in players:
@@ -245,17 +212,27 @@ def get_squad_stats(avg_stats, avg_default_stats, position, players):
 
             player_stat_value = getattr(player, attribute_name)
 
+            print("Percentile 70: ", percentile70_stat_value, "for ", attribute_display_name)
+            print("Percentile 30: ", percentile30_stat_value, "for ", attribute_display_name)
+            print("Percentile 95: ", percentile95_stat_value, "for ", attribute_display_name)
+            print("Percentile 5: ", percentile5_stat_value, "for ", attribute_display_name)
+            
             # Determine if the player's stat is significantly above or below average
             if player_stat_value >= percentile70_stat_value:
                 comparison = "significantly above average"
+                print(f"{player.Name} has a {attribute_display_name} of {player_stat_value} which is significantly above average")
                 if player_stat_value >= percentile95_stat_value:
                     comparison = "exceptional"
+                    print(f"{player.Name} has a {attribute_display_name} of {player_stat_value} which is exceptional")
             elif player_stat_value <= percentile30_stat_value:
                 comparison = "significantly below average"
+                print(f"{player.Name} has a {attribute_display_name} of {player_stat_value} which is significantly below average")
                 if player_stat_value <= percentile5_stat_value:
                     comparison = "horrible"
+                    print(f"{player.Name} has a {attribute_display_name} of {player_stat_value} which is horrible")
             else:
                 comparison = "average" #The player is mid for this attribute
+                print(f"{player.Name} has a {attribute_display_name} of {player_stat_value} which is average")
 
             # Check if the player's stat is the maximum or minimum
             is_max = player_stat_value == max_stat_value
@@ -269,41 +246,6 @@ def get_squad_stats(avg_stats, avg_default_stats, position, players):
             }
 
         stats[position][player.Name] = player_stats
-
-    if position == "": #If the position is not specified, we use the default stats
-        # Compare player stats with average for default stats
-        for player in players:
-            player_stats = {}
-
-            # Compare player stats with average for default stats
-            for attribute_display_name, attribute_info in avg_default_stats['DEFAULT'].items():
-                attribute_name = attribute_info['attribute_name']  # Access attribute name
-                avg_stat_value = attribute_info['avg']
-                # Check if the player's stat is the maximum or minimum
-                is_max = player_stat_value == attribute_info['max']
-                is_min = player_stat_value == attribute_info['min']
-                percentile70_stat_value = attribute_info['percentile_70']
-                percentile30_stat_value = attribute_info['percentile_30']
-
-                player_stat_value = getattr(player, attribute_name)
-
-                # Determine if the player's stat is significantly above or below average
-                if player_stat_value >= percentile70_stat_value:
-                    comparison = "significantly above average"
-                elif player_stat_value <= percentile30_stat_value:
-                    comparison = "significantly below average"
-                else:
-                    comparison = "average" #The player is mid for this attribute
-                
-
-                player_stats[attribute_display_name] = {
-                    'value': player_stat_value,
-                    'comparison': comparison,
-                    'is_max': is_max,
-                    'is_min': is_min
-                }
-
-            stats['DEFAULT'][player.Name] = player_stats
 
     return stats
 
