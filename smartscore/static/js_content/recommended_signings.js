@@ -276,7 +276,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             playerImageElement.addEventListener('error', function() {
                 // If the image fails to load, use a placeholder image
-                playerImageElement.src = '/static/smartscore/images/faces/unknown.png';
+                playerImageElement.src = '/static/smartscore/images/faces/default.png';
             });
 
             // Append the shirt image element to the player link

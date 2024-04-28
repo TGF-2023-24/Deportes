@@ -1,10 +1,7 @@
 import pytest
 
-from ..models import Player, Position, UserProfile
-from ..views import player_smartscore_api
+from ..models import Player, Position
 from ..smartscore import smartScore
-from django.urls import reverse
-from django.contrib.auth.models import User
 
 
 @pytest.fixture

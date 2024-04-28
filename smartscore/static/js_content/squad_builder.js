@@ -280,7 +280,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const playerImage = document.createElement('img');
                 playerImage.src = `/static/smartscore/images/faces/${playerID}.png`; // Replace with the correct path to your player images
                 playerImage.addEventListener('error', function () {
-                    playerImage.src = '/static/smartscore/images/faces/unknown.png'; // Replace with the default image path
+                    playerImage.src = '/static/smartscore/images/faces/default.png'; // Replace with the default image path
                 });
                 playerImage.alt = playerName; // Set alt text to player's name
                 playerImage.style.width = '90px'; // Adjust width as needed

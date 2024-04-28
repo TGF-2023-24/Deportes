@@ -14,7 +14,7 @@
                 <!-- Player image -->
                 <div class="player-image-container">
                     <img src="{% static 'smartscore/images/faces/' %}{{ player.custom_id|stringformat:"s" }}.png"
-                        onerror="this.onerror=null; this.src='{% static 'smartscore/images/faces/unknown.png' %}'"
+                        onerror="this.onerror=null; this.src='{% static 'smartscore/images/faces/default.png' %}'"
                         alt="{{ player.custom_id }}" class="player-image">
                 </div>
 
