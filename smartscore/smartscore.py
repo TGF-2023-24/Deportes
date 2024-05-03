@@ -774,12 +774,15 @@ def calculate_age_score(age, growth_factor):
     elif growth_factor == 2:
         calculation = pow(abs(age_difference)/10, 2) #Players in the extremes will be affected, others will be affected less
         calculation = round(calculation, 2)
+    
+    print("Calculation: ", calculation)
     if age_difference < 0:
         # Player is younger than the threshold, give a bonus
         score += calculation
     else:
         # Player is older than the threshold, penalize
         score -= calculation
+        score = max(0.1, score)
 
     
     print ("Age score: ", score)
