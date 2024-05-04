@@ -368,7 +368,7 @@ def replace_player(request, squad_id, old_player, new_player, pos):
     try:
         squad = Squad.objects.get(pk=squad_id)
         old_player = Player.objects.get(Name=old_player)
-        new_player = Player.objects.get(Name=new_player)
+        new_player = Player.objects.get(Name=new_player, Pos__name=pos)
         if old_player in squad.players.all():
             squad.players.remove(old_player)
             squad.players.add(new_player)
