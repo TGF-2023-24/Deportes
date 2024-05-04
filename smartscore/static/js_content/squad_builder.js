@@ -367,6 +367,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (playerCounts[position] > 1) {
                 // Adjust position of players based on the number of players at the position
                     for (let i = 0; i < playerPositionContainers[position].length; i++) {
+                        console.log('i:', i)
                         let playerPositionContainer = playerPositionContainers[position][i];
                         console.log('Adjusting position of container:', playerPositionContainer);
                         // Adjust left position, first one to the left, second one to the right, and third one to the center
