@@ -656,7 +656,7 @@ league_multipliers = {
 
 def smartScore(player, pos, budget, expectations, league):
     # Get the weights for the player's position
-    print("Player: ", player.Name, "Position: ", pos)
+    #print("Player: ", player.Name, "Position: ", pos)
     weights = position_weights.get(pos)
     
     smart_score = smartscore_attributes(player, pos, league, weights)
@@ -670,7 +670,7 @@ def smartScore(player, pos, budget, expectations, league):
     elif getattr(player, 'Min') < 1500:
         smart_score *= 0.95
 
-    print ("Smart Score after attribute weighting: ", smart_score) 
+    #print ("Smart Score after attribute weighting: ", smart_score) 
 
     # We want to give a higher score to players with higher potential ability, compared to current ability
     # The greater  the difference between potential ability and current ability, the higher the score (exponential growth)
@@ -678,7 +678,7 @@ def smartScore(player, pos, budget, expectations, league):
         projected_growth = 0
     else:
         projected_growth = (getattr(player, 'Pot_abil') / getattr(player, 'CAbil'))
-    print("Projected growth: ", projected_growth)
+    #print("Projected growth: ", projected_growth)
     projected_growth = min(1.8, projected_growth) # Cap the growth at 1.8
     if getattr(player, 'Age') < 34: #Players older than 34 are not expected to grow
         smart_score *= pow(projected_growth, 0.75 + expectations/2)
@@ -686,13 +686,13 @@ def smartScore(player, pos, budget, expectations, league):
     # Threshold is 27 years old, the further away from this age, the higher the penalty or bonus (exponential growth)
     growth_factor = expectations 
     age_score = calculate_age_score(getattr(player, 'Age'), growth_factor)
-    print("Age score is ", age_score)
+    #print("Age score is ", age_score)
     if age_score > 0:
         smart_score *= age_score
     elif age_score < 0:
         smart_score *= 1/abs(age_score) 
 
-    print("Smart Score after age and potential ability weighting: ", smart_score)
+    #print("Smart Score after age and potential ability weighting: ", smart_score)
 
      # Adjust score based on international match experience, reward players with more experience
     int_matches = getattr(player, 'International_match')
@@ -703,7 +703,7 @@ def smartScore(player, pos, budget, expectations, league):
     elif int_matches > 150:
         smart_score *= 1.15
 
-    print("Smart Score after international match experience weighting: ", smart_score)
+    #print("Smart Score after international match experience weighting: ", smart_score)
     
     if budget != 9999: #If budget is defined
         value = getattr(player, 'market_value')
@@ -719,7 +719,7 @@ def smartScore(player, pos, budget, expectations, league):
         smart_score *= 0.85  # Penalize players with no league information
     
 
-    print("SmartScore final: ", round(smart_score))
+    #print("SmartScore final: ", round(smart_score))
     if smart_score > 99:
         return 99
     if smart_score < 1:
@@ -751,7 +751,7 @@ def adjust_for_budget(budget, playerValue):
     adjustment_factor = sigmoid(budgetFraction, a=a, b=b, c=c)
 
     #HAY UN GRÁFICO DE LA CURVA EN LA CARPETA DE IMÁGENES
-    print("Budget fraction: ", budgetFraction, "Adjustment factor: ", adjustment_factor)
+    #print("Budget fraction: ", budgetFraction, "Adjustment factor: ", adjustment_factor)
     
     return adjustment_factor
 
@@ -775,7 +775,6 @@ def calculate_age_score(age, growth_factor):
         calculation = pow(abs(age_difference)/10, 2) #Players in the extremes will be affected, others will be affected less
         calculation = round(calculation, 2)
     
-    print("Calculation: ", calculation)
     if age_difference < 0:
         # Player is younger than the threshold, give a bonus
         score += calculation
@@ -785,7 +784,7 @@ def calculate_age_score(age, growth_factor):
         score = max(0.1, score)
 
     
-    print ("Age score: ", score)
+    #print ("Age score: ", score)
     return score
 
 
@@ -795,5 +794,5 @@ def calculate_league_multiplier(league):
     
     # Get the multiplier for the league tier
     multiplier = league_multipliers.get(league_tier, 0.85)  # If tier not found, default to 0.85
-    print("League tier: ", league_tier, "Multiplier: ", multiplier)
+    #print("League tier: ", league_tier, "Multiplier: ", multiplier)
     return multiplier

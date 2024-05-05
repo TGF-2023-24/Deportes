@@ -293,7 +293,7 @@ def smartscore_attributes(player, pos, league, position_weights):
     # Initialize smart score
     smart_score = 0
 
-    print(position_weights)
+    #print(position_weights)
     
     # Iterate over attribute weights
     for attribute, weight in position_weights.items():
@@ -331,7 +331,7 @@ def get_threshold_attribute(attribute_name, player_value, players):
     
     percentile = round(percentile_rank / 100, 2)
 
-    print(f"Percentile for {attribute_name} with value {player_value} is {percentile}")
+    #print(f"Percentile for {attribute_name} with value {player_value} is {percentile}")
     return percentile
 
 
