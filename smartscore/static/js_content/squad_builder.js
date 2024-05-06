@@ -327,6 +327,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     delete playerPositionMapping[removedPlayerName];
                     addedPlayerCount--;
                     playerCounts[position]--;
+
+                    //Obtain and remove the player position container from the array
+                    const index = playerPositionContainers[position].indexOf(playerPosition);
+                    if (index !== -1) {
+                        playerPositionContainers[position].splice(index, 1);
+                    }
                     //remove the player from the blocked players
                     blockedPlayers.delete(removedPlayerName);
                     console.log('Player removed:', removedPlayerName);
@@ -363,10 +369,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 playerNameElement.style.top = 100 + 'px'; // Adjust the position of the player name
                 //playerNameElement.style.left = 25 + 'px'; // Adjust the position of the player name
                 playerPosition.appendChild(playerNameElement);
-
                 if (playerCounts[position] > 1) {
                 // Adjust position of players based on the number of players at the position
-                    for (let i = 0; i < playerPositionContainers[position].length; i++) {
+                    for (let i = 0; i < playerPositionContainers[position].length ; i++) {
                         console.log('i:', i)
                         let playerPositionContainer = playerPositionContainers[position][i];
                         console.log('Adjusting position of container:', playerPositionContainer);
