@@ -1,9 +1,14 @@
 {% extends "base.html" %}
+{% load static %} <!-- Necessary to use static folder  -->
 {% block title %}About{% endblock %}
 {% block content %}
     <div class="about-container">
 
-        <h1 class="about-heading">About PlayerProVision</h1>
+        <div class="header-content">
+            <h1 class="about-heading">About PlayerProVision</h1>
+            <img src="{% static 'smartscore/images/icono.png' %}" alt="Icon">
+        </div>
+
         <p class="about-content">Welcome to PlayerProVision, your ultimate destination for football analysis and team management tools. Our platform is designed to revolutionize the way football enthusiasts and team managers interact with player data and manage their squads.</p>
 
         <h2 class="about-heading">Our Vision</h2>
@@ -28,6 +33,8 @@
 
         <h2 class="about-heading">Contact Us</h2>
         <p class="about-content">Have questions or feedback? We'd love to hear from you! Contact us at contact@playerprovision.com</p>
+
+        <p class="about-content">PlayerProVision is a university project developed by UCM students as part of the final project.</p>
 
     </div>
 {% endblock %}

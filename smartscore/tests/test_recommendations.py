@@ -211,7 +211,7 @@ def test_get_recommendations_unauth_noattr( user, sample_player1):
 
     # Simulate a GET request to get recommendations
     url = reverse('get_recommendations')
-    response = client.get(url, data={'positions': 'STC', 'attributes': '', 'foot': 'Left'})
+    response = client.get(url, data={'positions': 'STC', 'attributes': '', 'foot': ''})
     
     # Check that the response is successful
     assert response.status_code == 200
@@ -248,7 +248,7 @@ def test_save_recommendations_new_shortlist(authenticated_client, user, sample_p
     data = {
         'position': 'DC',
         'archetype': 'Agile',
-        'foot': 'Left',
+        'foot': '',
         'recommendation': {'name': 'Test Player'}
     }
     response = authenticated_client.post(url, data=json.dumps(data), content_type='application/json')

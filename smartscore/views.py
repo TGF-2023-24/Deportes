@@ -160,9 +160,9 @@ def search_results(request):
 
     try:
         # Perform search based on positions and filters
-        print("Positions are", positions, "Filters are", filters)
+        #print("Positions are", positions, "Filters are", filters)
         results = perform_search(positions, filters)
-        print("Results are", results)
+        #print("Results are", results)
 
         if not results:
             raise Http404("No results found.")
@@ -191,7 +191,7 @@ def perform_search(positions, filters):
             filter_type = filter_dict.get('type')
             filter_value = filter_dict.get('value')
 
-            print(property_name, filter_type, filter_value)
+            #print(property_name, filter_type, filter_value)
             # Construct the filter query based on the filter type
             if filter_type == "less":
                 players = players.filter(**{f"{property_name}__lt": filter_value})
@@ -336,7 +336,7 @@ def get_replacement_players(request, position, player, squad_id):
     current_players = squad.players.all()
 
     replacement_players = search_players_by_positions(Player.objects.all(), position)
-    print("replacement_players", replacement_players)
+    #print("replacement_players", replacement_players)
 
     replacedPlayer = Player.objects.get(Name=player)
     replacement_players = get_better_players(replacedPlayer, replacement_players, position)
@@ -391,13 +391,12 @@ def futureScope(request):
     }
 
     user_profile = request.user.userprofile
-    print( "League ?" + user_profile.league)
     if user_profile.league:
         context['budget'] = user_profile.budget
         context['selected_league'] = user_profile.league
         context['selected_expectations'] = user_profile.expectations
 
-    print("Context is", context)
+    #print("Context is", context)
     
     return render(request, 'futureScope.html', context)
 
@@ -493,7 +492,7 @@ def get_recommendations(request):
     print("Positions are", positions, "Filters are", attributes, "Foot is", foot)
 
     filtered_players = filter_recommendations(positions, attributes, foot)
-    print("Filtered players are", filtered_players)
+    #print("Filtered players are", filtered_players)
 
     # Get smartscore for the filtered players, return the top 15
     player_scores = []
@@ -526,10 +525,10 @@ def get_recommendations(request):
         final_players.append(player_info)
 
     # Print or use final_players as needed
-    for player_info in final_players:
-        print(f"Player: {player_info['name']}, Score: {player_info['score']}, Dorsal: {player_info['dorsal']}")
+    #for player_info in final_players:
+        #print(f"Player: {player_info['name']}, Score: {player_info['score']}, Dorsal: {player_info['dorsal']}")
 
-    print("Top players are", [player_info['name'] for player_info in final_players])
+    #print("Top players are", [player_info['name'] for player_info in final_players])
 
     return JsonResponse(final_players, safe=False)
 
@@ -549,6 +548,10 @@ def save_recommendations(request):
         print("Archeotipe is", archetype, "Position is", position, "Foot is", foot)
         print("Data is", recommendations_data)
 
+        # if foot is not specified, set it to 'Both'
+        if foot == '':
+            foot = 'Both'
+            
         name = 'Recommendations for ' + archetype + ' ' + position + ' players with ' + foot + ' foot'
 
         print(name)
@@ -586,7 +589,7 @@ def shortlist(request):
 
     user = request.user
     shortlists = user.userprofile.shortlist.all()
-    print("Shortlist is", shortlists)
+    #print("Shortlist is", shortlists)
     
     return render(request, 'shortlist.html', {'shortlists': shortlists})
 
@@ -597,6 +600,10 @@ def remove_from_shortlist(request, shortlist_id, player_id):
     
     # Remove the player from the shortlist
     shortlist.players.remove(player)
+
+    # if shortlist is empty, delete it
+    if shortlist.players.count() == 0:
+        shortlist.delete()
     
     # Redirect to the shortlist page or any other appropriate page
     return redirect('shortlist')

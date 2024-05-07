@@ -36,6 +36,7 @@ const positionLimits = {
 
 addedPlayerCount = 0;
 
+
 // Define a function to handle the selection of a squad
 function handleSquadSelection() {
     // Get the selected squad ID from the dropdown
@@ -182,7 +183,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // Add "Select a player" header after displaying players
-        playerList.innerHTML += '<p class="player-list-header">Select a player</p>';
+        playerList.innerHTML += '<p class="player-list-header">Select a player and press add player button to add it to squad.</p>';
     }
     
     // Function to handle player button click
@@ -283,8 +284,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     playerImage.src = '/static/smartscore/images/faces/default.png'; // Replace with the default image path
                 });
                 playerImage.alt = playerName; // Set alt text to player's name
-                playerImage.style.width = '90px'; // Adjust width as needed
-                playerImage.style.height = '100px'; // Adjust height as needed
+                playerImage.style.width = '100px'; // Adjust width as needed
+                playerImage.style.height = 'calc(100px * (310 / 260));'; // Adjust height as needed
 
                 // Calculate the position of the image based on container dimensions
                 const left = parseFloat(positionMapping[position].left) / 500 * containerWidth; // Normalize left position
@@ -366,7 +367,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 playerNameElement.textContent = printedName;
                 //playerNameElement.style.position = 'absolute';
-                playerNameElement.style.top = 100 + 'px'; // Adjust the position of the player name
+                playerNameElement.style.top = 110 + 'px'; // Adjust the position of the player name
                 //playerNameElement.style.left = 25 + 'px'; // Adjust the position of the player name
                 playerPosition.appendChild(playerNameElement);
                 if (playerCounts[position] > 1) {
@@ -377,9 +378,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         console.log('Adjusting position of container:', playerPositionContainer);
                         // Adjust left position, first one to the left, second one to the right, and third one to the center
                         if (playerCounts[position] === 2) {
-                            playerPositionContainer.style.left = (left + (i === 0 ? -48 : 48)) + 'px';
+                            playerPositionContainer.style.left = (left + (i === 0 ? -55 : 55)) + 'px';
                         } else if (playerCounts[position] === 3) {
-                            playerPositionContainer.style.left = (left + (i === 0 ? -88 : (i === 1 ? 88 : 0))) + 'px';
+                            playerPositionContainer.style.left = (left + (i === 0 ? -110 : (i === 1 ? 110 : 0))) + 'px';
                         }
                     }
                 }
@@ -466,137 +467,138 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to handle the analyze squad button click
     document.getElementById('analyze-squad-btn').addEventListener('click', function() {
         // Check if there are 11 players added to the field
-        /*if (addedPlayerCount < 11) {
+        if (addedPlayerCount < 11) {
             alert('Please add 11 players to analyze the squad.');
             return;
-        }*/
-            document.getElementById('standout-stats').innerHTML = '';
-            console.log('Analyzing squad...');
-            const squadPlayers = {}; // Object to store players by position
-              
-            // Iterate over player names and get their positions
-            Object.keys(playerPositionMapping).forEach(playerName => {
-                const position = playerPositionMapping[playerName];
-                // Store player name under their position
-                if (!squadPlayers[position]) {
-                    squadPlayers[position] = [];
-                }
-                squadPlayers[position].push(playerName);
-            });
-    
-            // Iterate over positions and get stats
-            Object.keys(squadPlayers).forEach(position => {
-                const squadPosition = squadPlayers[position];
-                console.log('Analyzing position:', position, 'with players:', squadPosition);
-                // Fetch stats for the position from the server
+        }
 
-                const playerString = JSON.stringify(squadPlayers[position]);
-                // Fetch stats for the position from the server
-                fetch(`/api/squad-stats/${position}/${playerString}`)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`Failed to fetch stats for position ${position}`);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        // Store stats for the position
-                        console.log('Stats for position:', data);
-                        // Iterate over the received data
-                        Object.keys(data).forEach(position => {
-                            const positionStats = data[position];
+        document.getElementById('standout-stats').innerHTML = '';
+        console.log('Analyzing squad...');
+        const squadPlayers = {}; // Object to store players by position
+            
+        // Iterate over player names and get their positions
+        Object.keys(playerPositionMapping).forEach(playerName => {
+            const position = playerPositionMapping[playerName];
+            // Store player name under their position
+            if (!squadPlayers[position]) {
+                squadPlayers[position] = [];
+            }
+            squadPlayers[position].push(playerName);
+        });
+
+        // Iterate over positions and get stats
+        Object.keys(squadPlayers).forEach(position => {
+            const squadPosition = squadPlayers[position];
+            console.log('Analyzing position:', position, 'with players:', squadPosition);
+            // Fetch stats for the position from the server
+
+            const playerString = JSON.stringify(squadPlayers[position]);
+            // Fetch stats for the position from the server
+            fetch(`/api/squad-stats/${position}/${playerString}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Failed to fetch stats for position ${position}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Store stats for the position
+                    console.log('Stats for position:', data);
+                    // Iterate over the received data
+                    Object.keys(data).forEach(position => {
+                        const positionStats = data[position];
+                        
+                        // Iterate over players in the position
+                        Object.keys(positionStats).forEach(playerName => {
+                            const playerStats = positionStats[playerName];
+                            let hasStandoutStat = false;
+                            let positiveStatsCount = 0;
+                            let negativeStatsCount = 0;
+                            // Display the player's name
+                            const playerNameElement = document.createElement('div');
+                            playerNameElement.innerHTML = `<strong>${playerName} (${position}):</strong>`;
+                            document.getElementById('standout-stats').appendChild(playerNameElement);
                             
-                            // Iterate over players in the position
-                            Object.keys(positionStats).forEach(playerName => {
-                                const playerStats = positionStats[playerName];
-                                let hasStandoutStat = false;
-                                let positiveStatsCount = 0;
-                                let negativeStatsCount = 0;
-                                // Display the player's name
-                                const playerNameElement = document.createElement('div');
-                                playerNameElement.innerHTML = `<strong>${playerName} (${position}):</strong>`;
-                                document.getElementById('standout-stats').appendChild(playerNameElement);
-                                
-                                // Iterate over player stats
-                                Object.keys(playerStats).forEach(statName => {
-                                    const stat = playerStats[statName];
-                                    // Check if the stat is standout
-                                    if ((stat.is_max || stat.is_min || stat.comparison !== 'average') && stat.comparison !== 'average') {
-                                        hasStandoutStat = true;
-                                        let symbol = '';
-                                        let color = '';
-                                        if (stat.comparison.includes('above')) {
-                                            symbol = '+';
-                                            color = 'forestgreen';
-                                            positiveStatsCount++;
-                                        } else if (stat.comparison.includes('below')) {
-                                            symbol = '-';
-                                            color = 'red';
-                                            negativeStatsCount++;
-                                        } else if (stat.comparison.includes('exceptional')) {
-                                            symbol = '⬆';
-                                            color = 'darkgreen';
-                                            positiveStatsCount++;
-                                        } else if (stat.comparison.includes('horrible')) {
-                                            symbol = '⬇';
-                                            color = 'darkred';
-                                            negativeStatsCount++;
-                                        }
-                                        
-                                        // Display the standout stat in your HTML
-                                        const statElement = document.createElement('div');
-                                        statElement.style.color = color;
-                                        statElement.innerHTML = `${symbol} ${statName} - ${stat.value} (${stat.comparison})`;
-                                        
-                                        // Append the stat element to your HTML
-                                        document.getElementById('standout-stats').appendChild(statElement);
+                            // Iterate over player stats
+                            Object.keys(playerStats).forEach(statName => {
+                                const stat = playerStats[statName];
+                                // Check if the stat is standout
+                                if ((stat.is_max || stat.is_min || stat.comparison !== 'average') && stat.comparison !== 'average') {
+                                    hasStandoutStat = true;
+                                    let symbol = '';
+                                    let color = '';
+                                    if (stat.comparison.includes('above')) {
+                                        symbol = '+';
+                                        color = 'forestgreen';
+                                        positiveStatsCount++;
+                                    } else if (stat.comparison.includes('below')) {
+                                        symbol = '-';
+                                        color = 'red';
+                                        negativeStatsCount++;
+                                    } else if (stat.comparison.includes('exceptional')) {
+                                        symbol = '⬆';
+                                        color = 'darkgreen';
+                                        positiveStatsCount++;
+                                    } else if (stat.comparison.includes('horrible')) {
+                                        symbol = '⬇';
+                                        color = 'darkred';
+                                        negativeStatsCount++;
                                     }
-                                });
-
-                                // If no standout stats, display "Player is solid"
-                                if (!hasStandoutStat) {
-                                    const solidPlayerElement = document.createElement('div');
-                                    solidPlayerElement.innerHTML = `Player is solid`;
-                                    document.getElementById('standout-stats').appendChild(solidPlayerElement);
+                                    
+                                    // Display the standout stat in your HTML
+                                    const statElement = document.createElement('div');
+                                    statElement.style.color = color;
+                                    statElement.innerHTML = `${symbol} ${statName} - ${stat.value} (${stat.comparison})`;
+                                    
+                                    // Append the stat element to your HTML
+                                    document.getElementById('standout-stats').appendChild(statElement);
                                 }
-                                
-                                else if (negativeStatsCount > positiveStatsCount) {
-                                    //Add a replace button
-                                    console.log(`We need to replace ${playerName}`)
-                                    const replaceButton = document.createElement('button');
-                                    replaceButton.innerHTML = 'Replace';
-                                    replaceButton.classList.add('replace-button');
-                                    replaceButton.addEventListener('click', () => {
-                                        // Hay que implementar esto
-                                        console.log(`Replace ${playerName}`);
-                                        const squadId = document.getElementById('squad-select').value;
-
-                                        fetch(`/api/replacement-players/${position}/${playerName}/${squadId}`)
-                                        .then(response => {
-                                            if (!response.ok) {
-                                                throw new Error(`Failed to fetch replacement players for ${playerName}`);
-                                            }
-                                            return response.json();
-                                        })
-                                        .then(data => {
-                                            console.log('Replacement players:', data);
-                                            currentPlayerIndex = 0;
-                                            displayReplacementPlayers(data, position, playerName);
-                                        })
-                                        .catch(error => {
-                                            console.error('Error fetching replacement players:', error);
-                                        });
-                                    });
-                                    document.getElementById('standout-stats').appendChild(replaceButton);
-                                }
-
                             });
+
+                            // If no standout stats, display "Player is solid"
+                            if (!hasStandoutStat) {
+                                const solidPlayerElement = document.createElement('div');
+                                solidPlayerElement.innerHTML = `Player is solid`;
+                                document.getElementById('standout-stats').appendChild(solidPlayerElement);
+                            }
+                            
+                            else if (negativeStatsCount > positiveStatsCount) {
+                                //Add a replace button
+                                console.log(`We need to replace ${playerName}`)
+                                const replaceButton = document.createElement('button');
+                                replaceButton.innerHTML = 'Replace';
+                                replaceButton.classList.add('replace-button');
+                                replaceButton.addEventListener('click', () => {
+                                    // Hay que implementar esto
+                                    console.log(`Replace ${playerName}`);
+                                    const squadId = document.getElementById('squad-select').value;
+
+                                    fetch(`/api/replacement-players/${position}/${playerName}/${squadId}`)
+                                    .then(response => {
+                                        if (!response.ok) {
+                                            throw new Error(`Failed to fetch replacement players for ${playerName}`);
+                                        }
+                                        return response.json();
+                                    })
+                                    .then(data => {
+                                        console.log('Replacement players:', data);
+                                        currentPlayerIndex = 0;
+                                        displayReplacementPlayers(data, position, playerName);
+                                    })
+                                    .catch(error => {
+                                        console.error('Error fetching replacement players:', error);
+                                    });
+                                });
+                                document.getElementById('standout-stats').appendChild(replaceButton);
+                            }
+
                         });
-                    })
-                    .catch(error => {
-                        console.error('Error fetching stats:', error);
                     });
-            });
+                })
+                .catch(error => {
+                    console.error('Error fetching stats:', error);
+                });
+        });
 
     });
 

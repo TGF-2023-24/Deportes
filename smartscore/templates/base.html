@@ -37,13 +37,13 @@
 
             <div class="sidebar-body">
                 <div class="sidebar-body-menu">
-                    <a class="active" href="{% url 'home' %}">
-                        <i class="bi bi-house-fill"></i>Home
+                    <a href="{% url 'home' %}">
+                        <i class="bi bi-house-fill"></i>  Home
                     </a>
             
                     <a id="tools" class="show-cat-btn" href="##">
-                        <i class="bi bi-grid-1x2-fill"></i>Tools
-                        <i class="bi bi-caret-down"></i>
+                        <i class="bi bi-grid-1x2-fill"></i>  Tools
+                        <i class="bi bi-arrow-down-short"></i> <!-- Right arrow icon -->
                     </a>
                     <ul id="list1" class="cat-sub-menu"> 
                         <a href="{% url 'advanced_search' %}"><i class="bi bi-search"></i>Advanced Search</a>
@@ -53,17 +53,18 @@
                     </ul>
             
                     <a id="library" class="show-cat-btn" href="##">
-                        <i class="bi bi-bookshelf"></i>Library
-                        <i class="bi bi-caret-down"></i>
+                        <i class="bi bi-bookshelf"></i>  Library
+                        <i class="bi bi-arrow-down-short"></i> <!-- Right arrow icon -->
+
                     </a>
                     <ul id="list2" class="cat-sub-menu">
-                        <a href="{% url 'my_squads' %}"><i class="bi bi-people-fill"></i>My Squads</a>
-                        <a href="{% url 'shortlist' %}"><i class="bi bi-star-fill"></i>Shortlist</a>
+                        <a href="{% url 'my_squads' %}"><i class="bi bi-people-fill"></i>  My Squads</a>
+                        <a href="{% url 'shortlist' %}"><i class="bi bi-star-fill"></i>  Shortlist</a>
                     </ul>
             
-                    <a href="{% url 'about' %}"><i class="bi bi-info-circle-fill"></i></span>About</a>
+                    <a href="{% url 'about' %}"><i class="bi bi-info-circle-fill"></i></span>  About</a>
             
-                    <a href="{% url 'settings' %}"><i class="bi bi-gear-fill"></i></span>Settings</a>
+                    <a href="{% url 'settings' %}"><i class="bi bi-gear-fill"></i></span>  Settings</a>
                 </div>
             </div>
             
@@ -76,7 +77,9 @@
             <form action="{% url 'search_player' %}" method="POST">
                 {% csrf_token %} <!--security -->
                 <input type="text" name="q" value="{{q}}" placeholder="Search for players">
-                <input type="submit" value="Search" class="primary-search-btn">
+                <button type="submit" class="primary-search-btn">
+                    <i class="bi bi-search"></i>  Search
+                </button>
             </form>
         </div>
 
@@ -115,9 +118,11 @@
         <p>Pie de página común &copy; {% now "Y" %}</p>
     </footer>
    -->  
-   <script src="{% static 'js_content/utils.js' %}"></script>
 
-   
+
+
+   <script src="{% static 'js_content/sidebar.js' %}"></script>
+
    
 </body>
 </html>

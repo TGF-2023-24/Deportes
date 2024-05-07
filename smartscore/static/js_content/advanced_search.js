@@ -186,6 +186,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to handle search button click
     document.getElementById('adv-search-btn').addEventListener('click', function() {
+        //get the div class for the spinner
+        const spinner = document.getElementById('loading-spinner');
+        spinner.classList.add('spinner'); // Apply the spinner CSS class
+        spinner.style.display = 'block'; // Display the spinner
+        spinner.style.margin = 'auto'; // Center the spinner
+        spinner.style.marginTop = '50px'; // Add some top margin
+        
         // Get activated dots
         const activatedDots = document.querySelectorAll('.activated');
         // Get positions corresponding to activated dots

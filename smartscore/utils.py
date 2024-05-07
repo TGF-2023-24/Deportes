@@ -7,13 +7,13 @@ import math
 
 def get_dot_positions(player_pos):
     position_mapping = {
-        'GK': {'default_top': 750},  # Goalkeeper
-        'D': {'default_top': 650},   # Defender
-        'WB': {'default_top': 525},  # Wing-back
-        'DM': {'default_top': 525},  # Defensive midfielder
-        'M': {'default_top': 400},   # Midfielder
-        'AM': {'default_top': 250},  # Attacking midfielder
-        'ST': {'default_top': 125},  # Forward
+        'GK': {'default_top': 750, 'name': 'Goalkeeper'},  # Goalkeeper
+        'D': {'default_top': 650, 'name': 'Defender'},   # Defender
+        'WB': {'default_top': 525, 'name': 'Wing-back'},  # Wing-back
+        'DM': {'default_top': 525, 'name': 'Defensive midfielder'},  # Defensive midfielder
+        'M': {'default_top': 400, 'name': 'Midfielder'},   # Midfielder
+        'AM': {'default_top': 250, 'name': 'Attacking midfielder'},  # Attacking midfielder
+        'ST': {'default_top': 125, 'name': 'Forward'},  # Forward
         # Add more positions and their default top values as needed
     }
 
@@ -22,7 +22,14 @@ def get_dot_positions(player_pos):
         if position.name[-1] in ['R', 'L', 'C']:  # Check the last letter for position indicator
             position_key = position.name[:-1]  # Extract position key without indicator
             if position_key in position_mapping:
-                dot_position = {'left': 250, 'top': position_mapping[position_key]['default_top']}
+                alignment = None
+                if position.name[-1] == 'R':
+                    alignment = 'Right'
+                elif position.name[-1] == 'L':
+                    alignment = 'Left'
+                elif position.name[-1] == 'C':
+                    alignment = 'Center'
+                dot_position = {'left': 250, 'top': position_mapping[position_key]['default_top'], 'position': position_mapping[position_key]['name'] + ' (' + alignment + ')'}
                 if position.name[-1] == 'R':
                     dot_position['left'] = 425  # Value for Right
                 elif position.name[-1] == 'L':
@@ -31,11 +38,10 @@ def get_dot_positions(player_pos):
                     dot_position['left'] = 250  # Value for Center
                 dot_positions.append(dot_position)
         else:
-            dot_positions.append({'left': 250, 'top': position_mapping[position.name]['default_top']})
-            
+            dot_positions.append({'left': 250, 'top': position_mapping[position.name]['default_top'], 'position': position_mapping[position.name]['name']})
 
-         
     return dot_positions
+
 
 
 

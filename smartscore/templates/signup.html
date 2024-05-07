@@ -1,21 +1,22 @@
 {% extends "base.html" %}
 
-{% block title %}Signup{% endblock %}
 
-{% block content %}
+    {% block title %}Signup{% endblock %}
 
-    <h1>Signup</h1>
-    <br>
-    <form action="{% url 'signup' %}" method="POST">
-        {% csrf_token %}
-        {% for field in form%} 
-            {{field.label_tag}} {{field}}
-            <br>
-        {% endfor %}
+    {% block content %}
+    <div class="centered-content">
+        <h1>Signup</h1>
+        <br>
+        <form action="{% url 'signup' %}" method="POST">
+            {% csrf_token %}
+            {% for field in form%} 
+                {{field.label_tag}} {{field}}
+                <br>
+            {% endfor %}
+            <button type="submit">Signup</button>
+        </form>
+        {{form.errors}}
+        <br>
+    </div>
+    {% endblock %}
 
-        
-        <button type="submit">Signup</button>
-    </form>
-    {{form.errors}}
-    <br>
-{% endblock %}

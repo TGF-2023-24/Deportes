@@ -2,7 +2,7 @@
 {% load static %}
 {% block title %}Advanced Player Search{% endblock %}
 {% block content %}
-<h1 class="page-title">Advanced Player Search</h1>
+<h1>Advanced Player Search</h1>
 
     
 <div class="search-container">
@@ -14,7 +14,7 @@
 
     <!-- Filter section -->
     <div class="filter-section">
-        <h2 class="section-title">Add Filter:</h2>
+        <h2 class="section-title">Add a filter to the search:</h2>
         <button id="add-filter-btn" class="primary-default-btn">Add Filter</button>
         <div id="filter-menu" style="display: none;">
             <select id="filter-category">
@@ -37,11 +37,12 @@
             <button id="apply-filter-btn" class="primary-default-btn">Apply Filter</button>
         </div>
         <div id="applied-filters" class="applied-filters"></div>
+        <div id="loading-spinner" class="loading-spinner" style="display: none;"></div>
     </div>
 </div>
 
 <!-- Search button -->
-<button id="adv-search-btn" class="secondary-search-btn">Search</button>
+<button id="adv-search-btn" class="secondary-search-btn"><i class="bi bi-search"></i>  Search</button>
 
 
 <!-- JavaScript for handling interactions -->

@@ -72,7 +72,7 @@ def player2():
         International_match=0,
         League="Test League",
         Pref_foot="Left",
-        Age=100,
+        Age=1,
         Height=180,
         Weight=75,
         Salary=50000,

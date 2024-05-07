@@ -28,38 +28,65 @@
                     </div>
                 </div>
                 <br>
-                {% if player.Club == '#VALUE!' %}
-                    <h3>Club: Not available</h3>
-                {% else %}
-                    <h3>Club: {{ player.Club }}</h3>
-                {% endif %}
-                <h3>Country:  
-                <img src="{% static 'smartscore/images/flags/normal/'|add:flag_number|add:'.png' %}" alt="{{ player.Nationality }}" class="flag-icon"> </h3>
+                <!-- Player details -->
+                <div class="scope-item">
+                    {% if player.Club == '#VALUE!' %}
+                        <span class="label">Club: Not available</span>
+                    {% else %}
+                        <span class="value bigger-value">{{  player.Club }}</span>
+                        <span class="label">Club</span>
+                    {% endif %}
+                </div>
+                <div class="scope-item">
+                    <img src="{% static 'smartscore/images/flags/normal/'|add:flag_number|add:'.png' %}" alt="{{ player.Nationality }}" class="flag-icon"> </h3>
+                    <span class="label">Country</span>
+                </div>
 
-                {% if player.market_value == 'Unknown' %}
-                    <h4>Transfermarkt Estimated Value: Not available</h4>
-                {% else %}
-                    <h4>Transfermarkt Estimated Value: €{{ player.market_value }} M</h4>
-                {% endif %}
+                <div class="scope-item">
 
-                {% if player.League == '#VALUE!' %} 
-                    <h4>Player Pro Estimated Value: Not available</h4>
-                    <h4>League: Not available</h4>
-                {% else %}
-                    <h4>Player Pro Estimated Value: €{{ transfer_value }} M</h4>
-                    <h4>League: {{ player.League }}</h4>
-                {% endif %}
+                    {% if player.market_value == 'Unknown' %}
+                        <span class="label">Transfermarkt Estimated Value: Not available</span>
+                    {% else %}
+                        <span class="value bigger-value">€{{ player.market_value }} M</span>
+                        <span class="label">Transfermarkt Estimated Value</span>
+                    {% endif %}
+                    <br>
+                    {% if player.League == '#VALUE!' %} 
+                        <span class="label">League: Not available</span>
+                        <br>
+                        <span class="label">Player Pro Estimated Value: Not available</span>
+                    {% else %}
+                        <span class="value bigger-value">€{{ transfer_value }} M</span>
+                        <span class="label">Player Pro Estimated Value</span>
+                        <br>
+                        <span class="value bigger-value">{{ player.League }}</span>
+                        <span class="label">League</span>
+                    {% endif %}
 
+                </div>
 
-                <h4>Age: {{ player.Age }}</h4>
-                <h4>Contract Due: {{ player.End_contract }}</h4>
-                <h4>Yearly Wage: {{ player.Salary }} €</h4>
-                <br>
-                <h4>Leg: {{ player.Pref_foot}} </h4>
-                <h4>Height: {{ player.Height }} cm</h4>
-                <h4>Weight: {{ player.Weight }} kg</h4><br>
-
+                <div class="scope-item">
+                    <span class="value bigger-value">{{ player.Age }}</span>
+                    <span class="label">Age</span>
+                    <br>
+                    <span class="value bigger-value">{{ player.End_contract }}</span>
+                    <span class="label">Contract Due</span>
+                    <br>
+                    <span class="value bigger-value">{{ player.Salary }} €</span>
+                    <span class="label">Yearly Wage</span>
+                    <br>
+                    <span class="value bigger-value">{{ player.Pref_foot }}</span>
+                    <span class="label">Preferred Foot</span>
+                    <br>
+                    <span class="value bigger-value">{{ player.Height }} cm</span>
+                    <span class="label">Height</span>
+                    <br>
+                    <span class="value bigger-value">{{ player.Weight }} kg</span>
+                    <span class="label">Weight</span>
+                    <br>
+                </div>
             </div>
+            <br>
 
             <!-- Add to Squad Form -->
             {% if request.user.is_authenticated %}
@@ -74,7 +101,7 @@
                             <option value="0">No squads available</option>
                         {% endif %}
                     </select>
-                    <button class ="primary-default-btn" type="submit">Add to Squad</button>
+                    <button class ="primary-default-btn" type="submit" id="add-player-to-squad">Add to Squad</button>
                 </form>
             {% else %}
                 
@@ -88,7 +115,9 @@
                 <img src="{% static 'smartscore/images/field.jpg' %}" alt="Football Field">
                 <!-- Player position dots -->
                 {% for dot_position in dot_positions %}
-                    <div class="player-position-dot" style="left: {{ dot_position.left }}px; top: {{ dot_position.top }}px;"></div>
+                    <div class="player-position-dot" style="left: {{ dot_position.left }}px; top: {{ dot_position.top }}px;">
+                        <span class="position-name">{{ dot_position.position }}</span> <!-- Display position name -->
+                    </div>
                 {% endfor %}
             </div>
         </div>
@@ -99,13 +128,30 @@
                 </div>
             
                 <canvas id="radarChart" width="400" height="400"></canvas>
-                <h3>{{player.Name}} stats: </h3>
-                <ul>
-                    {% for key, value in stats.items %}
-                        <li>{{ key }}: {{ value }}</li>
-                    {% endfor %}
-                </ul>
-
+                <div class="key-stats">
+                    <h3>{{ player.Name }} key stats:</h3>
+                    <ul>
+                        {% for key, value in stats.items %}
+                            <li>
+                                
+                                {% if key == 'Goals' %}
+                                    <img src="{% static 'smartscore/images/goal.png' %}" alt="icon" class="player-icon">
+                                {% elif key == 'Red Cards' %}
+                                    <img src="{% static 'smartscore/images/red.png' %}" alt="icon" class="player-icon">
+                                {% elif key == 'Yellow Cards' %}
+                                    <img src="{% static 'smartscore/images/yellow.png' %}" alt="icon" class="player-icon">
+                                {% elif key == 'Assists' %}
+                                    <img src="{% static 'smartscore/images/assist.png' %}" alt="icon" class="player-icon">
+                                {% endif %}
+                                <span class="bigger-value">{{ value }}</span>
+                                <span class="label">{{ key }}</span>
+                                
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                
+                
                 <ul id="avg_stats">
                     <p>Select a position to compare player stats vs average position stats.</p>
                 </ul>

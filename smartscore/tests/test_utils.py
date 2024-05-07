@@ -157,7 +157,7 @@ def test_dot_position(player):
 
     player.Pos.add(pos1, pos2, pos3, pos4)
 
-    assert get_dot_positions(player.Pos) == [{'left': 250, 'top': 750}, {'left': 75, 'top': 400}, {'left': 250, 'top': 400}, {'left': 425, 'top': 400}]
+    assert get_dot_positions(player.Pos) == [{'left': 250, 'top': 750, 'position': 'Goalkeeper'}, {'left': 75, 'top': 400, 'position': 'Midfielder (Left)'}, {'left': 250, 'top': 400, 'position': 'Midfielder (Center)'}, {'left': 425, 'top': 400, 'position': 'Midfielder (Right)'}]
 
 @pytest.mark.parametrize("input_name, expected_value", [
     ("Lionel Messi", 150.0),  # Example market value in millions

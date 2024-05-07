@@ -15,6 +15,29 @@ p {
     font-size: 16px; /* Adjust the font size for paragraphs */
 }
 
+h1 {
+    font-size: 32px; /* Tamaño del título h1 */
+    font-weight: bold; /* Peso de fuente */
+    color: #333; /* Color del texto */
+    margin-bottom: 30px; /* Espaciado inferior */
+    text-align: center;
+}
+
+h2 {
+    font-size: 24px; /* Tamaño del título h2 */
+    font-weight: bold; /* Peso de fuente */
+    color: #555; /* Color del texto */
+    margin-bottom: 15px; /* Espaciado inferior */
+}
+
+h3 {
+    font-size: 20px; /* Tamaño del título h3 */
+    font-weight: bold; /* Peso de fuente */
+    color: #777; /* Color del texto */
+    margin-bottom: 10px; /* Espaciado inferior */
+}
+
+
 /* Sidebar */
 .sidebar {
     position: fixed;
@@ -22,11 +45,13 @@ p {
     left: 0;
     height: 100%;
     width: 250px; /* Ancho del sidebar */
-    background-color: #d73030; /* Color de fondo del sidebar */
+    background-color: #db2828; /* Color de fondo del sidebar */
     color: #fff; /* Color del texto en el sidebar */
     padding-top: 60px; /* Altura del top bar */
     transition: width 0.3s ease;
     z-index: 1000;
+    text-decoration: none; 
+
 }
 
 .sidebar-head {
@@ -35,6 +60,7 @@ p {
     padding-top: 20px;
     text-align: center; /* Center the content of the head */
     width: 250px; 
+    text-decoration: none; 
 }
 
 .sidebar-body {
@@ -42,7 +68,16 @@ p {
     /*Add a separator between elements of the sidebar*/
     border-top: 1px solid #080808;
     border-top-style: groove;
-    
+    text-decoration: none; 
+
+}
+
+.sidebar-body a {
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
 }
 
 .sidebar-body-menu i {
@@ -62,15 +97,36 @@ p {
 }
 
 .sidebar a:hover {
-    background-color: #dc7575; /* Color de fondo al hacer hover */
+    background-color: #dc7575;
+    text-decoration: none; /* Ensure no underline on hover */
+
+}
+
+
+.sidebar-body-menu a {
+    font-size: 20px; /* Increase text size */
+    color: #fff; /* Default color */
+    text-decoration: none;
+    text-align: center;
+}
+
+.sidebar-body-menu a:hover {
+    background-color: #dc7575; /* Color for active and hover */
+    text-decoration: none; /* Ensure no underline on hover */
+
+}
+
+.sidebar-body-menu a.active {
+    background-color: #dc7575; /* Change background color */
+    color: #000000; /* Change text color */
 }
 
 /* Main content style */
 
 .content {
-    background-color: #f4f4f4; /* Color de fondo del contenido principal */
-    margin-left: 250px; /* Ancho del sidebar */
-    margin-top: 60px; /* Altura del top bar */
+    background-color: #f4f4f4; 
+    margin-left: 250px; 
+    margin-top: 60px; 
     padding: 20px;
     transition: margin-left 0.3s ease;
     align-items: center;
@@ -86,11 +142,11 @@ p {
 .top-bar {
     position: fixed;
     top: 0;
-    left: 250px; /* Ancho del sidebar */
-    width: calc(100% - 250px); /* Calcula el ancho del top bar */
-    height: 60px; /* Altura del top bar */
-    background-color: #c92d2d; /* Color de fondo del top bar */
-    color: #fff; /* Color del texto */
+    left: 250px; 
+    width: calc(100% - 250px);
+    height: 60px; 
+    background-color: #c92d2d; 
+    color: #fff; 
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -112,29 +168,32 @@ footer {
 }
 
 /* Buttons style */
-.primary-default-btn, .player-button, .squad-create-button {
+.primary-default-btn, .squad-create-button {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #d77330;
+    background-color: #0095ff;
     color: #fff;
     text-decoration: none;
     border-radius: 5px;
     transition: background-color 0.3s ease;
-    padding-left: 10px;
 }
 
-.primary-default-btn:hover, .player-button:hover, .squad-create-button:hover {
-    background-color: #c9602d;
+.primary-default-btn:hover, .squad-create-button:hover {
+    background-color: #0064ac;
+    text-decoration: none; /* Quita el subrayado */
+
 }
 
 .primary-search-btn {
     padding: 10px 20px;
-    background-color: #000000;
+    background-color: #000000 !important; 
     color: #fff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    text-decoration: none; 
+
 }
 
 .primary-search-btn:hover {
@@ -142,6 +201,7 @@ footer {
 }
 
 .search-wrapper input[type="text"] {
+    margin-top: 10px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -300,9 +360,9 @@ footer {
 
 .search-container {
     display: flex;
-    justify-content: space-between; /* Align items to the start and end of the container */
     margin-bottom: 30px;
 }
+
 
 .football-field-container {
     position: relative;
@@ -312,6 +372,8 @@ footer {
     max-height: calc(100vh - 200px); /* Set a maximum height */
     position: relative; /* Ensure relative positioning */
     overflow: hidden; /* Hide any overflowing content */
+    margin-left: 30px; /* Add margin to the left */
+
 }
 
 #football-field {
@@ -320,18 +382,32 @@ footer {
     object-fit: contain; /* Ensure the image fits within the container while preserving aspect ratio */
 }
 
-
 .filter-section {
-    width: calc(50% - 10px);
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end; /* Align items to the end of the container */
-    display: block; 
+    flex: 2; /* Occupy 2/3 of the available space */
+    display: block;
+    justify-content: center; /* Center the filter section horizontally */
+    text-align: center; /* Center the text within the filter section */
 }
-
 .section-title {
     margin-bottom: 10px;
 }
+
+.filter-section {
+    text-align: center; /* Center the content horizontally */
+}
+
+#filter-menu {
+    display: flex;
+    flex-wrap: wrap; /* Allow flex items to wrap to the next line */
+    justify-content: center; /* Center flex items horizontally */
+}
+
+#filter-menu select,
+#filter-menu input[type="number"],
+#filter-menu button {
+    margin: 5px; /* Add margin around each select, input, and button */
+}
+
 
 .filter-controls {
     margin-bottom: 20px;
@@ -351,6 +427,8 @@ footer {
 
 .applied-filters {
     margin-top: 20px;
+    margin-left : 20px;
+
 }
 
 /* Style for each filter item */
@@ -371,25 +449,6 @@ footer {
     background-color: #e0e0e0; /* Darker background color on hover */
 }
 
-
-.primary-default-btn,
-.primary-search-btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.primary-default-btn {
-    background-color: #d77330;
-    color: #fff;
-}
-
-.primary-default-btn:hover {
-    background-color: #c9602d;
-}
-
 .secondary-search-btn {
     position: absolute; 
     bottom: 20px; /* Distance from the bottom of the screen */
@@ -401,6 +460,8 @@ footer {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    text-decoration: none; /* Quita el subrayado */
+
 }
 
 .secondary-search-btn:hover {
@@ -429,6 +490,12 @@ footer {
 .player-image {
     width: 150px; /* Adjust size as needed */
     height: auto;
+    transition: transform 0.3s ease; /* Add transition for smooth zoom effect */
+}
+
+/* Apply zoom effect on hover */
+.player-image-container:hover .player-image {
+    transform: scale(1.2); /* Adjust the scale factor for zoom level */
 }
 
 .player-details {
@@ -464,10 +531,7 @@ footer {
 .squad-builder-container {
     display: flex;
     margin-bottom: 30px;
-}
-
-.player-button:hover {
-    background-color: #000000;
+    overflow-y: auto;
 }
 
 .player-button.clicked {
@@ -491,24 +555,12 @@ footer {
     background-color: #f17676; /* Set background color */
     border: 1px solid #ff0000; /* Add a border */
     border-radius: 5px; /* Add border radius */
-    max-width: 57px; /* Set maximum width equal to image width */
-    font-size: 0.8em; /* Set the default font size */
+    font-size: 16px; 
     white-space: nowrap; /* Prevent text wrapping */
     overflow: hidden; /* Hide any overflow text */
-    text-overflow: ellipsis; /* Display ellipsis if text overflows *
-}
-
-
-#example-btn {
-    display: none; /* Initially hide the button */
-}
-
-/* My squad container style */
-
-.squad-builder-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start; /* Align items to the top */
+    text-overflow: ellipsis; /* Display ellipsis if text overflows */
+    /*bold text*/
+    font-weight: bold;
 }
 
 .football-field-container-squad-builder {
@@ -518,7 +570,13 @@ footer {
 
 .squad-selection-container {
     position: relative;
-    width: 80%; /* Adjust width as needed */
+    height: calc(100vh - 200px); /* Set the height dynamically */
+    max-height: calc(100vh - 200px); /* Set a maximum height */
+    width: 55%; /* Adjust width as needed */
+    border-radius: 20px; /* Adjust the radius value as needed */
+    background-color: #f0f0f0; /* Background color for squad selection container */
+    margin-left: auto;
+    margin-top: 100px;
 }
 
 .squad-selection {
@@ -536,6 +594,11 @@ footer {
     margin-bottom: 10px; /* Adjust margin between player items */
 }
 
+.player-list li a {
+    text-decoration: none; /* Remove underline */
+}
+
+
 .player-list a {
     display: block;
     padding: 5px 0;
@@ -545,6 +608,12 @@ footer {
 
 .player-list a:hover {
     background-color: #f0f0f0;
+}
+
+.squad-actions {
+    align-items: center;
+    margin-top: 20px; /* Adjust margin as needed */
+    text-align: center;
 }
 
 .squad-actions form {
@@ -557,8 +626,7 @@ footer {
     margin-top: 20px; /* Add margin from the top */
 }
 
-/* Style for the squad select dropdown */
-.squad-select, 
+/* Style for the squad select dropdown */ 
 .dataset-select  {
     padding: 8px; /* Padding for the dropdown */
     border-radius: 5px; /* Add border radius */
@@ -585,10 +653,16 @@ footer {
 }
 
 .flag-icon {
-    width: 30px; /* Adjust the width of the flag icon */
+    width: 60px; /* Adjust the width of the flag icon */
     height: auto; /* Adjust the height of the flag icon */
     margin-right: 10px; /* Add margin to the right of the flag icon */
     display: inline-block !important; 
+    transition: transform 0.3s ease; /* Add transition for smooth zoom effect */
+}
+
+/* Apply zoom effect on hover */
+.flag-icon:hover {
+    transform: scale(1.2); /* Adjust the scale factor for zoom level */
 }
 
 /* Squad analysis container */
@@ -632,7 +706,7 @@ footer {
 
 
 .next-button, .previous-button {
-    background-color: #d77330; 
+    background-color: #FE4DF8; 
     color: #333; /* Dark text color */
     padding: 10px 20px; /* Adjust padding as needed */
     border: none;
@@ -642,8 +716,8 @@ footer {
     margin: 0 10px; /* Add margin between buttons */
 }
 
-.next-button:hover, .prev-button:hover {
-    background-color: #c9602d; 
+.next-button:hover, .previous-button:hover {
+    background-color: #be34ba; 
 }
 
 .replace2-button {
@@ -700,7 +774,31 @@ footer {
 .home-section img {
     max-width: 100%;
     max-height: 100%;
+    transition: transform 0.3s ease; /* Add smooth transition effect */
+    border-radius: 10px; /* Round the image borders */
 }
+
+.home-section img:hover {
+    transform: scale(1.1); /* Increase size by 10% on hover */
+}
+
+#unique-image-id {
+    width: 200px;
+    height: auto;
+    border-radius: 70%;
+    border: 2px solid #000000;
+    background-color: #ffff;
+}
+
+#unique-image-id2 {
+    width: 100px;
+    height: auto;
+    border-radius: 70%;
+    border: 2px solid #000000;
+    background-color: #ffff;
+}
+
+
 
 .radar-chart-container {
     position: relative;
@@ -739,13 +837,15 @@ footer {
     background-color: red;
     color: white;
     border: none;
-    font-weight: bold;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 0;
     z-index: 1; /* Ensure it appears above other elements */
+    font-family: "Arial", sans-serif; /* Font family */
+    font-size: 14px; /* Font size */
+    font-weight: bold; /* Font weight */
 }
 
 /* Add a hover effect for the remove button */
@@ -756,6 +856,9 @@ footer {
 .squads-container {
     display: grid;
     justify-content:  space-between;
+    max-width: 800px; /* Set a maximum width */
+    margin: 0 auto; /* Center the container horizontally */
+    margin-bottom: 20px; /* Add some bottom margin */
 }
 
 .squad {
@@ -779,11 +882,12 @@ footer {
 }
 
 
-.smartScore-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.futureScope-container {
+    display: flex; /* Use flexbox for layout */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
 }
+
 
 /* Style for the transfer budget input box */
 #transfer-budget {
@@ -894,14 +998,13 @@ form {
 }
 
 .cat-sub-menu {
-    display: none;
+    display: none; /* Hide the list by default */
 }
 
-.cat-sub-menu.show {
+.show-cat-btn:hover + .cat-sub-menu,
+.cat-sub-menu:hover {
     display: block;
 }
-
-
 .filter-section-recommendations {
     display: flex;
     flex-wrap: wrap;
@@ -919,7 +1022,7 @@ form {
 
 .filter-select {
     margin-bottom: 5px; /* Add space below select elements */
-    width: 100%; /* Make select elements fill the entire width of the container */
+    width: 80%; /* Make select elements fill the entire width of the container */
 }
 
 #recommend {
@@ -928,13 +1031,37 @@ form {
 }
 
 .about-container {
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
+    transition: transform 0.3s ease; /* Add smooth transition effect */
+    position: relative; /* Relative positioning for containing block */
+
+}
+
+.header-content {
+    align-items: center; /* Align items vertically */
+    justify-content: center; /* Align items horizontally */
+    margin-bottom: 20px; /* Add space between header and content */
+    position: relative; /* Relative positioning for containing block */
+    text-align: center; /* Center the text */
+}
+
+.about-container img {
+    width: 200px;
+    height: auto;
+    border-radius: 70%;
+    border: 2px solid #000000;
+    background-color: #ffff;
+    margin: 20px;
+}
+
+.about-container img:hover {
+    transform: scale(1.1); /* Increase size by 10% on hover */
 }
 
 .about-heading {
-    font-size: 24px;
+    font-size: 30px;
     color: #333;
     margin-bottom: 10px;
 }
@@ -977,6 +1104,14 @@ form {
     text-decoration: underline;
 }
 
+.settings-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex; /* Use flexbox */
+    flex-direction: column; /* Stack items vertically */
+    position: relative; /* Relative positioning for containing block */
+}
 
 
 /* Style for the user settings section */
@@ -1011,7 +1146,7 @@ input[type="password"] {
 
 button[type="submit"] {
     padding: 10px 20px;
-    background-color: #d77330;
+    background-color: #0095ff;
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -1019,11 +1154,7 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-    background-color: #c9602d;
-}
-
-h1, h2 {
-    color: #333;
+    background-color: #0064ac;
 }
 
 .info-element {
@@ -1035,6 +1166,231 @@ h1, h2 {
     /* Add any other styles you want */
 }
 
-#add-player-btn {
-    background-color : #000000;
+#add-player-btn, #analyze-squad-btn, #add-filter-btn, #adv-search-btn {
+    background-color : #3D0FD1;
+    text-decoration: none; /* Quita el subrayado */
+}
+
+#add-player-btn:hover, #analyze-squad-btn:hover, #add-filter-btn:hover, #adv-search-btn:hover{
+    background-color : #2a0b91;
+}
+
+.button-container {
+    text-align: center;
+    margin-top: 20px; /* Ajusta el margen según sea necesario */
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 20px; /* Ajusta el relleno según sea necesario */
+    background-color: #007bff; /* Color de fondo del botón */
+    color: #fff; /* Color del texto del botón */
+    text-decoration: none; /* Elimina el subrayado del enlace */
+    border-radius: 5px; /* Borde redondeado */
+    transition: background-color 0.3s ease; /* Transición suave al pasar el ratón */
+}
+
+.button:hover {
+    background-color: #0056b3; /* Color de fondo del botón al pasar el ratón */
+}
+
+.button-divider {
+    margin: 0 10px; /* Espaciado entre los botones y el separador */
+    color: #555; /* Color del texto del separador */
+}
+
+/* Style for the container holding shortlist items */
+.shortlist-container {
+    max-width: 800px; /* Set a maximum width */
+    margin: 0 auto; /* Center the container horizontally */
+    margin-bottom: 20px; /* Add some bottom margin */
+}
+
+.content-wrapper {
+    text-align: center; /* Center text horizontally */
+}
+
+
+.scope-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.scope-item {
+    margin-bottom: 15px;
+}
+
+.value {
+    font-size: 20px; /* Default font size */
+}
+
+.bigger-value {
+    font-size: 30px; /* Bigger font size */
+}
+
+.label {
+    font-size: 16px; /* Label font size */
+}
+
+#fut-but-save {
+    display: block; /* Change button display property to block */
+    margin: 0 auto; /* Center the button horizontally */
+    background-color: #007bff; /* Button background color */
+    color: #fff; /* Button text color */
+    border: none; /* Remove button border */
+    padding: 10px 20px; /* Button padding */
+    border-radius: 5px; /* Button border radius */
+    cursor: pointer; /* Add cursor pointer on hover */
+    font-size: 16px; /* Button font size */
+}
+
+#fut-but-save:hover {
+    background-color: #0056b3; /* Button background color on hover */
+}
+
+#fut-but-save:focus {
+    outline: none; /* Remove button outline on focus */
+}
+
+
+.squad-select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#squad-help-txt {
+    color: #666;
+}
+
+#player-list {
+    list-style: none;
+    padding: 0;
+}
+
+#player-list li {
+    margin-bottom: 5px;
+}
+
+.recommended-container {
+    max-width: 800px; /* Set a maximum width */
+    margin: 0 auto; /* Center the container horizontally */
+    margin-bottom: 20px; /* Add some bottom margin */
+}
+
+.player-button {
+    display: inline-block;
+    padding: 15px 30px; /* Adjusted padding */
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 0; /* Squared button */
+    transition: background-color 0.3s ease;
+    font-size: 18px; /* Increased font size */
+    margin-right: 10px; /* Added margin between buttons */
+}
+
+.player-button:last-child {
+    margin-right: 0; /* Remove margin from the last button */
+}
+
+.player-button:hover {
+    background-color: #0056b3;
+    padding: 17px 32px; /* Increased padding on hover */
+    font-size: 20px; /* Increased font size on hover */
+}
+
+.player-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.centered-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    transition: transform 0.3s ease; /* Add smooth transition effect */
+    position: relative; /* Relative positioning for containing block */
+}
+
+#delete-squad-btn {
+    background-color: #ff5252; /* Red background color */
+    color: #fff; /* White text color */
+    padding: 10px 20px; /* Adjust padding as needed */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Add border radius */
+    cursor: pointer; /* Add cursor pointer */
+    transition: background-color 0.3s ease; /* Smooth transition for background color */
+    text-decoration: none; /* Quita el subrayado */
+
+}
+
+#delete-squad-btn:hover {
+    background-color: #ff0000; /* Darker red background on hover */
+}
+
+
+.key-stats {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.key-stats h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.key-stats ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.key-stats li {
+    margin-bottom: 10px;
+}
+
+.key-stats .bigger-value {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.key-stats .label {
+    font-size: 16px;
+    padding-left: 15px;
+}
+
+/* Icons */
+.player-icon {
+    width: 35px; /* Adjust the width as needed */
+    margin-right: 5px; /* Add some space between the icon and label */
+}
+
+
+#add-player-to-squad {
+    margin: auto !important; /* Center the button horizontally */ 
+}
+
+
+.position-name {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 30%);
+    background-color: rgba(255, 255, 255, 0.8); /* Background color for position name */
+    padding: 5px 10px; /* Padding around position name */
+    border-radius: 5px; /* Border radius */
+    font-size: 15px; /* Font size */
+    font-weight: bold; /* Bold font weight */
+    text-align: center; /* Center alignment */
 }
