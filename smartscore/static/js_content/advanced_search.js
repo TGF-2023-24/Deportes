@@ -101,6 +101,13 @@ document.addEventListener('DOMContentLoaded', function() {
             dot.style.left = left + 'px';
             dot.style.top = top + 'px';
             dotContainer.appendChild(dot);
+
+              // Add text indicating position
+            const positionText = document.createElement('div');
+            positionText.className = 'position-name';
+            positionText.textContent = position;
+            dot.appendChild(positionText);
+
         });
     }
 
