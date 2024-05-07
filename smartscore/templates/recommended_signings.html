@@ -52,6 +52,8 @@
 
     <script>
         var shirt_img = "{% static 'smartscore/images/shirt.png' %}";
+        var isAuthenticated = {{ user.is_authenticated|yesno:"true,false" }};
+
     </script>
 
     <script src="{% static 'js_content/recommended_signings.js' %}"></script>

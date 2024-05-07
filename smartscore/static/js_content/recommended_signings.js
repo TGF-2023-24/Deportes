@@ -338,50 +338,60 @@ document.addEventListener('DOMContentLoaded', function() {
             // Append smart score display to smart score container
             smartScoreContainer.appendChild(smartScoreDisplay);
 
-            // Add save button
-            const saveButton = document.createElement('button');
-            saveButton.id = 'save';
-            saveButton.textContent = 'Save';
-            saveButton.classList.add('primary-default-btn');
+            if(isAuthenticated) {
+                // Add save button
+                const saveButton = document.createElement('button');
+                saveButton.id = 'save';
+                saveButton.textContent = 'Save';
+                saveButton.classList.add('primary-default-btn');
 
-            // Add some separation to the save button
-            saveButton.style.marginBottom = '10px'; // Adjust the margin as needed
-
-            // Append the save button to the recommendation section
+                // Add some separation to the save button
+                saveButton.style.marginBottom = '10px'; // Adjust the margin as needed
+            
             
 
-            const requestData = {
-                position: selectedProfile,
-                archetype: selectedArchetype,
-                foot: selectedFoot,
-                recommendation: recommendation  // Include the recommendations data
-            };
+                // Append the save button to the recommendation section
+                
 
-            console.log('Data:', requestData);
+                const requestData = {
+                    position: selectedProfile,
+                    archetype: selectedArchetype,
+                    foot: selectedFoot,
+                    recommendation: recommendation  // Include the recommendations data
+                };
 
-            saveButton.addEventListener('click', function() {
-                fetch('/api/save-recommendations/', {
-                    method: 'POST',  
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': getCookie('csrftoken')
-                    },        
-                    body: JSON.stringify(requestData)                    
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log('Success:', data);
-                        alert(data.message);
+                console.log('Data:', requestData);
+
+                saveButton.addEventListener('click', function() {
+                    fetch('/api/save-recommendations/', {
+                        method: 'POST',  
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCookie('csrftoken')
+                        },        
+                        body: JSON.stringify(requestData)                    
                     })
-                    .catch(error => {
-                        console.error('Error saving recommendations:', error);
-                        spinnerContainer.removeChild(loadingSpinner); // Remove the loading spinner
-                        alert('An error occurred while saving recommendations');
-                    });
-            });
-    
-            smartScoreAndButtonContainer.appendChild(smartScoreContainer);
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Success:', data);
+                            alert(data.message);
+                        })
+                        .catch(error => {
+                            if (error === 'SyntaxError: Unexpected token') {
+                                alert('You need to be logged in to save recommendations.');
+                                // Redirect the user to the login page or show a login modal
+                                // Example: window.location.href = '/login';
+                            } else {
+                                console.error('Error saving recommendations:', error);
+                                spinnerContainer.removeChild(loadingSpinner); // Remove the loading spinner
+                                alert('An error occurred while saving recommendations');
+                            }
+                        });
+                });
             smartScoreAndButtonContainer.appendChild(saveButton);
+
+            }
+            smartScoreAndButtonContainer.appendChild(smartScoreContainer);
             container.appendChild(smartScoreAndButtonContainer);
 
             updateBubbleColor(recommendation.score, smartScoreDisplay);
